@@ -1,0 +1,17 @@
+---
+- name: Launch upstream container
+  docker_container:
+    name: upstream
+    state: started
+    image: mangomm/go-bench-suite
+    ports:
+     - "8000:8000"
+    ulimits: "nofile:80000:80000"
+    command: ./go-bench-suite upstream
+  when: standup is defined and standup == true
+
+- name: Remove upstream container
+  docker_container:
+    name: upstream
+    state: absent
+  when: cleanup is defined and cleanup == true

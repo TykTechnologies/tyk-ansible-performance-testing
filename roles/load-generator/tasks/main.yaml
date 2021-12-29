@@ -1,0 +1,33 @@
+---
+- name: Create API key
+  uri:
+    url: http://{{ upstream_host_ip }}:{{ upstream_port }}/tyk/keys/create
+    method: POST
+    body_format: json
+    headers:
+      Content-Type: "application/json"
+      x-tyk-authorization: "352d20ee67be67f6340b4c0605b044b7"
+    body: "{ \"access_rights\": { \"2\": { \"allowed_urls\": [], \"api_id\": \"2\", \"api_name\": \"Tyk Test Auth API\", \"limit\": null, \"versions\": [ \"Default\" ] } }, \"allowance\": 100000, \"expires\": 0, \"org_id\": \"default\", \"per\": 1, \"quota_max\": -1, \"quota_remaining\": -1, \"quota_renewal_rate\": -1, \"quota_renews\": 1568655187, \"rate\": 100000, \"throttle_interval\": -1, \"throttle_retry_limit\": -1 }"
+  register: response
+  when: use_auth and standup is defined and standup == true
+
+- name: Launch Load Generator
+  docker_container:
+    name: load-generator
+    state: started
+    image: rcmorano/docker-hey
+    ports:
+      - "8000:8000"
+    detach: no
+    command: "{% if api_endpoint_prefix is defined and use_auth %}-z 10s -q 1500 -H \"Authorization: {{ response.json.key }}\" http://{{ upstream_host_ip }}:{{ upstream_port }}/{{ api_endpoint_prefix }}/json/valid{% elif api_endpoint_prefix is defined %}-z 10s -q 1500 http://{{ upstream_host_ip }}:{{ upstream_port }}/{{ api_endpoint_prefix }}/json/valid{% else %}-z 10s -q 1500 http://{{ upstream_host_ip }}:{{ upstream_port }}/json/valid{% endif %}"
+  register: output
+  when: standup is defined and standup == true
+
+- name: Copy result to local
+  local_action: copy content={{ output.container.Output }} dest=./{{ results_filename }}
+  when: standup is defined and standup == true
+
+- name: Remove Load Generator container
+  docker_container:
+    name: load-generator
+    state: absent

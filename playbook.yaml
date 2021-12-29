@@ -1,0 +1,77 @@
+---
+- hosts: all
+  become: true
+
+  roles:
+    - docker
+
+- hosts: upstream
+  become: true
+
+  roles:
+    - role: upstream
+      standup: true
+
+  tags:
+    - upstream
+
+- hosts: load-generator
+  become: true
+
+  roles:
+    - role: load-generator
+      upstream_host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
+      upstream_port: "8000"
+      use_auth: false
+      results_filename: "performance-testing/bench-upstream.txt"
+      standup: true
+
+  tags:
+    - bench-upstream
+
+- hosts: tyk
+  become: true
+
+  roles:
+    - role: tyk
+      upstream_host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
+      use_analytics: true
+      standup: true
+
+  tags:
+    - tyk
+
+- hosts: load-generator
+  become: true
+
+  roles:
+    - role: load-generator
+      upstream_host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
+      upstream_port: "8080"
+      api_endpoint_prefix: "auth_api_test"
+      use_auth: true
+      results_filename: performance-testing/bench-tyk.txt
+      standup: true
+
+  tags:
+    - bench-tyk
+
+- hosts: upstream
+  become: true
+
+  roles:
+    - role: upstream
+      cleanup: true
+
+  tags:
+    - cleanup-upstream
+
+- hosts: tyk
+  become: true
+
+  roles:
+    - role: tyk
+      cleanup: true
+
+  tags:
+    - cleanup-tyk

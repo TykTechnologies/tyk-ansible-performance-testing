@@ -1,0 +1,7 @@
+roles:
+  - name: geerlingguy.redis
+  - name: geerlingguy.pip
+  - name: geerlingguy.docker
+
+collections:
+  - name: community.mongodb

@@ -1,0 +1,15 @@
+dashboard_protocol: http
+dashboard_host:
+dashboard_port: 3000
+
+gateway_protocol: http
+gateway_host:
+gateway_port: 8080
+
+redis_host:
+redis_port: 6379
+redis_enable_cluster: false
+redis_enable_ssl: false
+
+mongodb_host:
+mongodb_port: 27017
