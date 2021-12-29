@@ -15,35 +15,16 @@
       - name: tyk
   when: standup is defined and standup == true
 
-- name: Ensures /opt/tyk-gateway/apps dir exists
-  file: path=/opt/tyk-gateway/apps state=directory
-  tags:
-    - standup
-
-- name: "Copy tyk.conf"
-  copy:
-    src: "../files/tyk.conf"
+- name: "Create tyk.conf"
+  template:
+    src: "tyk.j2"
     dest: "/opt/tyk-gateway/tyk.conf"
   when: standup is defined and standup == true
 
-- name: "Copy api_test.json"
-  copy:
-    src: "../files/api_test.json"
-    dest: "/opt/tyk-gateway/apps/api_test.json"
-  when: standup is defined and standup == true
-
-- name: "Copy auth_api_test.json"
-  copy:
-    src: "../files/auth_api_test.json"
-    dest: "/opt/tyk-gateway/apps/auth_api_test.json"
-  when: standup is defined and standup == true
-
-- name: Inject use_analytics variable as a Tyk environment variable
-  lineinfile:
-    dest: /etc/sysconfig/tyk-gateway
-    create: true
-    regexp: "^TYK_GW_ENABLEANALYTICS="
-    line: "TYK_GW_ENABLEANALYTICS={{ tyk.use_analytics }}"
+- name: "Create api.json"
+  template:
+    src: "api.j2"
+    dest: "/opt/tyk-gateway/apps/api.json"
   when: standup is defined and standup == true
 
 - name: Remove Tyk Gateway container
@@ -57,21 +38,18 @@
     state: started
     image: tykio/tyk-gateway:latest
     ports:
-      - "{{ tyk.service.port }}:8080"
+      - "{{ tyk.service.port }}:{{ tyk.service.port }}"
     networks:
       - name: tyk
     volumes:
       - "/opt/tyk-gateway/tyk.conf:/opt/tyk-gateway/tyk.conf"
-      - "/opt/tyk-gateway/apps/api_test.json:/opt/tyk-gateway/apps/api_test.json"
-      - "/opt/tyk-gateway/apps/auth_api_test.json:/opt/tyk-gateway/apps/auth_api_test.json"
+      - "/opt/tyk-gateway/apps/api.json:/opt/tyk-gateway/apps/api.json"
     ulimits: "nofile:80000:80000"
     env:
       GOGC: "1600"
     log_options:
       max-size: 10m
       max-file: 5
-    etc_hosts:
-      UPSTREAM_HOST: "{{ upstream_host_ip }}"
   when: standup is defined and standup == true
 
 - name: Remove Redis container

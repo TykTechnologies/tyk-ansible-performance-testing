@@ -1,7 +1,8 @@
 {
-  "name": "Tyk Test Auth API",
-  "api_id": "2",
+  "name": "Tyk Test API",
+  "api_id": "1",
   "org_id": "default",
+{% if tyk.use_auth %}
   "definition": {
     "location": "header",
     "key": "version"
@@ -9,6 +10,10 @@
   "auth": {
     "auth_header_name": "authorization"
   },
+{% else %}
+  "auth": {},
+  "use_keyless": true,
+{% endif %}
   "version_data": {
     "not_versioned": true,
     "versions": {
@@ -25,16 +30,15 @@
     }
   },
   "proxy": {
-    "listen_path": "/auth_api_test/",
-    "target_url": "http://UPSTREAM_HOST:8000",
+    "listen_path": "/api/",
+    "target_url": "http://{{ upstream_host }}:{{ upstream.service.port }}",
     "strip_listen_path": true
   },
-    "enable_batch_request_support": true,
+  "enable_batch_request_support": true,
   "cache_options": {
     "enable_cache": false,
     "cache_all_safe_requests": false
   },
-  "disable_quota": true,
-  "disable_rate_limit": false,
-  "dont_set_quota_on_create": true
+  "disable_quota": {{ not tyk.use_quota | lower }},
+  "disable_rate_limit": {{ not tyk.use_rate_limiting | lower }}
 }

@@ -39,7 +39,7 @@
 
   roles:
     - role: tyk
-      upstream_host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
+      upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
       standup: True
 
 - hosts: load-generator

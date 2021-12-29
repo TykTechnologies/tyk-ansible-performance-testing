@@ -22,8 +22,11 @@
 ## Variables
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
-| secrets.APISecret | `352d20ee67be67f6340b4c0605b044b7` | API secret |
 | tyk.service.port | `8080` | Gateway server listening port |
+| tyk.secret | `352d20ee67be67f6340b4c0605b044b7` | API secret |
 | tyk.use_auth | `False` | Enable authentication in the performance testing |
 | tyk.use_analytics | `False` | Enable analytics gathering in the performance testing |
+| tyk.use_quota | `False` | Enable quota tracking in the performance testing |
+| tyk.use_rate_limiting | `False` | Enable rate limiting in the performance testing |
 | upstream.service.port | `8000` | Upstream server listening port |
+
