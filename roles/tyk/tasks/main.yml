@@ -43,7 +43,7 @@
     dest: /etc/sysconfig/tyk-gateway
     create: true
     regexp: "^TYK_GW_ENABLEANALYTICS="
-    line: "TYK_GW_ENABLEANALYTICS={{ use_analytics }}"
+    line: "TYK_GW_ENABLEANALYTICS={{ tyk.use_analytics }}"
   when: standup is defined and standup == true
 
 - name: Remove Tyk Gateway container
@@ -57,7 +57,7 @@
     state: started
     image: tykio/tyk-gateway:latest
     ports:
-      - "8080:8080"
+      - "{{ tyk.service.port }}:8080"
     networks:
       - name: tyk
     volumes:

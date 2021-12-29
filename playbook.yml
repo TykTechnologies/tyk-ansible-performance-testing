@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  become: true
+  become: True
 
   vars:
     pip_install_packages:
@@ -12,72 +12,59 @@
     - geerlingguy.docker
 
 - hosts: upstream
-  become: true
+  become: True
+  vars_files:
+    - ./vars.yml
 
   roles:
     - role: upstream
-      standup: true
-
-  tags:
-    - upstream
+      standup: True
 
 - hosts: load-generator
-  become: true
+  become: True
+  vars_files:
+    - ./vars.yml
 
   roles:
     - role: load-generator
-      upstream_host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
-      upstream_port: "8000"
-      use_auth: false
-      results_filename: "bench-upstream.txt"
-      standup: true
-
-  tags:
-    - bench-upstream
+      is_upstream: True
+      host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
+      host_port: "{{ upstream.service.port }}"
+      results_filename: bench-upstream.txt
 
 - hosts: tyk
-  become: true
+  become: True
+  vars_files:
+    - ./vars.yml
 
   roles:
     - role: tyk
       upstream_host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
-      use_analytics: true
-      standup: true
-
-  tags:
-    - tyk
+      standup: True
 
 - hosts: load-generator
-  become: true
+  become: True
+  vars_files:
+    - ./vars.yml
 
   roles:
     - role: load-generator
-      upstream_host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
-      upstream_port: "8080"
-      api_endpoint_prefix: "auth_api_test"
-      use_auth: true
+      is_upstream: False
+      host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
+      host_port: "{{ tyk.service.port }}"
+      use_auth: "{{ tyk.use_auth }}"
       results_filename: bench-tyk.txt
-      standup: true
-
-  tags:
-    - bench-tyk
 
 - hosts: upstream
-  become: true
+  become: True
 
   roles:
     - role: upstream
-      cleanup: true
-
-  tags:
-    - cleanup-upstream
+      cleanup: True
 
 - hosts: tyk
-  become: true
+  become: True
 
   roles:
     - role: tyk
-      cleanup: true
-
-  tags:
-    - cleanup-tyk
+      cleanup: True
