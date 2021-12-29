@@ -39,6 +39,6 @@
     "enable_cache": false,
     "cache_all_safe_requests": false
   },
-  "disable_quota": {{ not tyk.use_quota | lower }},
-  "disable_rate_limit": {{ not tyk.use_rate_limiting | lower }}
+  "disable_quota": {{ (not(tyk.use_quota | bool)) | lower }},
+  "disable_rate_limit": {{ (not(tyk.use_rate_limiting | bool)) | lower }}
 }
