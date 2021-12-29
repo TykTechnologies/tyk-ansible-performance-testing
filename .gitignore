@@ -1,7 +1,5 @@
 **/*.pem
 **/.DS_Store
-**/hosts.yaml
-**/pt-hosts.yaml
+**/hosts.yml
 **/ansible.cfg
-performance-testing/*.txt
-pt-playbook.yaml
+*.txt

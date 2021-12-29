@@ -2,8 +2,14 @@
 - hosts: all
   become: true
 
+  vars:
+    pip_install_packages:
+      - name: docker
+
   roles:
     - docker
+    - geerlingguy.pip
+    - geerlingguy.docker
 
 - hosts: upstream
   become: true
@@ -23,7 +29,7 @@
       upstream_host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
       upstream_port: "8000"
       use_auth: false
-      results_filename: "performance-testing/bench-upstream.txt"
+      results_filename: "bench-upstream.txt"
       standup: true
 
   tags:
@@ -50,7 +56,7 @@
       upstream_port: "8080"
       api_endpoint_prefix: "auth_api_test"
       use_auth: true
-      results_filename: performance-testing/bench-tyk.txt
+      results_filename: bench-tyk.txt
       standup: true
 
   tags:

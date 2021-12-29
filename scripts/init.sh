@@ -1,3 +1,3 @@
 cp ansible.cfg.example ansible.cfg
-cp hosts.yaml.example hosts.yaml
-ansible-galaxy install -r requirements.yaml
+cp hosts.yml.example hosts.yml
+ansible-galaxy install -r requirements.yml

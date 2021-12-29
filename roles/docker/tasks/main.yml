@@ -1,0 +1,4 @@
+---
+- name: Ensure packages are up to date
+  package:
+    update_cache: yes
