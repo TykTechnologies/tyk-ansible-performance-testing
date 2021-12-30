@@ -27,12 +27,16 @@
     - ./vars/tests.yml
     - ./vars/upstream.yml
 
-  roles:
-    - role: load-generator
-      is_upstream: True
-      host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
-      host_port: "{{ upstream.service.port }}"
-      results_filename: bench-upstream.txt
+  tasks:
+    - name: Include load-generator role
+      vars:
+        is_upstream: True
+        host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
+        host_port: "{{ upstream.service.port }}"
+        results_filename: bench-upstream.txt
+      include_role:
+        name: load-generator
+      when: query_type == "REST"
 
 - hosts: tyk
   become: True

@@ -9,7 +9,7 @@
       x-tyk-authorization: "{{ gateway.secret }}"
     body: "{ \"access_rights\": { \"1\": { \"allowed_urls\": [], \"api_id\": \"1\", \"api_name\": \"Tyk Test API\", \"limit\": null, \"versions\": [ \"Default\" ] } }, \"allowance\": 100000, \"expires\": 0, \"org_id\": \"default\", \"per\": 1, \"quota_max\": -1, \"quota_remaining\": -1, \"quota_renewal_rate\": -1, \"quota_renews\": 1568655187, \"rate\": 100000, \"throttle_interval\": -1, \"throttle_retry_limit\": -1 }"
   register: response
-  when: is_upstream == false and enable_auth == true
+  when: not is_upstream and enable_auth
 
 - name: Launch Load Generator
   docker_container:
@@ -17,7 +17,7 @@
     state: started
     image: rcmorano/docker-hey
     detach: no
-    command: "{% if is_upstream %}-z 10s -q 1500 http://{{ host_ip }}:{{ host_port }}/json/valid{% elif enable_auth %}-z 10s -q 1500 -H \"Authorization: {{ response.json.key }}\" http://{{ host_ip }}:{{ host_port }}/api/json/valid{% else %}-z 10s -q 1500 http://{{ host_ip }}:{{ host_port }}/api/json/valid{% endif %}"
+    command: "-z 10s -q 1500{% if not is_upstream and enable_auth %} -H \"Authorization: {{ response.json.key }}\"{% endif %}{% if query_type == 'UDG' %} -d '{\"query\":\"query {\n  user(id: 1) {\n    username\n    name\n    email\n    posts {\n      userId\n      title\n      body\n      comments {\n        name\n        email\n        body\n      }\n    }\n  }\n}\",\"variables\":null}'{% endif %} http://{{ host_ip }}:{{ host_port }}/{% if not is_upstream %}api/{% endif %}{% if query_type == 'REST' %}json/valid{% endif %}"
   register: output
 
 - name: Copy result to local

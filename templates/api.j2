@@ -31,14 +31,129 @@
   },
   "proxy": {
     "listen_path": "/api/",
-    "target_url": "http://{{ upstream_host }}:{{ upstream.service.port }}",
+    "target_url": "{% if query_type == 'REST' %}http://{{ upstream_host }}:{{ upstream.service.port }}{% endif %}",
     "strip_listen_path": true
   },
   "enable_batch_request_support": true,
+  "disable_quota": {{ (not(enable_quota | bool)) | lower }},
+  "disable_rate_limit": {{ (not(enable_rate_limiting | bool)) | lower }},
+{% if query_type == 'UDG' %}
+  "graphql": {
+    "schema": "type Comment {\n  id: ID\n  postId: String\n  name: String\n  email: String\n  body: String\n}\n\ntype Post {\n  id: ID\n  userId: ID\n  title: String\n  body: String\n  comments: [Comment]\n}\n\ntype Query {\n  user(id: ID!): User\n}\n\ntype User {\n  id: ID\n  name: String\n  email: String\n  username: String\n  posts: [Post]\n}\n",
+    "enabled": true,
+    "engine": {
+      "field_configs": [
+        {
+          "type_name": "Query",
+          "field_name": "user",
+          "disable_default_mapping": true,
+          "path": [
+            ""
+          ]
+        },
+        {
+          "type_name": "User",
+          "field_name": "posts",
+          "disable_default_mapping": true,
+          "path": [
+            ""
+          ]
+        },
+        {
+          "type_name": "Post",
+          "field_name": "comments",
+          "disable_default_mapping": true,
+          "path": [
+            ""
+          ]
+        }
+      ],
+      "data_sources": [
+        {
+          "kind": "REST",
+          "name": "users",
+          "internal": false,
+          "root_fields": [
+            {
+              "type": "Query",
+              "fields": [
+                "user"
+              ]
+            }
+          ],
+          "config": {
+            "url": "http://{{ upstream_host }}:{{ upstream.service.port }}/users/{% raw %}{{.arguments.id}}{% endraw %}",
+            "method": "GET",
+            "body": "",
+            "headers": {},
+            "default_type_name": "User"
+          }
+        },
+        {
+          "kind": "REST",
+          "name": "user-posts",
+          "internal": false,
+          "root_fields": [
+            {
+              "type": "User",
+              "fields": [
+                "posts"
+              ]
+            }
+          ],
+          "config": {
+            "url": "http://{{ upstream_host }}:{{ upstream.service.port }}/users/{% raw %}{{.object.id}}{% endraw %}/posts",
+            "method": "GET",
+            "body": "",
+            "headers": {},
+            "default_type_name": "Post"
+          }
+        },
+        {
+          "kind": "REST",
+          "name": "posts-comments",
+          "internal": false,
+          "root_fields": [
+            {
+              "type": "Post",
+              "fields": [
+                "comments"
+              ]
+            }
+          ],
+          "config": {
+            "url": "http://{{ upstream_host }}:{{ upstream.service.port }}/posts/{% raw %}{{.object.id}}{% endraw %}/comments",
+            "method": "GET",
+            "body": "",
+            "headers": {},
+            "default_type_name": "Comment"
+          }
+        }
+      ]
+    },
+    "type_field_configurations": [],
+    "execution_mode": "executionEngine",
+    "proxy": {
+      "auth_headers": {}
+    },
+    "subgraph": {
+      "sdl": ""
+    },
+    "supergraph": {
+      "subgraphs": [],
+      "merged_sdl": "",
+      "global_headers": {}
+    },
+    "version": "2",
+    "playground": {
+      "enabled": false,
+      "path": ""
+    },
+    "last_schema_update": "2021-12-30T16:27:26.291Z"
+  },
+{% endif %}
   "cache_options": {
     "enable_cache": false,
     "cache_all_safe_requests": false
-  },
-  "disable_quota": {{ (not(enable_quota | bool)) | lower }},
-  "disable_rate_limit": {{ (not(enable_rate_limiting | bool)) | lower }}
+  }
 }

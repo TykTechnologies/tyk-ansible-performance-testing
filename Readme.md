@@ -24,7 +24,8 @@
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
-| query_type | `REST` | Type of the query used in the performance testing |
+| query_type | `REST` | Default query type. Will run the performance testing using REST APIs |
+| query_type | `UDG` | Will run the performance testing using Universal Data Graph to stitch multiple `REST` data sources and present them as a single `GraphQL` endpoint. |
 | enable_auth | `False` | Enable authentication in the performance testing |
 | enable_analytics | `False` | Enable analytics gathering in the performance testing |
 | enable_quota | `False` | Enable quota tracking in the performance testing |

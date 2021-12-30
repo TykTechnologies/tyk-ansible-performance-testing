@@ -2,7 +2,7 @@
 - name: Create Tyk network
   docker_network:
     name: tyk
-  when: standup is defined and standup == true
+  when: standup is defined and standup
 
 - name: Launch Redis container
   docker_container:
@@ -13,19 +13,19 @@
       - "127.0.0.1:6379:6379"
     networks:
       - name: tyk
-  when: standup is defined and standup == true
+  when: standup is defined and standup
 
 - name: "Create tyk.conf"
   template:
     src: "tyk.j2"
     dest: "/opt/tyk-gateway/tyk.conf"
-  when: standup is defined and standup == true
+  when: standup is defined and standup
 
 - name: "Create api.json"
   template:
     src: "api.j2"
     dest: "/opt/tyk-gateway/apps/api.json"
-  when: standup is defined and standup == true
+  when: standup is defined and standup
 
 - name: Remove Tyk Gateway container
   docker_container:
@@ -36,7 +36,7 @@
   docker_container:
     name: tyk-gateway
     state: started
-    image: tykio/tyk-gateway:latest
+    image: tykio/tyk-gateway:v4.0.0-rc18
     ports:
       - "{{ gateway.service.port }}:{{ gateway.service.port }}"
     networks:
@@ -50,16 +50,16 @@
     log_options:
       max-size: 10m
       max-file: 5
-  when: standup is defined and standup == true
+  when: standup is defined and standup
 
 - name: Remove Redis container
   docker_container:
     name: redis
     state: absent
-  when: cleanup is defined and cleanup == true
+  when: cleanup is defined and cleanup
 
 - name: Remove Tyk network
   docker_network:
     name: tyk
     state: absent
-  when: cleanup is defined and cleanup == true
+  when: cleanup is defined and cleanup

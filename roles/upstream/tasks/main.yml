@@ -3,15 +3,15 @@
   docker_container:
     name: upstream
     state: started
-    image: mangomm/go-bench-suite
+    image: "{% if query_type == 'REST' %}mangomm/go-bench-suite{% elif query_type == 'UDG' %}svenwal/jsonplaceholder{% endif %}"
     ports:
-      - "{{ upstream.service.port }}:8000"
+      - "{{ upstream.service.port }}:{% if query_type == 'REST' %}8000{% elif query_type == 'UDG' %}3000{% endif %}"
     ulimits: "nofile:80000:80000"
-    command: ./go-bench-suite upstream
-  when: standup is defined and standup == true
+    command: "{% if query_type == 'REST' %}./go-bench-suite upstream{% endif %}"
+  when: standup is defined and standup
 
 - name: Remove upstream container
   docker_container:
     name: upstream
     state: absent
-  when: cleanup is defined and cleanup == true
+  when: cleanup is defined and cleanup
