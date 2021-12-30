@@ -2,5 +2,5 @@
 **/.DS_Store
 hosts.yml
 ansible.cfg
-vars.yml
+vars/*.yml
 *.txt

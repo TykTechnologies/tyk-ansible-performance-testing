@@ -38,7 +38,7 @@
     state: started
     image: tykio/tyk-gateway:latest
     ports:
-      - "{{ tyk.service.port }}:{{ tyk.service.port }}"
+      - "{{ gateway.service.port }}:{{ gateway.service.port }}"
     networks:
       - name: tyk
     volumes:

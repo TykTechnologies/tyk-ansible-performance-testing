@@ -20,13 +20,25 @@
 6. View output of performance tests under `bench-upstream.txt`, and `bench-tyk.txt`
 
 ## Variables
+- `vars/tests.yml`
+
+| Variable | Default | Comments |
+| --------- | :---------: | --------- |
+| query_type | `REST` | Type of the query used in the performance testing |
+| enable_auth | `False` | Enable authentication in the performance testing |
+| enable_analytics | `False` | Enable analytics gathering in the performance testing |
+| enable_quota | `False` | Enable quota tracking in the performance testing |
+| enable_rate_limiting | `False` | Enable rate limiting in the performance testing |
+
+- `vars/gateway.yml`
+
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
 | tyk.service.port | `8080` | Gateway server listening port |
 | tyk.secret | `352d20ee67be67f6340b4c0605b044b7` | API secret |
-| tyk.use_auth | `False` | Enable authentication in the performance testing |
-| tyk.use_analytics | `False` | Enable analytics gathering in the performance testing |
-| tyk.use_quota | `False` | Enable quota tracking in the performance testing |
-| tyk.use_rate_limiting | `False` | Enable rate limiting in the performance testing |
-| upstream.service.port | `8000` | Upstream server listening port |
 
+- `vars/upstream.yml`
+
+| Variable | Default | Comments |
+| --------- | :---------: | --------- |
+| upstream.service.port | `8000` | Upstream server listening port |

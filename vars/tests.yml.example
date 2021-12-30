@@ -1,0 +1,5 @@
+query_type: REST
+enable_auth: False
+enable_analytics: False
+enable_quota: False
+enable_rate_limiting: False

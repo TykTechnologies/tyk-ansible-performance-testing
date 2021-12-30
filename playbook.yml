@@ -14,7 +14,8 @@
 - hosts: upstream
   become: True
   vars_files:
-    - ./vars.yml
+    - ./vars/tests.yml
+    - ./vars/upstream.yml
 
   roles:
     - role: upstream
@@ -23,7 +24,8 @@
 - hosts: load-generator
   become: True
   vars_files:
-    - ./vars.yml
+    - ./vars/tests.yml
+    - ./vars/upstream.yml
 
   roles:
     - role: load-generator
@@ -35,7 +37,9 @@
 - hosts: tyk
   become: True
   vars_files:
-    - ./vars.yml
+    - ./vars/tests.yml
+    - ./vars/gateway.yml
+    - ./vars/upstream.yml
 
   roles:
     - role: tyk
@@ -45,14 +49,14 @@
 - hosts: load-generator
   become: True
   vars_files:
-    - ./vars.yml
+    - ./vars/tests.yml
+    - ./vars/gateway.yml
 
   roles:
     - role: load-generator
       is_upstream: False
       host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
-      host_port: "{{ tyk.service.port }}"
-      use_auth: "{{ tyk.use_auth }}"
+      host_port: "{{ gateway.service.port }}"
       results_filename: bench-tyk.txt
 
 - hosts: upstream

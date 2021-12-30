@@ -1,0 +1,3 @@
+upstream:
+  service:
+    port: 8000
