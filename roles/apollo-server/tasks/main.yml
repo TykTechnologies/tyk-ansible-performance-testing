@@ -1,0 +1,59 @@
+---
+- name: Ensure working directory exists
+  file:
+    path: /node/home/apollo-server/src
+    state: directory
+  when: standup is defined and standup
+
+- name: "Copy Dockerfile"
+  template:
+    src: "../files/Dockerfile"
+    dest: "/node/home/apollo-server/Dockerfile"
+  when: standup is defined and standup
+
+- name: "Copy package.json"
+  template:
+    src: "../files/src/package.json"
+    dest: "/node/home/apollo-server/src/package.json"
+  when: standup is defined and standup
+
+- name: "Copy package-lock.json"
+  template:
+    src: "../files/src/package-lock.json"
+    dest: "/node/home/apollo-server/src/package-lock.json"
+  when: standup is defined and standup
+
+- name: "Create index.js"
+  template:
+    src: "apollo-server/index.j2"
+    dest: "/node/home/apollo-server/src/index.js"
+  when: standup is defined and standup
+
+- name: Build apollo-server container image
+  docker_image:
+    name: apollo-server
+    tag: latest
+    build:
+      path: /node/home/apollo-server/
+    source: build
+  when: standup is defined and standup
+
+- name: Remove Apollo server container
+  docker_container:
+    name: apollo-server
+    state: absent
+
+- name: Launch Apollo server container
+  docker_container:
+    name: apollo-server
+    state: started
+    image: apollo-server:latest
+    ports:
+      - "{{ apollo.service.port }}:{{ apollo.service.port }}"
+  when: standup is defined and standup
+
+- name: Remove apollo-server container image
+  docker_image:
+    name: apollo-server
+    state: absent
+  when: cleanup is defined and cleanup

@@ -1,5 +1,9 @@
-query_type: REST
+query_type: UDG
+udg_query_type: LINEAR
 enable_auth: False
 enable_analytics: False
 enable_quota: False
 enable_rate_limiting: False
+
+linear_udg_query: "query { user(id: 1) { username name email }}"
+nested_udg_query: "query { user(id: 1) { username name email posts { title body comments { name email body }}}}"

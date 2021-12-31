@@ -1,0 +1,74 @@
+const { ApolloServer, gql } = require('apollo-server')
+const { RESTDataSource }    = require('apollo-datasource-rest')
+
+const API = "http://{{ upstream_host }}:{{ upstream.service.port }}/"
+
+class SocialMediaAPI extends RESTDataSource {
+  constructor() {
+    super()
+    this.baseURL = API
+  }
+
+  async getUser(id) {
+    // Fetch user infomation.
+    const user = await this.get(`users/${id}`)
+
+{% if udg_query_type == "NESTED" %}
+    // Fetch user's posts information.
+    user.posts = await this.get(`users/${id}/posts`)
+
+    for (let i = 0, post; i < user.posts.length; ++i) {
+      post = user.posts[i]
+      post.comments = await this.get(`posts/${post.id}/comments`)
+    }
+{% endif %}
+    return user
+  }
+}
+
+const typeDefs = gql`
+  type Comment {
+    id: ID
+    postId: String
+    name: String
+    email: String
+    body: String
+  }
+
+  type Post {
+    id: ID
+    userId: ID
+    title: String
+    body: String
+    comments: [Comment]
+  }
+
+  type Query {
+    user(id: ID!): User
+  }
+
+  type User {
+    id: ID
+    name: String
+    email: String
+    username: String
+    posts: [Post]
+  }
+`
+
+const resolvers = {
+  Query: {
+    user: async (parent, { id }, { dataSources }) =>
+      dataSources.api.getUser(id),
+  },
+}
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  dataSources: () => ({
+    api: new SocialMediaAPI(),
+  }),
+})
+
+server.listen({{ apollo.service.port }}).then(({ url }) => console.log(`Server running at ${url}`))

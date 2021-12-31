@@ -30,13 +30,13 @@
   tasks:
     - name: Include load-generator role
       vars:
-        is_upstream: True
+        label: upstream
         host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
         host_port: "{{ upstream.service.port }}"
         results_filename: bench-upstream.txt
       include_role:
         name: load-generator
-      when: query_type == "REST"
+      when: query_type == 'REST'
 
 - hosts: tyk
   become: True
@@ -58,10 +58,39 @@
 
   roles:
     - role: load-generator
-      is_upstream: False
+      label: tyk
       host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
       host_port: "{{ gateway.service.port }}"
-      results_filename: bench-tyk.txt
+      results_filename: "bench-tyk-{{ query_type }}{% if query_type == 'UDG' %}-{{ udg_query_type }}{% endif %}.txt"
+
+- hosts: apollo
+  become: True
+  vars_files:
+    - ./vars/tests.yml
+    - ./vars/apollo-server.yml
+    - ./vars/upstream.yml
+
+  roles:
+    - role: apollo-server
+      upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
+      standup: True
+
+- hosts: load-generator
+  become: True
+  vars_files:
+    - ./vars/tests.yml
+    - ./vars/apollo-server.yml
+
+  tasks:
+    - name: Include load-generator role
+      vars:
+        label: apollo
+        host_ip: "{{ hostvars.apollo.ansible_facts.default_ipv4.address }}"
+        host_port: "{{ apollo.service.port }}"
+        results_filename: "bench-apollo-{{ query_type }}{% if query_type == 'UDG' %}-{{ udg_query_type }}{% endif %}.txt"
+      include_role:
+        name: load-generator
+      when: query_type == 'UDG'
 
 - hosts: upstream
   become: True
@@ -76,3 +105,16 @@
   roles:
     - role: tyk
       cleanup: True
+
+- hosts: apollo
+  become: True
+  vars_files:
+    - ./vars/tests.yml
+
+  tasks:
+    - name: Include apollo-server role
+      vars:
+        cleanup: True
+      include_role:
+        name: apollo-server
+      when: query_type == 'UDG'

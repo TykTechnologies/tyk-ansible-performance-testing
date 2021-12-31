@@ -1,0 +1,14 @@
+{
+  "name": "apollo-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-datasource-rest": "^3.5.0",
+    "apollo-server": "^3.6.0",
+    "graphql": "^16.2.0"
+  }
+}

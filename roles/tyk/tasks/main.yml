@@ -15,15 +15,21 @@
       - name: tyk
   when: standup is defined and standup
 
+- name: Ensure working directory exists
+  file:
+    path: /opt/tyk-gateway/apps
+    state: directory
+  when: standup is defined and standup
+
 - name: "Create tyk.conf"
   template:
-    src: "tyk.j2"
+    src: "tyk/tyk.j2"
     dest: "/opt/tyk-gateway/tyk.conf"
   when: standup is defined and standup
 
 - name: "Create api.json"
   template:
-    src: "api.j2"
+    src: "tyk/api.j2"
     dest: "/opt/tyk-gateway/apps/api.json"
   when: standup is defined and standup
 
