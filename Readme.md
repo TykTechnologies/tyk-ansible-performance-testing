@@ -8,7 +8,7 @@
 
 2. Run initalization script to initialize environment `sh scripts/init.sh`.
 
-3. Create 3 different servers to conduct the testing:
+3. Create 4 different servers to conduct the testing:
   - Upstream: expose port 8000 (ex. c5.2xlarge)
   - Load Generator (ex. c5.9xlarge)
   - Tyk: expose port 8080 (ex. c5.9xlarge)
