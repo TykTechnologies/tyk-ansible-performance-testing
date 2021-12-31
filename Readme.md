@@ -18,7 +18,7 @@
 
 5. Run `sudo ansible-playbook playbook.yml` to run performance tests. `sudo` is used to allow ansible to create the performance testing results files on your local machine.
 
-6. View output of performance tests under `bench-upstream.txt`, and `bench-tyk.txt`
+6. View output of performance tests under `./benchmarks/`.
 
 ## Settings
 `query_type`: `REST` and `UDG`
