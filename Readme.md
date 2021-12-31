@@ -21,12 +21,15 @@
 6. View output of performance tests under `./benchmarks/`.
 
 ## Settings
-`query_type`: `REST` and `UDG`
+### query_type
+Values: `REST` and `UDG`
 
 `REST`: Uses a REST request.
+
 `UDG`: Stitches multiple data sources together and presents them as a single GraphQL endpoint.
 
-`udg_query_type`: `LINEAR` and `NESTED`
+### udg_query_type
+Values: `LINEAR` and `NESTED`
 
 `LINEAR`: Runs the following GraphQL query:
 ```
