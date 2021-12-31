@@ -28,10 +28,12 @@ Values: `REST` and `UDG`
 
 `UDG`: Stitches multiple data sources together and presents them as a single GraphQL endpoint.
 
-### udg_query_type
-Values: `LINEAR` and `NESTED`
+### udg_depth
+Values: `0`, `1` and `2`
 
-`LINEAR`: Runs the following GraphQL query:
+`0`: Runs the following GraphQL query:
+```
+
 ```
 query {
   user(id: 1) {
@@ -42,20 +44,24 @@ query {
 }
 ```
 
-Also disables the following code snippet to stop apollo from fetching extra data.
+`1`: Runs the following GraphQL query:
 
 ```
-    // Fetch user's posts information.
-    user.posts = await this.get(`users/${id}/posts`)
-
-    for (let i = 0, post; i < user.posts.length; ++i) {
-      post = user.posts[i]
-      post.comments = await this.get(`posts/${post.id}/comments`)
+query {
+  user(id: 1) {
+    username
+    name
+    email
+    posts {
+      title
+      body
     }
+  }
+}
 ```
 
 
-`NESTED`: Runs the following GraphQL query:
+`2`: Runs the following GraphQL query:
 ```
 query {
   user(id: 1) {
@@ -81,7 +87,7 @@ query {
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
 | query_type | `REST` | Sets the query type for the performance testing |
-| udg_query_type | `LINEAR` | Sets the udg query type for the performance testing |
+| udg_depth | `0` | Sets the nested query depth |
 | enable_auth | `False` | Enable authentication in the performance testing |
 | enable_analytics | `False` | Enable analytics gathering in the performance testing |
 | enable_quota | `False` | Enable quota tracking in the performance testing |

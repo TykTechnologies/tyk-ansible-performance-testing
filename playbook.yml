@@ -61,7 +61,7 @@
       label: tyk
       host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
       host_port: "{{ gateway.service.port }}"
-      results_filename: "bench-tyk-{{ query_type }}{% if query_type == 'UDG' %}-{{ udg_query_type }}{% endif %}.txt"
+      results_filename: "bench-tyk-{{ query_type | lower }}{% if query_type == 'UDG' %}-{{ udg_depth }}{% endif %}.txt"
 
 - hosts: apollo
   become: True
@@ -87,7 +87,7 @@
         label: apollo
         host_ip: "{{ hostvars.apollo.ansible_facts.default_ipv4.address }}"
         host_port: "{{ apollo.service.port }}"
-        results_filename: "bench-apollo-{{ query_type }}{% if query_type == 'UDG' %}-{{ udg_query_type }}{% endif %}.txt"
+        results_filename: "bench-apollo-{{ query_type | lower }}{% if query_type == 'UDG' %}-{{ udg_depth }}{% endif %}.txt"
       include_role:
         name: load-generator
       when: query_type == 'UDG'

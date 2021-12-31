@@ -13,14 +13,15 @@ class SocialMediaAPI extends RESTDataSource {
     // Fetch user infomation.
     const user = await this.get(`users/${id}`)
 
-{% if udg_query_type == "NESTED" %}
+{% if udg_depth > 0 %}
     // Fetch user's posts information.
     user.posts = await this.get(`users/${id}/posts`)
-
+{% if udg_depth > 1 %}
     for (let i = 0, post; i < user.posts.length; ++i) {
       post = user.posts[i]
       post.comments = await this.get(`posts/${post.id}/comments`)
     }
+{% endif %}
 {% endif %}
     return user
   }
