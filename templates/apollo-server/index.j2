@@ -9,21 +9,19 @@ class SocialMediaAPI extends RESTDataSource {
     this.baseURL = API
   }
 
+  // Fetch user infomation.
   async getUser(id) {
-    // Fetch user infomation.
-    const user = await this.get(`users/${id}`)
+    return await this.get(`users/${id}`)
+  }
 
-{% if udg_depth > 0 %}
-    // Fetch user's posts information.
-    user.posts = await this.get(`users/${id}/posts`)
-{% if udg_depth > 1 %}
-    for (let i = 0, post; i < user.posts.length; ++i) {
-      post = user.posts[i]
-      post.comments = await this.get(`posts/${post.id}/comments`)
-    }
-{% endif %}
-{% endif %}
-    return user
+  // Fetch posts infomation.
+  async getPosts(id) {
+    return await this.get(`users/${id}/posts`)
+  }
+
+  // Fetch comments infomation.
+  async getComments(id) {
+    return await this.get(`posts/${id}/comments`)
   }
 }
 
@@ -62,6 +60,14 @@ const resolvers = {
     user: async (parent, { id }, { dataSources }) =>
       dataSources.api.getUser(id),
   },
+  User: {
+    posts: async (parent, args, { dataSources }) =>
+      dataSources.api.getPosts(parent.id),
+  },
+  Post: {
+    comments: async (parent, args, { dataSources }) =>
+      dataSources.api.getComments(parent.id),
+  }
 }
 
 const server = new ApolloServer({
