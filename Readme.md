@@ -33,8 +33,6 @@ Values: `0`, `1` and `2`
 
 `0`: Runs the following GraphQL query:
 ```
-
-```
 query {
   user(id: 1) {
     username
