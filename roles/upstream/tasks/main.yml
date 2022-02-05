@@ -3,9 +3,9 @@
   docker_container:
     name: upstream
     state: started
-    image: "{% if query_type == 'REST' %}mangomm/go-bench-suite{% elif query_type == 'UDG' %}svenwal/jsonplaceholder{% endif %}"
+    image: "{% if query_type == 'REST' %}mangomm/go-bench-suite{% elif query_type == 'UDG' %}mangomm/jsonplaceholder{% endif %}"
     ports:
-      - "{{ upstream.service.port }}:{% if query_type == 'REST' %}8000{% elif query_type == 'UDG' %}3000{% endif %}"
+      - "{{ upstream.service.port }}:8000"
     ulimits: "nofile:80000:80000"
     command: "{% if query_type == 'REST' %}./go-bench-suite upstream{% endif %}"
   when: standup is defined and standup
