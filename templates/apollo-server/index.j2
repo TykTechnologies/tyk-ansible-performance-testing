@@ -5,7 +5,7 @@ const { cpus }              = require('os')
 const p                     = require('process')
 
 const API     = "http://{{ upstream_host }}:{{ upstream.service.port }}/"
-const numCPUs = cpus().length
+const numCPUs = {% if not limit_cores %}cpus().length{% else %}{{ limit_cores }}{% endif %}
 
 class SocialMediaAPI extends RESTDataSource {
   constructor() {

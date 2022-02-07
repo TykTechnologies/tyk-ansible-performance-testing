@@ -53,6 +53,7 @@
     ulimits: "nofile:80000:80000"
     env:
       GOGC: "1600"
+      GOMAXPROCS: "{% if limit_cores %}{{ limit_cores }}{% endif %}"
     log_options:
       max-size: 10m
       max-file: 5
