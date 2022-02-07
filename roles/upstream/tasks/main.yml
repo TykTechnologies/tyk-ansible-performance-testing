@@ -6,6 +6,8 @@
     image: "{% if query_type == 'REST' %}mangomm/go-bench-suite{% elif query_type == 'UDG' %}mangomm/jsonplaceholder{% endif %}"
     ports:
       - "{{ upstream.service.port }}:8000"
+    env:
+      GOGC: "3200"
     ulimits: "nofile:80000:80000"
     command: "{% if query_type == 'REST' %}./go-bench-suite upstream{% endif %}"
   when: standup is defined and standup
