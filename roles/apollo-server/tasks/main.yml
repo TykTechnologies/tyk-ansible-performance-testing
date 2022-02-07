@@ -29,6 +29,16 @@
     dest: "/node/home/apollo-server/src/index.js"
   when: standup is defined and standup
 
+- name: Remove Apollo server container
+  docker_container:
+    name: apollo-server
+    state: absent
+
+- name: Remove apollo-server container image
+  docker_image:
+    name: apollo-server
+    state: absent
+
 - name: Build apollo-server container image
   docker_image:
     name: apollo-server
@@ -38,11 +48,6 @@
     source: build
   when: standup is defined and standup
 
-- name: Remove Apollo server container
-  docker_container:
-    name: apollo-server
-    state: absent
-
 - name: Launch Apollo server container
   docker_container:
     name: apollo-server
@@ -51,9 +56,3 @@
     ports:
       - "{{ apollo.service.port }}:{{ apollo.service.port }}"
   when: standup is defined and standup
-
-- name: Remove apollo-server container image
-  docker_image:
-    name: apollo-server
-    state: absent
-  when: cleanup is defined and cleanup
