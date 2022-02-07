@@ -9,6 +9,9 @@
   "dependencies": {
     "apollo-datasource-rest": "^3.5.0",
     "apollo-server": "^3.6.0",
-    "graphql": "^16.2.0"
+    "cluster": "^0.7.7",
+    "graphql": "^16.2.0",
+    "os": "^0.1.2",
+    "process": "^0.11.10"
   }
 }

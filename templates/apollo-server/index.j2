@@ -1,7 +1,11 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { RESTDataSource }    = require('apollo-datasource-rest')
+const cluster               = require('cluster')
+const { cpus }              = require('os')
+const p                     = require('process')
 
-const API = "http://{{ upstream_host }}:{{ upstream.service.port }}/"
+const API     = "http://{{ upstream_host }}:{{ upstream.service.port }}/"
+const numCPUs = cpus().length
 
 class SocialMediaAPI extends RESTDataSource {
   constructor() {
@@ -78,4 +82,23 @@ const server = new ApolloServer({
   }),
 })
 
-server.listen({{ apollo.service.port }}).then(({ url }) => console.log(`Server running at ${url}`))
+if (cluster.isPrimary) {
+  console.log(`Primary ${process.pid} is running`);
+
+  // Fork workers.
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`worker ${worker.process.pid} died`);
+  });
+} else {
+  // Workers can share any TCP connection
+  // In this case it is an HTTP server
+  server
+    .listen({{ apollo.service.port }})
+    .then(({ url }) => console.log(`Server running at ${url}`))
+
+  console.log(`Worker ${process.pid} started`);
+}
