@@ -11,6 +11,9 @@
     - geerlingguy.pip
     - geerlingguy.docker
 
+  tags:
+    - install
+
 - hosts: upstream
   become: True
   vars_files:
@@ -20,6 +23,9 @@
   roles:
     - role: upstream
       standup: True
+
+  tags:
+    - standup
 
 - hosts: load-generator
   become: True
@@ -38,6 +44,9 @@
         name: load-generator
       when: query_type == 'REST'
 
+  tags:
+    - test
+
 - hosts: tyk
   become: True
   vars_files:
@@ -49,6 +58,9 @@
     - role: tyk
       upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
       standup: True
+
+  tags:
+    - standup
 
 - hosts: load-generator
   become: True
@@ -63,6 +75,9 @@
       host_port: "{{ gateway.service.port }}"
       results_filename: "bench-tyk-{{ query_type | lower }}{% if query_type == 'UDG' %}-{{ udg_depth }}{% endif %}.txt"
 
+  tags:
+    - test
+
 - hosts: apollo
   become: True
   vars_files:
@@ -74,6 +89,9 @@
     - role: apollo-server
       upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
       standup: True
+
+  tags:
+    - standup
 
 - hosts: load-generator
   become: True
@@ -92,6 +110,9 @@
         name: load-generator
       when: query_type == 'UDG'
 
+  tags:
+    - test
+
 - hosts: upstream
   become: True
 
@@ -99,12 +120,18 @@
     - role: upstream
       cleanup: True
 
+  tags:
+    - cleanup
+
 - hosts: tyk
   become: True
 
   roles:
     - role: tyk
       cleanup: True
+
+  tags:
+    - cleanup
 
 - hosts: apollo
   become: True
@@ -118,3 +145,6 @@
       include_role:
         name: apollo-server
       when: query_type == 'UDG'
+
+  tags:
+    - cleanup
