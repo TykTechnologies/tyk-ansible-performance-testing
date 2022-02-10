@@ -37,7 +37,7 @@
   "enable_batch_request_support": true,
   "disable_quota": {{ (not(enable_quota | bool)) | lower }},
   "disable_rate_limit": {{ (not(enable_rate_limiting | bool)) | lower }},
-{% if query_type == 'UDG' %}
+{% if query_type == 'STITCH' %}
   "graphql": {
     "schema": "type Comment {\n  id: ID\n  postId: String\n  name: String\n  email: String\n  body: String\n}\n\ntype Post {\n  id: ID\n  userId: ID\n  title: String\n  body: String\n  comments: [Comment]\n}\n\ntype Query {\n  user(id: ID!): User\n}\n\ntype User {\n  id: ID\n  name: String\n  email: String\n  username: String\n  posts: [Post]\n}\n",
     "enabled": true,
@@ -150,6 +150,54 @@
       "path": ""
     },
     "last_schema_update": "2021-12-30T16:27:26.291Z"
+  },
+{% elif query_type == 'FEDERATE' %}
+  "graphql": {
+    "schema": "type Query {\n  user(id: ID!): User!\n  users: [User!]!\n  comment(id: ID!): Comment!\n  comments: [Comment!]!\n  post(id: ID!): Post!\n  posts: [Post!]!\n}\n\ntype User {\n  id: ID!\n  name: String!\n  username: String!\n  email: String!\n  address: Address!\n  phone: String!\n  website: String!\n  company: Company!\n  posts: [Post]\n}\n\ntype Address {\n  street: String!\n  suite: String!\n  city: String!\n  zipcode: String!\n  geo: GeoLocation!\n}\n\ntype GeoLocation {\n  lat: String!\n  lng: String!\n}\n\ntype Company {\n  name: String!\n  catchPhrase: String!\n  bs: String!\n}\n\ntype Comment {\n  id: ID!\n  postId: ID!\n  name: String!\n  email: String!\n  body: String!\n}\n\ntype Post {\n  id: ID!\n  userId: ID!\n  title: String!\n  body: String!\n  comments: [Comment]\n}",
+    "enabled": true,
+    "engine": {
+      "field_configs": [],
+      "data_sources": []
+    },
+    "type_field_configurations": [],
+    "execution_mode": "supergraph",
+    "proxy": {
+      "auth_headers": {}
+    },
+    "subgraph": {
+      "sdl": ""
+    },
+    "supergraph": {
+      "updated_at": "2022-02-10T21:03:39.511Z",
+      "subgraphs": [
+        {
+          "api_id": "2",
+          "name": "users-subgraph",
+          "url": "tyk://users-subgraph",
+          "sdl": "extend type Query {\n    user(id: ID!): User!\n    users: [User!]!\n}\n\ntype User @key(fields: \"id\") {\n    id: ID!\n    name: String!\n    username: String!\n    email: String!\n    address: Address!\n    phone: String!\n    website: String!\n    company: Company!\n}\n\ntype Address {\n    street: String!\n    suite: String!\n    city: String!\n    zipcode: String!\n    geo: GeoLocation!\n}\n\ntype GeoLocation {\n    lat: String!\n    lng: String!\n}\n\ntype Company {\n    name: String!\n    catchPhrase: String!\n    bs: String!\n}\n"
+        },
+        {
+          "api_id": "3",
+          "name": "comments-subgraph",
+          "url": "tyk://comments-subgraph",
+          "sdl": "extend type Query {\n    comment(id: ID!): Comment!\n    comments: [Comment!]!\n}\n\ntype Comment @key(fields: \"id\") {\n    id: ID!\n    postId: ID!\n    name: String!\n    email: String!\n    body: String!\n}\n\nextend type Post @key(fields: \"id\") {\n    id: ID! @external\n    comments: [Comment]\n}\n"
+        },
+        {
+          "api_id": "4",
+          "name": "posts-subgraph",
+          "url": "tyk://posts-subgraph",
+          "sdl": "extend type Query {\n    post(id: ID!): Post!\n    posts: [Post!]!\n}\n\ntype Post @key(fields: \"id\") {\n    id: ID!\n    userId: ID!\n    title: String!\n    body: String!\n}\n\nextend type User @key(fields: \"id\") {\n    id: ID! @external\n    posts: [Post]\n}\n"
+        }
+      ],
+      "merged_sdl": "type Query {\n  user(id: ID!): User!\n  users: [User!]!\n  comment(id: ID!): Comment!\n  comments: [Comment!]!\n  post(id: ID!): Post!\n  posts: [Post!]!\n}\n\ntype User {\n  id: ID!\n  name: String!\n  username: String!\n  email: String!\n  address: Address!\n  phone: String!\n  website: String!\n  company: Company!\n  posts: [Post]\n}\n\ntype Address {\n  street: String!\n  suite: String!\n  city: String!\n  zipcode: String!\n  geo: GeoLocation!\n}\n\ntype GeoLocation {\n  lat: String!\n  lng: String!\n}\n\ntype Company {\n  name: String!\n  catchPhrase: String!\n  bs: String!\n}\n\ntype Comment {\n  id: ID!\n  postId: ID!\n  name: String!\n  email: String!\n  body: String!\n}\n\ntype Post {\n  id: ID!\n  userId: ID!\n  title: String!\n  body: String!\n  comments: [Comment]\n}",
+      "global_headers": {}
+    },
+    "version": "2",
+    "playground": {
+      "enabled": false,
+      "path": ""
+    },
+    "last_schema_update": "2022-02-10T21:03:39.511Z"
   },
 {% endif %}
   "cache_options": {

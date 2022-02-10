@@ -17,7 +17,7 @@
     state: started
     image: rcmorano/docker-hey
     detach: no
-    command: "-z 10s{% if label == 'tyk' and enable_auth %} -H \"Authorization: {{ response.json.key }}\"{% endif %}{% if query_type == 'UDG' %} -m POST -H \"Content-Type: application/json\" -d \"{\\\"query\\\":\\\"{{ udg_query[udg_depth] }}\\\",\\\"variables\\\":null}\"{% endif %} http://{{ host_ip }}:{{ host_port }}/{% if label == 'tyk' %}api/{% endif %}{% if query_type == 'REST' %}json/valid{% endif %}"
+    command: "-z 10s{% if label == 'tyk' and enable_auth %} -H \"Authorization: {{ response.json.key }}\"{% endif %}{% if query_type != 'REST' %} -m POST -H \"Content-Type: application/json\" -d \"{\\\"query\\\":\\\"{{ graphql_query[query_depth] }}\\\",\\\"variables\\\":null}\"{% endif %} http://{{ host_ip }}:{{ host_port }}/{% if label == 'tyk' %}api/{% else %}json/valid{% endif %}"
   register: output
 
 - name: Copy result to local

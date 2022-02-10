@@ -1,3 +1,10 @@
 upstream:
   service:
     port: 8000
+  services:
+    users:
+      port: 4001
+    posts:
+      port: 4002
+    comments:
+      port: 4003

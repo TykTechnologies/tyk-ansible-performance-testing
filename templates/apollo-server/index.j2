@@ -1,16 +1,17 @@
-const { ApolloServer, gql } = require('apollo-server')
-const { RESTDataSource }    = require('apollo-datasource-rest')
-const cluster               = require('cluster')
-const { cpus }              = require('os')
-const p                     = require('process')
+const { ApolloServer, gql }                   = require('apollo-server')
+const { ApolloGateway, IntrospectAndCompose } = require("@apollo/gateway")
+const { RESTDataSource }                      = require('apollo-datasource-rest')
+const cluster                                 = require('cluster')
+const { cpus }                                = require('os')
+const p                                       = require('process')
 
-const API     = "http://{{ upstream_host }}:{{ upstream.service.port }}/"
 const numCPUs = {% if not limit_cores %}cpus().length{% else %}{{ limit_cores }}{% endif %}
 
+{% if query_type == 'STITCH' %}
 class SocialMediaAPI extends RESTDataSource {
   constructor() {
     super()
-    this.baseURL = API
+    this.baseURL = "http://{{ upstream_host }}:{{ upstream.service.port }}/"
   }
 
   // Fetch user infomation.
@@ -81,6 +82,18 @@ const server = new ApolloServer({
     api: new SocialMediaAPI(),
   }),
 })
+{% else %}
+const gateway = new ApolloGateway({
+  supergraphSdl: new IntrospectAndCompose({
+    subgraphs: [
+      { name: "users",    url: "http://{{ upstream_host }}:{{ upstream.services.users.port }}/query" },
+      { name: "posts",    url: "http://{{ upstream_host }}:{{ upstream.services.posts.port }}/query" },
+      { name: "comments", url: "http://{{ upstream_host }}:{{ upstream.services.comments.port }}/query" },
+    ],
+  }),
+})
+const server = new ApolloServer({ gateway })
+{% endif %}
 
 if (cluster.isPrimary) {
   console.log(`Primary ${process.pid} is running`);

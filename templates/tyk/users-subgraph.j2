@@ -1,0 +1,71 @@
+{
+  "name": "users-subgraph",
+  "api_id": "2",
+  "org_id": "default",
+  "auth": {},
+  "use_keyless": true,
+  "version_data": {
+    "not_versioned": true,
+    "versions": {
+      "Default": {
+        "name": "Default",
+        "expires": "3000-01-02 15:04",
+        "use_extended_paths": true,
+        "extended_paths": {
+          "ignored": [],
+          "white_list": [],
+          "black_list": []
+        }
+      }
+    }
+  },
+  "internal": true,
+  "proxy": {
+    "target_url": "http://{{ upstream_host }}:{{ upstream.services.users.port }}/query",
+    "strip_listen_path": true,
+    "enable_load_balancing": false,
+    "listen_path": "/users-subgraph/",
+    "disable_strip_slash": true
+  },
+  "enable_batch_request_support": true,
+  "disable_quota": true,
+  "disable_rate_limit": true,
+  "graphql": {
+    "schema": "directive @extends on OBJECT | INTERFACE\n\ndirective @external on FIELD_DEFINITION\n\ndirective @key(fields: _FieldSet!) on OBJECT | INTERFACE\n\ndirective @provides(fields: _FieldSet!) on FIELD_DEFINITION\n\ndirective @requires(fields: _FieldSet!) on FIELD_DEFINITION\n\nscalar _Any\n\nunion _Entity = User\n\nscalar _FieldSet\n\ntype _Service {\n  sdl: String\n}\n\ntype Address {\n  street: String!\n  suite: String!\n  city: String!\n  zipcode: String!\n  geo: GeoLocation!\n}\n\ntype Company {\n  name: String!\n  catchPhrase: String!\n  bs: String!\n}\n\ntype Entity {\n  findUserByID(id: ID!): User!\n}\n\ntype GeoLocation {\n  lat: String!\n  lng: String!\n}\n\ntype Query {\n  user(id: ID!): User!\n  users: [User!]!\n  _entities(representations: [_Any!]!): [_Entity]!\n  _service: _Service!\n}\n\ntype User {\n  id: ID!\n  name: String!\n  username: String!\n  email: String!\n  address: Address!\n  phone: String!\n  website: String!\n  company: Company!\n}\n",
+    "enabled": true,
+    "engine": {
+      "field_configs": [],
+      "data_sources": []
+    },
+    "type_field_configurations": [],
+    "execution_mode": "subgraph",
+    "proxy": {
+      "auth_headers": {}
+    },
+    "subgraph": {
+      "sdl": "extend type Query {\n    user(id: ID!): User!\n    users: [User!]!\n}\n\ntype User @key(fields: \"id\") {\n    id: ID!\n    name: String!\n    username: String!\n    email: String!\n    address: Address!\n    phone: String!\n    website: String!\n    company: Company!\n}\n\ntype Address {\n    street: String!\n    suite: String!\n    city: String!\n    zipcode: String!\n    geo: GeoLocation!\n}\n\ntype GeoLocation {\n    lat: String!\n    lng: String!\n}\n\ntype Company {\n    name: String!\n    catchPhrase: String!\n    bs: String!\n}\n"
+    },
+    "supergraph": {
+      "subgraphs": [
+        {
+          "api_id": "",
+          "name": "",
+          "url": "",
+          "sdl": ""
+        }
+      ],
+      "merged_sdl": "",
+      "global_headers": {}
+    },
+    "version": "2",
+    "playground": {
+      "enabled": false,
+      "path": ""
+    },
+    "last_schema_update": "2022-02-10T13:55:39.126Z"
+  },
+  "cache_options": {
+    "enable_cache": false,
+    "cache_all_safe_requests": false
+  }
+}

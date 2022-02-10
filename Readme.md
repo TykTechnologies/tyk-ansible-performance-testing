@@ -22,13 +22,16 @@
 
 ## Settings
 ### query_type
-Values: `REST` and `UDG`
+Values: `REST` and `STITCH`
 
 `REST`: Uses a REST request.
 
-`UDG`: Stitches multiple data sources together and presents them as a single GraphQL endpoint.
+`STITCH`: Stitches multiple data sources together and presents them as a single GraphQL endpoint.
 
-### udg_depth
+`FEDERATE`: Stitches multiple supgrahs and presents them as a supergraph.
+
+### query_depth
+`query_type`: `STITCH` and `FEDERATE`
 Values: `0`, `1` and `2`
 
 `0`: Runs the following GraphQL query:
@@ -82,13 +85,13 @@ query {
 ## Variables
 - `vars/tests.yml`
 
-| Variable | Default | Comments |
-| --------- | :---------: | --------- |
-| query_type | `REST` | Sets the query type for the performance testing |
-| udg_depth | `0` | Sets the nested query depth |
-| enable_auth | `False` | Enable authentication in the performance testing |
-| enable_analytics | `False` | Enable analytics gathering in the performance testing |
-| enable_quota | `False` | Enable quota tracking in the performance testing |
+| Variable             | Default | Comments |
+|----------------------| :---------: | --------- |
+| query_type           | `REST` | Sets the query type for the performance testing |
+| query_depth          | `0` | Sets the nested query depth |
+| enable_auth          | `False` | Enable authentication in the performance testing |
+| enable_analytics     | `False` | Enable analytics gathering in the performance testing |
+| enable_quota         | `False` | Enable quota tracking in the performance testing |
 | enable_rate_limiting | `False` | Enable rate limiting in the performance testing |
 
 - `vars/gateway.yml`
@@ -109,3 +112,6 @@ query {
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
 | upstream.service.port | `8000` | Upstream server listening port |
+| upstream.services.users.port | `4001` | Upstream server for users federated service listening port |
+| upstream.services.posts.port | `4002` | Upstream server for ports federated service listening port |
+| upstream.services.comments.port | `4003` | Upstream server for comments federated service listening port |

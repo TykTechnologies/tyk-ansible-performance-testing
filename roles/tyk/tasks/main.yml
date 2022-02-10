@@ -33,6 +33,24 @@
     dest: "/opt/tyk-gateway/apps/api.json"
   when: standup is defined and standup
 
+- name: "Create users-subgraph.json"
+  template:
+    src: "tyk/users-subgraph.j2"
+    dest: "/opt/tyk-gateway/apps/users-subgraph.json"
+  when: standup is defined and standup and query_type == "FEDERATE"
+
+- name: "Create posts-subgraph.json"
+  template:
+    src: "tyk/posts-subgraph.j2"
+    dest: "/opt/tyk-gateway/apps/posts-subgraph.json"
+  when: standup is defined and standup and query_type == "FEDERATE"
+
+- name: "Create comments-subgraph.json"
+  template:
+    src: "tyk/comments-subgraph.j2"
+    dest: "/opt/tyk-gateway/apps/comments-subgraph.json"
+  when: standup is defined and standup and query_type == "FEDERATE"
+
 - name: Remove Tyk Gateway container
   docker_container:
     name: tyk-gateway
@@ -49,7 +67,7 @@
       - name: tyk
     volumes:
       - "/opt/tyk-gateway/tyk.conf:/opt/tyk-gateway/tyk.conf"
-      - "/opt/tyk-gateway/apps/api.json:/opt/tyk-gateway/apps/api.json"
+      - "/opt/tyk-gateway/apps:/opt/tyk-gateway/apps"
     ulimits: "nofile:80000:80000"
     env:
       GOGC: "1600"

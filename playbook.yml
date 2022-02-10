@@ -79,7 +79,7 @@
       label: tyk
       host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
       host_port: "{{ gateway.service.port }}"
-      results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-tyk-{{ query_type | lower }}{% if query_type == 'UDG' %}-{{ udg_depth }}{% endif %}.txt"
+      results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-tyk-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
 
   tags:
     - test
@@ -111,10 +111,10 @@
         label: apollo
         host_ip: "{{ hostvars.apollo.ansible_facts.default_ipv4.address }}"
         host_port: "{{ apollo.service.port }}"
-        results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-apollo-{{ query_type | lower }}{% if query_type == 'UDG' %}-{{ udg_depth }}{% endif %}.txt"
+        results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-apollo-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
       include_role:
         name: load-generator
-      when: query_type == 'UDG'
+      when: query_type != 'REST'
 
   tags:
     - test
@@ -150,7 +150,7 @@
         cleanup: True
       include_role:
         name: apollo-server
-      when: query_type == 'UDG'
+      when: query_type != 'REST'
 
   tags:
     - cleanup

@@ -1,0 +1,71 @@
+{
+  "name": "comments-subgraph",
+  "api_id": "4",
+  "org_id": "default",
+  "auth": {},
+  "use_keyless": true,
+  "version_data": {
+    "not_versioned": true,
+    "versions": {
+      "Default": {
+        "name": "Default",
+        "expires": "3000-01-02 15:04",
+        "use_extended_paths": true,
+        "extended_paths": {
+          "ignored": [],
+          "white_list": [],
+          "black_list": []
+        }
+      }
+    }
+  },
+  "internal": true,
+  "proxy": {
+    "target_url": "http://{{ upstream_host }}:{{ upstream.services.comments.port }}/query",
+    "strip_listen_path": true,
+    "enable_load_balancing": false,
+    "listen_path": "/comments-subgraph/",
+    "disable_strip_slash": true
+  },
+  "enable_batch_request_support": true,
+  "disable_quota": true,
+  "disable_rate_limit": true,
+  "graphql": {
+    "schema": "directive @extends on OBJECT | INTERFACE\n\ndirective @external on FIELD_DEFINITION\n\ndirective @key(fields: _FieldSet!) on OBJECT | INTERFACE\n\ndirective @provides(fields: _FieldSet!) on FIELD_DEFINITION\n\ndirective @requires(fields: _FieldSet!) on FIELD_DEFINITION\n\nscalar _Any\n\nunion _Entity = Comment | Post\n\nscalar _FieldSet\n\ntype _Service {\n  sdl: String\n}\n\ntype Comment {\n  id: ID!\n  postId: ID!\n  name: String!\n  email: String!\n  body: String!\n}\n\ntype Entity {\n  findCommentByID(id: ID!): Comment!\n  findPostByID(id: ID!): Post!\n}\n\ntype Post {\n  id: ID!\n  comments: [Comment]\n}\n\ntype Query {\n  comment(id: ID!): Comment!\n  comments: [Comment!]!\n  _entities(representations: [_Any!]!): [_Entity]!\n  _service: _Service!\n}\n",
+    "enabled": true,
+    "engine": {
+      "field_configs": [],
+      "data_sources": []
+    },
+    "type_field_configurations": [],
+    "execution_mode": "subgraph",
+    "proxy": {
+      "auth_headers": {}
+    },
+    "subgraph": {
+      "sdl": "extend type Query {\n    comment(id: ID!): Comment!\n    comments: [Comment!]!\n}\n\ntype Comment @key(fields: \"id\") {\n    id: ID!\n    postId: ID!\n    name: String!\n    email: String!\n    body: String!\n}\n\nextend type Post @key(fields: \"id\") {\n    id: ID! @external\n    comments: [Comment]\n}\n"
+    },
+    "supergraph": {
+      "subgraphs": [
+        {
+          "api_id": "",
+          "name": "",
+          "url": "",
+          "sdl": ""
+        }
+      ],
+      "merged_sdl": "",
+      "global_headers": {}
+    },
+    "version": "2",
+    "playground": {
+      "enabled": false,
+      "path": ""
+    },
+    "last_schema_update": "2022-02-10T15:57:14.674Z"
+  },
+  "cache_options": {
+    "enable_cache": false,
+    "cache_all_safe_requests": false
+  }
+}
