@@ -1,22 +1,19 @@
 ---
 - hosts: all
   tasks:
-  - name: Collect and print all available facts
-    ansible.builtin.debug:
+  - name: Collect ansible_facts to discover internal IPs
+    debug:
       var: ansible_facts
 
 - hosts: all
   become: True
-
   vars:
     pip_install_packages:
       - name: docker
-
   roles:
-    - docker
+    - htop
     - geerlingguy.pip
     - geerlingguy.docker
-
   tags:
     - install
 
@@ -25,11 +22,9 @@
   vars_files:
     - ./vars/tests.yml
     - ./vars/upstream.yml
-
   roles:
     - role: upstream
       standup: True
-
   tags:
     - standup
 
@@ -38,7 +33,6 @@
   vars_files:
     - ./vars/tests.yml
     - ./vars/upstream.yml
-
   tasks:
     - name: Include load-generator role
       vars:
@@ -49,7 +43,6 @@
       include_role:
         name: load-generator
       when: query_type == 'REST'
-
   tags:
     - test
 
@@ -59,12 +52,10 @@
     - ./vars/tests.yml
     - ./vars/gateway.yml
     - ./vars/upstream.yml
-
   roles:
     - role: tyk
       upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
       standup: True
-
   tags:
     - standup
 
@@ -73,14 +64,12 @@
   vars_files:
     - ./vars/tests.yml
     - ./vars/gateway.yml
-
   roles:
     - role: load-generator
       label: tyk
       host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
       host_port: "{{ gateway.service.port }}"
       results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-tyk-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
-
   tags:
     - test
 
@@ -90,12 +79,10 @@
     - ./vars/tests.yml
     - ./vars/apollo-server.yml
     - ./vars/upstream.yml
-
   roles:
     - role: apollo-server
       upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
       standup: True
-
   tags:
     - standup
 
@@ -104,7 +91,6 @@
   vars_files:
     - ./vars/tests.yml
     - ./vars/apollo-server.yml
-
   tasks:
     - name: Include load-generator role
       vars:
@@ -115,27 +101,22 @@
       include_role:
         name: load-generator
       when: query_type != 'REST'
-
   tags:
     - test
 
 - hosts: upstream
   become: True
-
   roles:
     - role: upstream
       cleanup: True
-
   tags:
     - cleanup
 
 - hosts: tyk
   become: True
-
   roles:
     - role: tyk
       cleanup: True
-
   tags:
     - cleanup
 
@@ -143,7 +124,6 @@
   become: True
   vars_files:
     - ./vars/tests.yml
-
   tasks:
     - name: Include apollo-server role
       vars:
@@ -151,6 +131,5 @@
       include_role:
         name: apollo-server
       when: query_type != 'REST'
-
   tags:
     - cleanup
