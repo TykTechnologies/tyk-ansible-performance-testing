@@ -1,0 +1,15 @@
+---
+- name: Create users-subgraph.json
+  template:
+    src: tyk/users-subgraph.j2
+    dest: /opt/tyk-gateway/apps/users-subgraph.json
+
+- name: Create posts-subgraph.json
+  template:
+    src: tyk/posts-subgraph.j2
+    dest: /opt/tyk-gateway/apps/posts-subgraph.json
+
+- name: Create comments-subgraph.json
+  template:
+    src: tyk/comments-subgraph.j2
+    dest: /opt/tyk-gateway/apps/comments-subgraph.json

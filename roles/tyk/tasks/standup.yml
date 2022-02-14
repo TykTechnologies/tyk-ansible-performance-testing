@@ -1,0 +1,34 @@
+---
+- name: Create tyk.conf
+  template:
+    src: tyk/tyk.j2
+    dest: /opt/tyk-gateway/tyk.conf
+
+- name: Create api.json
+  template:
+    src: tyk/api.j2
+    dest: /opt/tyk-gateway/apps/api.json
+
+- name: Include federation standup task
+  include_tasks: standup-federation.yml
+  when: query_type == "FEDERATE"
+
+- name: Launch Tyk Gateway container
+  docker_container:
+    name: tyk-gateway
+    state: started
+    image: tykio/tyk-gateway:v4.0.0-rc28
+    ports:
+      - "{{ gateway.service.port }}:{{ gateway.service.port }}"
+    networks:
+      - name: tyk
+    volumes:
+      - "/opt/tyk-gateway/tyk.conf:/opt/tyk-gateway/tyk.conf"
+      - "/opt/tyk-gateway/apps:/opt/tyk-gateway/apps"
+    ulimits: "nofile:80000:80000"
+    env:
+      GOGC: "1600"
+      GOMAXPROCS: "{% if limit_cores %}{{ limit_cores }}{% endif %}"
+    log_options:
+      max-size: 10m
+      max-file: 5

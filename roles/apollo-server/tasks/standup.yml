@@ -1,0 +1,21 @@
+---
+- name: Create index.js
+  template:
+    src: apollo-server/index.j2
+    dest: /node/home/apollo-server/src/index.js
+
+- name: Build apollo-server container image
+  docker_image:
+    name: apollo-server
+    tag: latest
+    build:
+      path: /node/home/apollo-server/
+    source: build
+
+- name: Launch Apollo server container
+  docker_container:
+    name: apollo-server
+    state: started
+    image: apollo-server:latest
+    ports:
+      - "{{ apollo.service.port }}:{{ apollo.service.port }}"

@@ -5,7 +5,7 @@
     method: POST
     body_format: json
     headers:
-      Content-Type: "application/json"
+      Content-Type: application/json
       x-tyk-authorization: "{{ gateway.secret }}"
     body: "{ \"access_rights\": { \"1\": { \"allowed_urls\": [], \"api_id\": \"1\", \"api_name\": \"Tyk Test API\", \"limit\": null, \"versions\": [ \"Default\" ] } }, \"allowance\": 100000, \"expires\": 0, \"org_id\": \"default\", \"per\": 1, \"quota_max\": -1, \"quota_remaining\": -1, \"quota_renewal_rate\": -1, \"quota_renews\": 1568655187, \"rate\": 100000, \"throttle_interval\": -1, \"throttle_retry_limit\": -1 }"
   register: response

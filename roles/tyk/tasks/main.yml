@@ -1,90 +1,13 @@
 ---
-- name: Create Tyk network
-  docker_network:
-    name: tyk
-  when: standup is defined and standup
-
-- name: Launch Redis container
-  docker_container:
-    name: redis
-    state: started
-    image: redis:4.0-alpine
-    ports:
-      - "127.0.0.1:6379:6379"
-    networks:
-      - name: tyk
-  when: standup is defined and standup
-
-- name: Ensure working directory exists
-  file:
-    path: /opt/tyk-gateway/apps
-    state: directory
-  when: standup is defined and standup
-
-- name: "Create tyk.conf"
-  template:
-    src: "tyk/tyk.j2"
-    dest: "/opt/tyk-gateway/tyk.conf"
-  when: standup is defined and standup
-
-- name: "Create api.json"
-  template:
-    src: "tyk/api.j2"
-    dest: "/opt/tyk-gateway/apps/api.json"
-  when: standup is defined and standup
-
-- name: "Create users-subgraph.json"
-  template:
-    src: "tyk/users-subgraph.j2"
-    dest: "/opt/tyk-gateway/apps/users-subgraph.json"
-  when: standup is defined and standup and query_type == "FEDERATE"
-
-- name: "Create posts-subgraph.json"
-  template:
-    src: "tyk/posts-subgraph.j2"
-    dest: "/opt/tyk-gateway/apps/posts-subgraph.json"
-  when: standup is defined and standup and query_type == "FEDERATE"
-
-- name: "Create comments-subgraph.json"
-  template:
-    src: "tyk/comments-subgraph.j2"
-    dest: "/opt/tyk-gateway/apps/comments-subgraph.json"
-  when: standup is defined and standup and query_type == "FEDERATE"
+- name: Include install task
+  include_tasks: install.yml
+  when: ('install' in ansible_run_tags) or (ansible_run_tags|length == 0)
 
 - name: Remove Tyk Gateway container
   docker_container:
     name: tyk-gateway
     state: absent
 
-- name: Launch Tyk Gateway container
-  docker_container:
-    name: tyk-gateway
-    state: started
-    image: tykio/tyk-gateway:v4.0.0-rc18
-    ports:
-      - "{{ gateway.service.port }}:{{ gateway.service.port }}"
-    networks:
-      - name: tyk
-    volumes:
-      - "/opt/tyk-gateway/tyk.conf:/opt/tyk-gateway/tyk.conf"
-      - "/opt/tyk-gateway/apps:/opt/tyk-gateway/apps"
-    ulimits: "nofile:80000:80000"
-    env:
-      GOGC: "1600"
-      GOMAXPROCS: "{% if limit_cores %}{{ limit_cores }}{% endif %}"
-    log_options:
-      max-size: 10m
-      max-file: 5
-  when: standup is defined and standup
-
-- name: Remove Redis container
-  docker_container:
-    name: redis
-    state: absent
-  when: cleanup is defined and cleanup
-
-- name: Remove Tyk network
-  docker_network:
-    name: tyk
-    state: absent
-  when: cleanup is defined and cleanup
+- name: Include standup task
+  include_tasks: standup.yml
+  when: ('standup' in ansible_run_tags) or (ansible_run_tags|length == 0)

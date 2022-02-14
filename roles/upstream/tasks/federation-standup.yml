@@ -1,0 +1,39 @@
+---
+- name: Launch users container
+  docker_container:
+    name: users
+    state: started
+    image: zalbiraw/go-api-test-service
+    ports:
+      - "{{ upstream.services.users.port }}:4001"
+    env:
+      GOGC: "3200"
+      PORT: "4001"
+    ulimits: "nofile:80000:80000"
+    entrypoint: ./users/server
+
+- name: Launch posts container
+  docker_container:
+    name: posts
+    state: started
+    image: zalbiraw/go-api-test-service
+    ports:
+      - "{{ upstream.services.posts.port }}:4002"
+    env:
+      GOGC: "3200"
+      PORT: "4002"
+    ulimits: "nofile:80000:80000"
+    entrypoint: ./posts/server
+
+- name: Launch comments container
+  docker_container:
+    name: comments
+    state: started
+    image: zalbiraw/go-api-test-service
+    ports:
+      - "{{ upstream.services.comments.port }}:4003"
+    env:
+      GOGC: "3200"
+      PORT: "4003"
+    ulimits: "nofile:80000:80000"
+    entrypoint: ./comments/server

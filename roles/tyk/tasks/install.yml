@@ -1,0 +1,19 @@
+---
+- name: Create Tyk network
+  docker_network:
+    name: tyk
+
+- name: Launch Redis container
+  docker_container:
+    name: redis
+    state: started
+    image: redis:4.0-alpine
+    ports:
+      - "127.0.0.1:6379:6379"
+    networks:
+      - name: tyk
+
+- name: Ensure working directory exists
+  file:
+    path: /opt/tyk-gateway/apps
+    state: directory

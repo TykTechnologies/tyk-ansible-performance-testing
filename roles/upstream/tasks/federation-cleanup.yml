@@ -1,0 +1,15 @@
+---
+- name: Remove users container
+  docker_container:
+    name: users
+    state: absent
+
+- name: Remove posts container
+  docker_container:
+    name: posts
+    state: absent
+
+- name: Remove comments container
+  docker_container:
+    name: comments
+    state: absent

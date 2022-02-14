@@ -1,0 +1,8 @@
+---
+- name: Include federation-standup task
+  include_tasks: federation-standup.yml
+  when: ('standup' in ansible_run_tags) or (ansible_run_tags|length == 0)
+
+- name: Include federation-cleanup task
+  include_tasks: federation-cleanup.yml
+  when: ('cleanup' in ansible_run_tags) or (ansible_run_tags|length == 0)

@@ -1,0 +1,10 @@
+---
+- name: Ensure working directory exists
+  file:
+    path: /node/home/apollo-server/src
+    state: directory
+
+- name: Copy Dockerfile, and src folder to /node/home/apollo-server
+  copy:
+    src: ../files/
+    dest: /node/home/apollo-server/

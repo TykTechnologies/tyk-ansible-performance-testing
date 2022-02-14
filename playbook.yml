@@ -4,6 +4,9 @@
   - name: Collect ansible_facts to discover internal IPs
     debug:
       var: ansible_facts
+  tags:
+    - standup
+    - test
 
 - hosts: all
   become: True
@@ -23,8 +26,7 @@
     - ./vars/tests.yml
     - ./vars/upstream.yml
   roles:
-    - role: upstream
-      standup: True
+    - upstream
   tags:
     - standup
 
@@ -39,7 +41,7 @@
         label: upstream
         host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
         host_port: "{{ upstream.service.port }}"
-        results_filename: bench-upstream.txt
+        results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-upstreams.txt"
       include_role:
         name: load-generator
       when: query_type == 'REST'
@@ -55,8 +57,8 @@
   roles:
     - role: tyk
       upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
-      standup: True
   tags:
+    - install
     - standup
 
 - hosts: load-generator
@@ -82,8 +84,8 @@
   roles:
     - role: apollo-server
       upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
-      standup: True
   tags:
+    - install
     - standup
 
 - hosts: load-generator
@@ -106,17 +108,17 @@
 
 - hosts: upstream
   become: True
+  vars_files:
+    - ./vars/tests.yml
   roles:
-    - role: upstream
-      cleanup: True
+    - upstream
   tags:
     - cleanup
 
 - hosts: tyk
   become: True
   roles:
-    - role: tyk
-      cleanup: True
+    - tyk
   tags:
     - cleanup
 
@@ -126,8 +128,6 @@
     - ./vars/tests.yml
   tasks:
     - name: Include apollo-server role
-      vars:
-        cleanup: True
       include_role:
         name: apollo-server
       when: query_type != 'REST'
