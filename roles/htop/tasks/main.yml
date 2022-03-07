@@ -5,16 +5,8 @@
     state: latest
     update_cache: yes
 
-- name: Add epel-release GPG key
-  ansible.builtin.rpm_key:
-    state: present
-    key: https://mirror.dst.ca/epel/RPM-GPG-KEY-EPEL-8
-
-- name: Install epel-release for Red Hat and CentOS
-  yum:
-    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-    state: present
-    update_cache: yes
+- name: Include redhat task
+  include_tasks: redhat.yml
   when: ansible_distribution == "RedHat" or ansible_distribution == "CentOS"
 
 - name: Install htop
