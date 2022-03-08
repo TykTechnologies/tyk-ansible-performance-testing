@@ -17,7 +17,7 @@
   docker_container:
     name: tyk-gateway
     state: started
-    image: tykio/tyk-gateway:v4.0.0-rc28
+    image: tykio/tyk-gateway:v4.0.1-rc8
     ports:
       - "{{ gateway.service.port }}:{{ gateway.service.port }}"
     networks:
