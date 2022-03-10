@@ -1,4 +1,4 @@
-gateway:
+tyk:
   secret: 352d20ee67be67f6340b4c0605b044b7
   service:
     port: 8080

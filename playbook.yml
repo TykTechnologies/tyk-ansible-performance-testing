@@ -52,7 +52,7 @@
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/gateway.yml
+    - ./vars/tyk.yml
     - ./vars/upstream.yml
   roles:
     - role: tyk
@@ -65,13 +65,47 @@
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/gateway.yml
+    - ./vars/tyk.yml
   roles:
     - role: load-generator
       label: tyk
       host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
-      host_port: "{{ gateway.service.port }}"
+      host_port: "{{ tyk.service.port }}"
       results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-tyk-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
+  tags:
+    - test
+
+- hosts: kong
+  become: True
+  vars_files:
+    - ./vars/tests.yml
+    - ./vars/kong.yml
+    - ./vars/upstream.yml
+  tasks:
+    - name: Include kong role
+      vars:
+        upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
+      include_role:
+        name: kong
+      when: query_type == 'REST'
+  tags:
+    - standup
+
+- hosts: load-generator
+  become: True
+  vars_files:
+    - ./vars/tests.yml
+    - ./vars/kong.yml
+  tasks:
+    - name: Include load-generator role
+      vars:
+        label: kong
+        host_ip: "{{ hostvars.kong.ansible_facts.default_ipv4.address }}"
+        host_port: "{{ kong.service.port }}"
+        results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-kong-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
+      include_role:
+        name: load-generator
+      when: query_type == 'REST'
   tags:
     - test
 
@@ -81,9 +115,13 @@
     - ./vars/tests.yml
     - ./vars/apollo-server.yml
     - ./vars/upstream.yml
-  roles:
-    - role: apollo-server
-      upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
+  tasks:
+    - name: Include apollo-server role
+      vars:
+        upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
+      include_role:
+        name: apollo-server
+      when: query_type != 'REST'
   tags:
     - install
     - standup
@@ -119,6 +157,18 @@
   become: True
   roles:
     - tyk
+  tags:
+    - cleanup
+
+- hosts: kong
+  become: True
+  vars_files:
+    - ./vars/tests.yml
+  tasks:
+    - name: Include kong role
+      include_role:
+        name: kong
+      when: query_type == 'REST'
   tags:
     - cleanup
 

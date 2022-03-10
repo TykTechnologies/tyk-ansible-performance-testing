@@ -16,3 +16,7 @@ all:
       ansible_host: host
       ansible_user: user
       ansible_ssh_private_key_file: ./secret.pem
+    kong:
+      ansible_host: host
+      ansible_user: user
+      ansible_ssh_private_key_file: ./secret.pem

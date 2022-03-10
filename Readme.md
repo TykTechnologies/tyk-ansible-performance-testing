@@ -94,12 +94,12 @@ query {
 | enable_quota         | `False` | Enable quota tracking in the performance testing |
 | enable_rate_limiting | `False` | Enable rate limiting in the performance testing |
 
-- `vars/gateway.yml`
+- `vars/tyk.yml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
-| gateway.service.port | `8080` | Gateway server listening port |
-| gateway.secret | `352d20ee67be67f6340b4c0605b044b7` | API secret |
+| tyk.service.port | `8080` | Tyk gateway server listening port |
+| tyk.secret | `352d20ee67be67f6340b4c0605b044b7` | API secret |
 
 - `vars/apollo-server.yml`
 

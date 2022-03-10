@@ -1,6 +1,6 @@
 {
-  "listen_port": {{ gateway.service.port }},
-  "secret": "{{ gateway.secret }}",
+  "listen_port": {{ tyk.service.port }},
+  "secret": "{{ tyk.secret }}",
   "template_path": "/opt/tyk-gateway/templates",
   "tyk_js_path": "/opt/tyk-gateway/js/tyk.js",
   "middleware_path": "/opt/tyk-gateway/middleware",

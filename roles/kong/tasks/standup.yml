@@ -1,0 +1,31 @@
+---
+- name: /kong/declarative/ dir exists
+  file:
+    path: /kong/declarative/
+    state: directory
+
+- name: Create kong.yml
+  template:
+    src: kong/kong.j2
+    dest: /kong/declarative/kong.yml
+
+- name: Launch Kong container
+  docker_container:
+    name: kong
+    state: started
+    image: bitnami/kong:latest
+    ports:
+      - "{{ kong.service.port }}:{{ kong.service.port }}"
+      - "{{ kong.service.ssl_port }}:{{ kong.service.ssl_port }}"
+      - "{{ kong.admin.port }}:{{ kong.admin.port }}"
+      - "{{ kong.admin.ssl_port }}:{{ kong.admin.ssl_port }}"
+    volumes:
+      - "/kong/declarative/:/kong/declarative/"
+    env:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: "/kong/declarative/kong.yml"
+      KONG_PROXY_ACCESS_LOG: "/dev/stdout"
+      KONG_ADMIN_ACCESS_LOG: "/dev/stdout"
+      KONG_PROXY_ERROR_LOG: "/dev/stderr"
+      KONG_ADMIN_ERROR_LOG: "/dev/stderr"
+      KONG_ADMIN_LISTEN: "0.0.0.0:{{ kong.admin.port }}, 0.0.0.0:{{ kong.admin.ssl_port }} ssl"
