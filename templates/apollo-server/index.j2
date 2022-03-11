@@ -11,7 +11,7 @@ const numCPUs = {% if not limit_cores %}cpus().length{% else %}{{ limit_cores }}
 class SocialMediaAPI extends RESTDataSource {
   constructor() {
     super()
-    this.baseURL = "http://{{ upstream_host }}:{{ upstream.service.port }}/"
+    this.baseURL = "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.service.port }}/"
   }
 
   // Fetch user infomation.
@@ -86,9 +86,9 @@ const server = new ApolloServer({
 const gateway = new ApolloGateway({
   supergraphSdl: new IntrospectAndCompose({
     subgraphs: [
-      { name: "users",    url: "http://{{ upstream_host }}:{{ upstream.services.users.port }}/query" },
-      { name: "posts",    url: "http://{{ upstream_host }}:{{ upstream.services.posts.port }}/query" },
-      { name: "comments", url: "http://{{ upstream_host }}:{{ upstream.services.comments.port }}/query" },
+      { name: "users",    url: "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.services.users.port }}/query" },
+      { name: "posts",    url: "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.services.posts.port }}/query" },
+      { name: "comments", url: "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.services.comments.port }}/query" },
     ],
   }),
 })
@@ -110,7 +110,7 @@ if (cluster.isPrimary) {
   // Workers can share any TCP connection
   // In this case it is an HTTP server
   server
-    .listen({{ apollo.service.port }})
+    .listen({{ services.apollo.service.port }})
     .then(({ url }) => console.log(`Server running at ${url}`))
 
   console.log(`Worker ${process.pid} started`);

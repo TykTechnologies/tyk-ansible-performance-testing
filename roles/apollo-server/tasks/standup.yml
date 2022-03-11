@@ -18,4 +18,4 @@
     state: started
     image: apollo-server:latest
     ports:
-      - "{{ apollo.service.port }}:{{ apollo.service.port }}"
+      - "{{ services.apollo.service.port }}:{{ services.apollo.service.port }}"

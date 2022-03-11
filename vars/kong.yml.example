@@ -1,7 +1,0 @@
-kong:
-  service:
-    port: 8000
-    ssl_port: 8443
-  admin:
-    port: 8001
-    ssl_port: 8444

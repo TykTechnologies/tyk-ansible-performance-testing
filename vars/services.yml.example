@@ -1,0 +1,25 @@
+services:
+  upstream:
+    service:
+      port: 8000
+    subgraphs:
+      users:
+        port: 4001
+      posts:
+        port: 4002
+      comments:
+        port: 4003
+  tyk:
+    secret: 352d20ee67be67f6340b4c0605b044b7
+    service:
+      port: 8080
+  kong:
+    service:
+      port: 8000
+      ssl_port: 8443
+    admin:
+      port: 8001
+      ssl_port: 8444
+  apollo:
+    service:
+      port: 4000

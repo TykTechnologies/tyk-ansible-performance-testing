@@ -15,10 +15,10 @@
     state: started
     image: kong:latest
     ports:
-      - "{{ kong.service.port }}:{{ kong.service.port }}"
-      - "{{ kong.service.ssl_port }}:{{ kong.service.ssl_port }}"
-      - "{{ kong.admin.port }}:{{ kong.admin.port }}"
-      - "{{ kong.admin.ssl_port }}:{{ kong.admin.ssl_port }}"
+      - "{{ services.kong.service.port }}:{{ services.kong.service.port }}"
+      - "{{ services.kong.service.ssl_port }}:{{ services.kong.service.ssl_port }}"
+      - "{{ services.kong.admin.port }}:{{ services.kong.admin.port }}"
+      - "{{ services.kong.admin.ssl_port }}:{{ services.kong.admin.ssl_port }}"
     volumes:
       - "/kong/declarative/:/kong/declarative/"
     env:
@@ -28,4 +28,4 @@
       KONG_ADMIN_ACCESS_LOG: "/dev/stdout"
       KONG_PROXY_ERROR_LOG: "/dev/stderr"
       KONG_ADMIN_ERROR_LOG: "/dev/stderr"
-      KONG_ADMIN_LISTEN: "0.0.0.0:{{ kong.admin.port }}, 0.0.0.0:{{ kong.admin.ssl_port }} ssl"
+      KONG_ADMIN_LISTEN: "0.0.0.0:{{ services.kong.admin.port }}, 0.0.0.0:{{ services.kong.admin.ssl_port }} ssl"

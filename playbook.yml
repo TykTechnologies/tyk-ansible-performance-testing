@@ -1,124 +1,123 @@
 ---
-- hosts: all
-  tasks:
-  - name: Collect ansible_facts to discover internal IPs
-    debug:
-      var: ansible_facts
-  tags:
-    - standup
-    - test
-
+# Install docker on all servers.
 - hosts: all
   become: True
   vars:
     pip_install_packages:
       - name: docker
   roles:
-    - htop
     - geerlingguy.pip
     - geerlingguy.docker
   tags:
     - install
 
+# Install htop on all servers (Optional)
+- hosts: all
+  become: True
+  roles:
+    - htop
+  tags:
+    - htop
+
+# Allows gathering of ansible_facts to discover the internal IPs of the
+# servers when running the test tag.
+- hosts: all
+  tasks:
+  - name: Collect ansible_facts to discover internal IPs
+    debug:
+      msg: Discovering internal IP...
+  tags:
+    - test
+
+# Stand up upstream services.
 - hosts: upstream
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/upstream.yml
+    - ./vars/services.yml
   roles:
     - upstream
   tags:
     - standup
 
+# Benchmark upstream service
 - hosts: load-generator
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/upstream.yml
+    - ./vars/services.yml
   tasks:
     - name: Include load-generator role
       vars:
         label: upstream
-        host_ip: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
-        host_port: "{{ upstream.service.port }}"
-        results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-upstreams.txt"
       include_role:
         name: load-generator
       when: query_type == 'REST'
   tags:
     - test
 
+# Stand up Tyk gateway
 - hosts: tyk
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/tyk.yml
-    - ./vars/upstream.yml
+    - ./vars/services.yml
   roles:
     - role: tyk
-      upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
   tags:
     - install
     - standup
 
+# Benchmark Tyk gateway
 - hosts: load-generator
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/tyk.yml
+    - ./vars/services.yml
   roles:
     - role: load-generator
       label: tyk
-      host_ip: "{{ hostvars.tyk.ansible_facts.default_ipv4.address }}"
-      host_port: "{{ tyk.service.port }}"
-      results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-tyk-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
   tags:
     - test
 
+# Stand up Kong gateway
 - hosts: kong
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/kong.yml
-    - ./vars/upstream.yml
+    - ./vars/services.yml
   tasks:
     - name: Include kong role
-      vars:
-        upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
       include_role:
         name: kong
       when: query_type == 'REST'
   tags:
     - standup
 
+# Benchmark Kong gateway
 - hosts: load-generator
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/kong.yml
+    - ./vars/services.yml
   tasks:
     - name: Include load-generator role
       vars:
         label: kong
-        host_ip: "{{ hostvars.kong.ansible_facts.default_ipv4.address }}"
-        host_port: "{{ kong.service.port }}"
-        results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-kong-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
       include_role:
         name: load-generator
       when: query_type == 'REST'
   tags:
     - test
 
+# Stand up Apollo server
 - hosts: apollo
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/apollo-server.yml
-    - ./vars/upstream.yml
+    - ./vars/services.yml
   tasks:
     - name: Include apollo-server role
-      vars:
-        upstream_host: "{{ hostvars.upstream.ansible_facts.default_ipv4.address }}"
       include_role:
         name: apollo-server
       when: query_type != 'REST'
@@ -126,24 +125,23 @@
     - install
     - standup
 
+# Benchmark Apollo server
 - hosts: load-generator
   become: True
   vars_files:
     - ./vars/tests.yml
-    - ./vars/apollo-server.yml
+    - ./vars/services.yml
   tasks:
     - name: Include load-generator role
       vars:
         label: apollo
-        host_ip: "{{ hostvars.apollo.ansible_facts.default_ipv4.address }}"
-        host_port: "{{ apollo.service.port }}"
-        results_filename: "bench{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-apollo-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
       include_role:
         name: load-generator
       when: query_type != 'REST'
   tags:
     - test
 
+# Clean up upstream services
 - hosts: upstream
   become: True
   vars_files:
@@ -153,6 +151,7 @@
   tags:
     - cleanup
 
+# Clean up Tyk gateway services
 - hosts: tyk
   become: True
   roles:
@@ -160,6 +159,7 @@
   tags:
     - cleanup
 
+# Clean up Kong gateway services
 - hosts: kong
   become: True
   vars_files:
@@ -172,6 +172,7 @@
   tags:
     - cleanup
 
+# Clean up Apollo services
 - hosts: apollo
   become: True
   vars_files:

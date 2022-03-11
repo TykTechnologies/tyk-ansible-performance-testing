@@ -2,9 +2,9 @@
  _transform: true
 
  services:
- - host: {{ upstream_host }}
+ - host: {{ hostvars.upstream.ansible_facts.default_ipv4.address }}
    name: api
-   port: {{ upstream.service.port }}
+   port: {{ services.upstream.service.port }}
    protocol: http
    routes:
    - name: api
