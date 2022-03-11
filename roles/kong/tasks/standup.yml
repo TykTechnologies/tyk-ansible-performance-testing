@@ -13,7 +13,7 @@
   docker_container:
     name: kong
     state: started
-    image: bitnami/kong:latest
+    image: kong:latest
     ports:
       - "{{ kong.service.port }}:{{ kong.service.port }}"
       - "{{ kong.service.ssl_port }}:{{ kong.service.ssl_port }}"
