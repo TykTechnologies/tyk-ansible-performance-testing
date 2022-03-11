@@ -90,7 +90,7 @@
     - name: Include kong role
       include_role:
         name: kong
-      when: query_type == 'REST'
+      when: (query_type == 'REST') and ('kong' in test_services)
   tags:
     - standup
 
@@ -106,7 +106,7 @@
         label: kong
       include_role:
         name: load-generator
-      when: query_type == 'REST'
+      when: (query_type == 'REST') and ('kong' in test_services)
   tags:
     - test
 
@@ -120,7 +120,7 @@
     - name: Include apollo-server role
       include_role:
         name: apollo-server
-      when: query_type != 'REST'
+      when: (query_type != 'REST') and ('apollo' in test_services)
   tags:
     - install
     - standup
@@ -137,7 +137,7 @@
         label: apollo
       include_role:
         name: load-generator
-      when: query_type != 'REST'
+      when: (query_type != 'REST') and ('apollo' in test_services)
   tags:
     - test
 
@@ -168,7 +168,7 @@
     - name: Include kong role
       include_role:
         name: kong
-      when: query_type == 'REST'
+      when: (query_type == 'REST') and ('kong' in test_services)
   tags:
     - cleanup
 
@@ -181,6 +181,6 @@
     - name: Include apollo-server role
       include_role:
         name: apollo-server
-      when: query_type != 'REST'
+      when: (query_type != 'REST') and ('apollo' in test_services)
   tags:
     - cleanup

@@ -24,7 +24,10 @@ enable_quota: False
 # Enables rate limiting checking for API requests.
 # Applicable to Tyk.
 enable_rate_limiting: False
-# List of services you would like to run your tests against.
+# List of services you would like to run your tests against. Tyk is selected
+# by default. Options: [
+#   kong(REST),
+#   apollo(STITCH, FEDERATE)
+# ]
 test_services:
-  - tyk
   - apollo
