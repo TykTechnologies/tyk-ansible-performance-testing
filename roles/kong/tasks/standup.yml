@@ -1,13 +1,18 @@
 ---
-- name: /kong/declarative/ dir exists
+- name: /etc/kong/declarative/ dir exists
   file:
-    path: /kong/declarative/
+    path: /etc/kong/declarative/
     state: directory
+
+- name: Create kong.conf
+  template:
+    src: kong/kong.conf.j2
+    dest: /etc/kong/kong.conf
 
 - name: Create kong.yml
   template:
-    src: kong/kong.j2
-    dest: /kong/declarative/kong.yml
+    src: kong/kong.yml.j2
+    dest: /etc/kong/declarative/kong.yml
 
 - name: Launch Kong container
   docker_container:
@@ -20,12 +25,5 @@
       - "{{ services.kong.admin.port }}:{{ services.kong.admin.port }}"
       - "{{ services.kong.admin.ssl_port }}:{{ services.kong.admin.ssl_port }}"
     volumes:
-      - "/kong/declarative/:/kong/declarative/"
-    env:
-      KONG_DATABASE: "off"
-      KONG_DECLARATIVE_CONFIG: "/kong/declarative/kong.yml"
-      KONG_PROXY_ACCESS_LOG: "/dev/stdout"
-      KONG_ADMIN_ACCESS_LOG: "/dev/stdout"
-      KONG_PROXY_ERROR_LOG: "/dev/stderr"
-      KONG_ADMIN_ERROR_LOG: "/dev/stderr"
-      KONG_ADMIN_LISTEN: "0.0.0.0:{{ services.kong.admin.port }}, 0.0.0.0:{{ services.kong.admin.ssl_port }} ssl"
+      - "/etc/kong/:/etc/kong/"
+    ulimits: "nofile:80000:80000"
