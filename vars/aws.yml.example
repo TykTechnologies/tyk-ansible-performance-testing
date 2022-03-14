@@ -1,0 +1,25 @@
+aws:
+  region: us-west-2
+  key_name: secret
+  instance_type: t2.micro
+  image: ami-0892d3c7ee96c0bf7
+  group: secret-sg
+  vpc_subnet_id: subnet-vpc_subnet_id
+  aws_access_key: aws_access_key
+  aws_secret_key: aws_secret_key
+  instances:
+    upstream:
+      user: ubuntu
+      key_file: ./secret.pem
+    load:
+      user: ubuntu
+      key_file: ./secret.pem
+    tyk:
+      user: ubuntu
+      key_file: ./secret.pem
+    kong:
+      user: ubuntu
+      key_file: ./secret.pem
+    apollo:
+      user: ubuntu
+      key_file: ./secret.pem

@@ -1,0 +1,35 @@
+---
+- name: Provision Upstream EC2 instance
+  ec2_instance:
+    state: absent
+    name: "{{ aws.instance_type }}-upstream"
+    vpc_subnet_id: "{{ aws.vpc_subnet_id }}"
+  delegate_to: localhost
+
+- name: Provision Load Generator EC2 instance
+  ec2_instance:
+    state: absent
+    name: "{{ aws.instance_type }}-load"
+    vpc_subnet_id: "{{ aws.vpc_subnet_id }}"
+  delegate_to: localhost
+
+- name: Provision Tyk EC2 instance
+  ec2_instance:
+    state: absent
+    name: "{{ aws.instance_type }}-tyk"
+    vpc_subnet_id: "{{ aws.vpc_subnet_id }}"
+  delegate_to: localhost
+
+- name: Provision Kong EC2 instance
+  ec2_instance:
+    state: absent
+    name: "{{ aws.instance_type }}-kong"
+    vpc_subnet_id: "{{ aws.vpc_subnet_id }}"
+  delegate_to: localhost
+
+- name: Provision Apollo EC2 instance
+  ec2_instance:
+    state: absent
+    name: "{{ aws.instance_type }}-apollo"
+    vpc_subnet_id: "{{ aws.vpc_subnet_id }}"
+  delegate_to: localhost

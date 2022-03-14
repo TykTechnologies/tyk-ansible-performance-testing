@@ -3,4 +3,5 @@
 hosts.yml
 ansible.cfg
 vars/*.yml
-*.txt
+hosts/*.yml
+benchmarks/*.txt

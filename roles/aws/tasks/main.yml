@@ -1,0 +1,8 @@
+---
+- name: Include standup task
+  include_tasks: standup.yml
+  when: ('standup' in ansible_run_tags)
+
+- name: Include cleanup task
+  include_tasks: cleanup.yml
+  when: ('cleanup' in ansible_run_tags)
