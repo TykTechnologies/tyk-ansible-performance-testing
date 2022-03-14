@@ -23,3 +23,5 @@ enable_rate_limiting: False
 # ]
 test_services:
   - kong
+# Prefix for the generated tests.
+prefix: False

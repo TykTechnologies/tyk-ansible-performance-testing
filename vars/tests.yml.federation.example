@@ -31,4 +31,5 @@ enable_rate_limiting: False
 # ]
 test_services:
   - apollo
-
+# Prefix for the generated tests.
+prefix: False
