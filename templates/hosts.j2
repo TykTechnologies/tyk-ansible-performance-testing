@@ -2,21 +2,21 @@ all:
   hosts:
     upstream:
       ansible_host: "{{ hosts.upstream }}"
-      ansible_user: "{{ aws.instances.upstream.user }}"
-      ansible_ssh_private_key_file: "{{ aws.instances.upstream.key_file }}"
+      ansible_user: "{{ provider.instances.upstream.user }}"
+      ansible_ssh_private_key_file: "{{ provider.instances.upstream.key_file }}"
     load-generator:
       ansible_host: "{{ hosts.load }}"
-      ansible_user: "{{ aws.instances.load.user }}"
-      ansible_ssh_private_key_file: "{{ aws.instances.load.key_file }}"
+      ansible_user: "{{ provider.instances.load.user }}"
+      ansible_ssh_private_key_file: "{{ provider.instances.load.key_file }}"
     tyk:
       ansible_host: "{{ hosts.tyk }}"
-      ansible_user: "{{ aws.instances.tyk.user }}"
-      ansible_ssh_private_key_file: "{{ aws.instances.tyk.key_file }}"
+      ansible_user: "{{ provider.instances.tyk.user }}"
+      ansible_ssh_private_key_file: "{{ provider.instances.tyk.key_file }}"
     kong:
       ansible_host: "{{ hosts.kong }}"
-      ansible_user: "{{ aws.instances.kong.user }}"
-      ansible_ssh_private_key_file: "{{ aws.instances.kong.key_file }}"
+      ansible_user: "{{ provider.instances.kong.user }}"
+      ansible_ssh_private_key_file: "{{ provider.instances.kong.key_file }}"
     apollo:
       ansible_host: "{{ hosts.apollo }}"
-      ansible_user: "{{ aws.instances.apollo.user }}"
-      ansible_ssh_private_key_file: "{{ aws.instances.apollo.key_file }}"
+      ansible_user: "{{ provider.instances.apollo.user }}"
+      ansible_ssh_private_key_file: "{{ provider.instances.apollo.key_file }}"
