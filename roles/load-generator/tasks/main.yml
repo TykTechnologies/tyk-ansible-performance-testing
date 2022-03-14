@@ -21,7 +21,7 @@
   register: output
 
 - name: Copy result to local
-  local_action: copy content={{ output.container.Output }} dest="./benchmarks/bench{% if prefix %}{{ prefix }}{% endif %}{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-{{ label }}-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
+  local_action: copy content={{ output.container.Output }} dest="./benchmarks/bench{% if prefix %}-{{ prefix }}{% endif %}{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-{{ label }}-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
 
 - name: Remove Load Generator container
   docker_container:
