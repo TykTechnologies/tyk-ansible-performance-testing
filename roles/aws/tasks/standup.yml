@@ -1,0 +1,92 @@
+---
+- name: Provision Upstream EC2 instance
+  ec2_instance:
+    name: "{{ aws_instance_type }}-upstream"
+    instance_type: "{{ aws_instance_type }}"
+    region: "{{ aws_region }}"
+    image_id: "{{ aws_image }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    security_group: "{{ aws_group }}"
+    key_name: "{{ aws_key_name }}"
+    network:
+      assign_public_ip: yes
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: upstream
+  delegate_to: localhost
+
+- name: Provision Load Generator EC2 instance
+  ec2_instance:
+    name: "{{ aws_instance_type }}-load"
+    instance_type: "{{ aws_instance_type }}"
+    region: "{{ aws_region }}"
+    image_id: "{{ aws_image }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    security_group: "{{ aws_group }}"
+    key_name: "{{ aws_key_name }}"
+    network:
+      assign_public_ip: yes
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: load
+  delegate_to: localhost
+
+- name: Provision Tyk EC2 instance
+  ec2_instance:
+    name: "{{ aws_instance_type }}-tyk"
+    instance_type: "{{ aws_instance_type }}"
+    region: "{{ aws_region }}"
+    image_id: "{{ aws_image }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    security_group: "{{ aws_group }}"
+    key_name: "{{ aws_key_name }}"
+    network:
+      assign_public_ip: yes
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: tyk
+  delegate_to: localhost
+
+- name: Provision Kong EC2 instance
+  ec2_instance:
+    name: "{{ aws_instance_type }}-kong"
+    instance_type: "{{ aws_instance_type }}"
+    region: "{{ aws_region }}"
+    image_id: "{{ aws_image }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    security_group: "{{ aws_group }}"
+    key_name: "{{ aws_key_name }}"
+    network:
+      assign_public_ip: yes
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: kong
+  delegate_to: localhost
+
+- name: Provision Apollo EC2 instance
+  ec2_instance:
+    name: "{{ aws_instance_type }}-apollo"
+    instance_type: "{{ aws_instance_type }}"
+    region: "{{ aws_region }}"
+    image_id: "{{ aws_image }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    security_group: "{{ aws_group }}"
+    key_name: "{{ aws_key_name }}"
+    network:
+      assign_public_ip: yes
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: apollo
+  delegate_to: localhost
+
+- name: Create {{ aws_instance_type }}-aws-hosts.yml
+  vars:
+    hosts:
+      upstream: "{{ upstream.instances[0].public_dns_name }}"
+      load: "{{ load.instances[0].public_dns_name }}"
+      tyk: "{{ tyk.instances[0].public_dns_name }}"
+      kong: "{{ kong.instances[0].public_dns_name }}"
+      apollo: "{{ apollo.instances[0].public_dns_name }}"
+  template:
+    src: hosts.j2
+    dest: ./hosts/{{ aws_instance_type }}-aws-hosts.yml

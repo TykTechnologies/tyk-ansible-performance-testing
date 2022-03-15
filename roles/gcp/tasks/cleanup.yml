@@ -1,0 +1,106 @@
+---
+- name: Terminate Upstream GCP compute instance
+  gcp_compute_instance:
+    state: absent
+    name: "{{ gcp_machine_type }}-upstream"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate Upstream GCP address instance
+  gcp_compute_address:
+    state: absent
+    name: "{{ gcp_machine_type }}-upstream-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate Load Generator GCP compute instance
+  gcp_compute_instance:
+    state: absent
+    name: "{{ gcp_machine_type }}-load"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate Load Generator GCP address instance
+  gcp_compute_address:
+    state: absent
+    name: "{{ gcp_machine_type }}-load-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate Tyk GCP compute instance
+  gcp_compute_instance:
+    state: absent
+    name: "{{ gcp_machine_type }}-tyk"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate Tyk GCP address instance
+  gcp_compute_address:
+    state: absent
+    name: "{{ gcp_machine_type }}-tyk-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate Kong GCP compute instance
+  gcp_compute_instance:
+    state: absent
+    name: "{{ gcp_machine_type }}-kong"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate Kong GCP address instance
+  gcp_compute_address:
+    state: absent
+    name: "{{ gcp_machine_type }}-kong-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate Apollo GCP compute instance
+  gcp_compute_instance:
+    state: absent
+    name: "{{ gcp_machine_type }}-apollo"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate Apollo GCP address instance
+  gcp_compute_address:
+    state: absent
+    name: "{{ gcp_machine_type }}-apollo-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate GCP firewall instance
+  gcp_compute_firewall:
+    state: absent
+    name: "{{ gcp_machine_type }}-firewall"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+
+- name: Terminate GCP network instance
+  gcp_compute_network:
+    state: absent
+    name: "{{ gcp_machine_type }}-network"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"

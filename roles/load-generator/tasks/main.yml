@@ -1,12 +1,12 @@
 ---
 - name: Create API key
   uri:
-    url: http://{{ host_ip }}:{{ host_port }}/tyk/keys/create
+    url: http://{{ hostvars[label].ansible_facts.default_ipv4.address }}:{{ services[label].service.port }}/tyk/keys/create
     method: POST
     body_format: json
     headers:
       Content-Type: application/json
-      x-tyk-authorization: "{{ gateway.secret }}"
+      x-tyk-authorization: "{{ services.tyk.secret }}"
     body: "{ \"access_rights\": { \"1\": { \"allowed_urls\": [], \"api_id\": \"1\", \"api_name\": \"Tyk Test API\", \"limit\": null, \"versions\": [ \"Default\" ] } }, \"allowance\": 100000, \"expires\": 0, \"org_id\": \"default\", \"per\": 1, \"quota_max\": -1, \"quota_remaining\": -1, \"quota_renewal_rate\": -1, \"quota_renews\": 1568655187, \"rate\": 100000, \"throttle_interval\": -1, \"throttle_retry_limit\": -1 }"
   register: response
   when: label == 'tyk' and enable_auth
@@ -17,11 +17,11 @@
     state: started
     image: rcmorano/docker-hey
     detach: no
-    command: "-z 10s{% if label == 'tyk' and enable_auth %} -H \"Authorization: {{ response.json.key }}\"{% endif %}{% if query_type != 'REST' %} -m POST -H \"Content-Type: application/json\" -d \"{\\\"query\\\":\\\"{{ graphql_query[query_depth] }}\\\",\\\"variables\\\":null}\"{% endif %} http://{{ host_ip }}:{{ host_port }}/{% if label == 'tyk' %}api/{% else %}json/valid{% endif %}"
+    command: "-z 10s{% if label == 'tyk' and enable_auth %} -H \"Authorization: {{ response.json.key }}\"{% endif %}{% if query_type != 'REST' %} -m POST -H \"Content-Type: application/json\" -d \"{\\\"query\\\":\\\"{{ graphql_query[query_depth] }}\\\",\\\"variables\\\":null}\"{% endif %} http://{{ hostvars[label].ansible_facts.default_ipv4.address }}:{{ services[label].service.port }}/{% if (label == 'tyk' or label == 'kong') %}api/{% endif %}{% if query_type == 'REST' %}json/valid{% endif %}"
   register: output
 
 - name: Copy result to local
-  local_action: copy content={{ output.container.Output }} dest=./benchmarks/{{ results_filename }}
+  local_action: copy content={{ output.container.Output }} dest="./benchmarks/bench{% if prefix %}-{{ prefix }}{% endif %}{% if limit_cores %}-cores-{{ limit_cores }}{% endif %}-{{ label }}-{{ query_type | lower }}{% if query_type != 'REST' %}-{{ query_depth }}{% endif %}.txt"
 
 - name: Remove Load Generator container
   docker_container:

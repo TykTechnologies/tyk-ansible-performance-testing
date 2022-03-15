@@ -1,0 +1,22 @@
+all:
+  hosts:
+    upstream:
+      ansible_host: "{{ hosts.upstream }}"
+      ansible_user: "{{ provider.user }}"
+      ansible_ssh_private_key_file: "{{ provider.key_file }}"
+    load-generator:
+      ansible_host: "{{ hosts.load }}"
+      ansible_user: "{{ provider.user }}"
+      ansible_ssh_private_key_file: "{{ provider.key_file }}"
+    tyk:
+      ansible_host: "{{ hosts.tyk }}"
+      ansible_user: "{{ provider.user }}"
+      ansible_ssh_private_key_file: "{{ provider.key_file }}"
+    kong:
+      ansible_host: "{{ hosts.kong }}"
+      ansible_user: "{{ provider.user }}"
+      ansible_ssh_private_key_file: "{{ provider.key_file }}"
+    apollo:
+      ansible_host: "{{ hosts.apollo }}"
+      ansible_user: "{{ provider.user }}"
+      ansible_ssh_private_key_file: "{{ provider.key_file }}"

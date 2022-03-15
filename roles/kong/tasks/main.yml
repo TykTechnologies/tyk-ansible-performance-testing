@@ -1,0 +1,9 @@
+---
+- name: Remove Kong gateway container
+  docker_container:
+    name: kong
+    state: absent
+
+- name: Include standup task
+  include_tasks: standup.yml
+  when: ('standup' in ansible_run_tags) or (ansible_run_tags|length == 0)

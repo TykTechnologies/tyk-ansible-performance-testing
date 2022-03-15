@@ -1,0 +1,11 @@
+---
+- name: Create GCP instances
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - ./vars/gcp.yml
+  roles:
+    - gcp
+  tags:
+    - standup
+    - cleanup

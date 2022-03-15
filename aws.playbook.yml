@@ -1,0 +1,11 @@
+---
+- name: Create EC2 instances
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - ./vars/aws.yml
+  roles:
+    - aws
+  tags:
+    - standup
+    - cleanup

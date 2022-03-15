@@ -5,10 +5,10 @@
     state: started
     image: zalbiraw/go-api-test-service
     ports:
-      - "{{ upstream.services.users.port }}:4001"
+      - "{{ services.upstream.subgraphs.users.port }}:{{ services.upstream.subgraphs.users.port }}"
     env:
       GOGC: "3200"
-      PORT: "4001"
+      PORT: "{{ services.upstream.subgraphs.users.port }}"
     ulimits: "nofile:80000:80000"
     entrypoint: ./users/server
 
@@ -18,10 +18,10 @@
     state: started
     image: zalbiraw/go-api-test-service
     ports:
-      - "{{ upstream.services.posts.port }}:4002"
+      - "{{ services.upstream.subgraphs.posts.port }}:{{ services.upstream.subgraphs.posts.port }}"
     env:
       GOGC: "3200"
-      PORT: "4002"
+      PORT: "{{ services.upstream.subgraphs.posts.port }}"
     ulimits: "nofile:80000:80000"
     entrypoint: ./posts/server
 
@@ -31,9 +31,9 @@
     state: started
     image: zalbiraw/go-api-test-service
     ports:
-      - "{{ upstream.services.comments.port }}:4003"
+      - "{{ services.upstream.subgraphs.comments.port }}:{{ services.upstream.subgraphs.comments.port }}"
     env:
       GOGC: "3200"
-      PORT: "4003"
+      PORT: "{{ services.upstream.subgraphs.comments.port }}"
     ulimits: "nofile:80000:80000"
     entrypoint: ./comments/server

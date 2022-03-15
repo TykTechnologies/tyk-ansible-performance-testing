@@ -1,0 +1,237 @@
+---
+- name: Provision GCP network instance
+  gcp_compute_network:
+    name: "{{ gcp_machine_type }}-network"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    auto_create_subnetworks: True
+  register: network
+
+- name: Provision GCP firewall instance
+  gcp_compute_firewall:
+    name: "{{ gcp_machine_type }}-firewall"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    network: "{{ network }}"
+    allowed:
+      - ip_protocol: tcp
+        ports:
+          - "22"
+          - "4000-4003"
+          - "8000-8001"
+          - "8080"
+          - "8443-8444"
+
+- name: Provision Upstream GCP disk instance
+  gcp_compute_disk:
+    name: "{{ gcp_machine_type }}-upstream-disk"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    source_image: "{{ gcp_image }}"
+    size_gb: 20
+  register: upstream_disk
+
+- name: Provision Upstream GCP address instance
+  gcp_compute_address:
+    name: "{{ gcp_machine_type }}-upstream-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+  register: upstream_address
+
+- name: Provision Upstream GCP compute instance
+  gcp_compute_instance:
+    name: "{{ gcp_machine_type }}-upstream"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    machine_type: "{{ gcp_machine_type }}"
+    disks:
+    - auto_delete: True
+      boot: True
+      source: "{{ upstream_disk }}"
+    network_interfaces:
+    - network: "{{ network }}"
+      access_configs:
+      - name: External NAT
+        nat_ip: "{{ upstream_address }}"
+        type: ONE_TO_ONE_NAT
+  delegate_to: localhost
+
+- name: Provision Load Generator GCP disk instance
+  gcp_compute_disk:
+    name: "{{ gcp_machine_type }}-load-disk"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    source_image: "{{ gcp_image }}"
+    size_gb: 20
+  register: load_disk
+
+- name: Provision Load Generator GCP address instance
+  gcp_compute_address:
+    name: "{{ gcp_machine_type }}-load-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+  register: load_address
+
+- name: Provision Load Generator GCP compute instance
+  gcp_compute_instance:
+    name: "{{ gcp_machine_type }}-load"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    machine_type: "{{ gcp_machine_type }}"
+    disks:
+      - auto_delete: True
+        boot: True
+        source: "{{ load_disk }}"
+    network_interfaces:
+    - network: "{{ network }}"
+      access_configs:
+      - name: External NAT
+        nat_ip: "{{ load_address }}"
+        type: ONE_TO_ONE_NAT
+  delegate_to: localhost
+
+- name: Provision Tyk GCP disk instance
+  gcp_compute_disk:
+    name: "{{ gcp_machine_type }}-tyk-disk"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    source_image: "{{ gcp_image }}"
+    size_gb: 20
+  register: tyk_disk
+
+- name: Provision Tyk GCP address instance
+  gcp_compute_address:
+    name: "{{ gcp_machine_type }}-tyk-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+  register: tyk_address
+
+- name: Provision Tyk GCP compute instance
+  gcp_compute_instance:
+    name: "{{ gcp_machine_type }}-tyk"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    machine_type: "{{ gcp_machine_type }}"
+    disks:
+    - auto_delete: True
+      boot: True
+      source: "{{ tyk_disk }}"
+    network_interfaces:
+    - network: "{{ network }}"
+      access_configs:
+      - name: External NAT
+        nat_ip: "{{ tyk_address }}"
+        type: ONE_TO_ONE_NAT
+  delegate_to: localhost
+
+- name: Provision Kong GCP disk instance
+  gcp_compute_disk:
+    name: "{{ gcp_machine_type }}-kong-disk"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    source_image: "{{ gcp_image }}"
+    size_gb: 20
+  register: kong_disk
+
+- name: Provision Kong GCP address instance
+  gcp_compute_address:
+    name: "{{ gcp_machine_type }}-kong-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+  register: kong_address
+
+- name: Provision Kong GCP compute instance
+  gcp_compute_instance:
+    name: "{{ gcp_machine_type }}-kong"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    machine_type: "{{ gcp_machine_type }}"
+    disks:
+    - auto_delete: True
+      boot: True
+      source: "{{ kong_disk }}"
+    network_interfaces:
+    - network: "{{ network }}"
+      access_configs:
+      - name: External NAT
+        nat_ip: "{{ kong_address }}"
+        type: ONE_TO_ONE_NAT
+  delegate_to: localhost
+
+- name: Provision Apollo GCP disk instance
+  gcp_compute_disk:
+    name: "{{ gcp_machine_type }}-apollo-disk"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    source_image: "{{ gcp_image }}"
+    size_gb: 20
+  register: apollo_disk
+
+- name: Provision Apollo GCP address instance
+  gcp_compute_address:
+    name: "{{ gcp_machine_type }}-apollo-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+  register: apollo_address
+
+- name: Provision Apollo GCP compute instance
+  gcp_compute_instance:
+    name: "{{ gcp_machine_type }}-apollo"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    machine_type: "{{ gcp_machine_type }}"
+    disks:
+    - auto_delete: True
+      boot: True
+      source: "{{ apollo_disk }}"
+    network_interfaces:
+    - network: "{{ network }}"
+      access_configs:
+      - name: External NAT
+        nat_ip: "{{ apollo_address }}"
+        type: ONE_TO_ONE_NAT
+  delegate_to: localhost
+
+- name: Create {{ gcp_machine_type }}-gcp-hosts.yml
+  vars:
+    hosts:
+      upstream: "{{ upstream_address.address }}"
+      load: "{{ load_address.address }}"
+      tyk: "{{ tyk_address.address }}"
+      kong: "{{ kong_address.address }}"
+      apollo: "{{ apollo_address.address }}"
+  template:
+    src: hosts.j2
+    dest: ./hosts/{{ gcp_machine_type }}-gcp-hosts.yml

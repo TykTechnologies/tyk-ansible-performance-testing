@@ -1,0 +1,12 @@
+ _format_version: "2.1"
+
+ services:
+ - host: {{ hostvars.upstream.ansible_facts.default_ipv4.address }}
+   name: api
+   port: {{ services.upstream.service.port }}
+   protocol: http
+   routes:
+   - name: api
+     paths:
+     - /api
+     strip_path: true

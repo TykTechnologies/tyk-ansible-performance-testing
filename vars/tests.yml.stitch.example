@@ -1,0 +1,35 @@
+# Test query type: enum(REST, STITCH, FEDERATE)
+query_type: STITCH
+# Test query depth: enum(0, 1, 2)
+# Applicable to the STITCH and FEDERATE query types.
+query_depth: 0
+# GraphQL queries used to test the stitch and federation services.
+graphql_query:
+  0: "query { user(id: 1) { username name email }}"
+  1: "query { user(id: 1) { username name email posts { title body }}}"
+  2: "query { user(id: 1) { username name email posts { title body comments { name email body }}}}"
+# Limits the number of cores used by vendor. Set to false to disable
+# functionality.
+# Applicable to Tyk and Apollo.
+limit_cores: False
+# Generates an authorization token and uses it to proxy with auth enabled.
+# Applicable to Tyk.
+enable_auth: False
+# Enables analytics gathering for API requests.
+# Applicable to Tyk.
+enable_analytics: False
+# Enables quota checking for API requests.
+# Applicable to Tyk.
+enable_quota: False
+# Enables rate limiting checking for API requests.
+# Applicable to Tyk.
+enable_rate_limiting: False
+# List of services you would like to run your tests against. Tyk is selected
+# by default. Options: [
+#   kong(REST),
+#   apollo(STITCH, FEDERATE)
+# ]
+test_services:
+  - apollo
+# Prefix for the generated tests.
+prefix: False
