@@ -7,19 +7,5 @@ aws_vpc_subnet_id: subnet-vpc_subnet_id
 aws_access_key: aws_access_key
 aws_secret_key: aws_secret_key
 provider:
-  instances:
-    upstream:
-      user: ec2-user
-      key_file: ./secret.pem
-    load:
-      user: ec2-user
-      key_file: ./secret.pem
-    tyk:
-      user: ec2-user
-      key_file: ./secret.pem
-    kong:
-      user: ec2-user
-      key_file: ./secret.pem
-    apollo:
-      user: ec2-user
-      key_file: ./secret.pem
+  user: ec2-user
+  key_file: ./secret.pem
