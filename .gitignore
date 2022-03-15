@@ -6,3 +6,4 @@ gcp.json
 vars/*.yml
 hosts/*.yml
 benchmarks/*.txt
+analysis/*.png
