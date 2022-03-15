@@ -22,40 +22,35 @@ all_data$rps <- as.numeric(all_data$rps)
 all_data$p99 <- as.numeric(all_data$p99)
 
 # Define testing variables
-clouds <- c("aws", "gcp")
-machines <- cbind(
-  c("t3.medium", "m5.large", "c5.xlarge"),
-  c("n1-standard-1", "n1-standard-4", "n1-highcpu-16")
-)
-services <- c("upstream", "tyk", "kong")
-types <- c("rps", "p99")
-title <- paste(services, collapse=' vs ')
+x <- c("t3.medium", "m5.large", "c5.xlarge", "c5.2xlarge", "c5.4xlarge", "c5.9xlarge")
+compare <- c("upstream", "tyk", "kong")
+tests <- c("rps", "p99")
+title <- paste(compare, collapse=' vs ')
 titles <- c(paste(title, "RPS"), paste(title, "P99"))
 
-shapes <- c(15, 16, 17)
+shapes <- 15:(15 + length(compare))
 color <- c("#505071", "#00CDB0", "#FF7787")
 
-for (i in 1:length(clouds)) {
-  data_1 <- all_data[grep(machines[1, i], files),]
-  data_2 <- all_data[grep(machines[2, i], files),]
-  data_3 <- all_data[grep(machines[3, i], files),]
-
-  for (j in 1:length(types)) {
-    png(paste("./analysis/", clouds[i], "-", types[j], ".png", sep=""))
-    plot(c(1, 2, 3), c(1, 2, 3), col="white", ylim=c(0, max(all_data[, types[j]])), main=titles[j], ylab=types[j], xaxt="n", xlab="Machine type")
-    axis(1, at=c(1, 2, 3), labels=machines[, i])
-
-    for (k in 1:length(services)) {
-      service <- c(
-        mean(data_1[, types[j]][grep(services[k], rownames(data_1))]),
-        mean(data_2[, types[j]][grep(services[k], rownames(data_2))]),
-        mean(data_3[, types[j]][grep(services[k], rownames(data_3))])
-      )
-      points(c(1, 2, 3), service, pch=shapes[k], col=color[k])
-      lines(c(1, 2, 3), service, col=color[k])
-    }
-    legend(legend=services, pch=shapes, x="topleft", col=color)
-    dev.off()
-  }
+data <- list()
+for (i in 1:length(x)) {
+  data[[i]] <- all_data[grep(x[i], files),]
 }
 
+for (i in 1:length(tests)) {
+  png(paste("./analysis/", tests[i], ".png", sep=""), width=8, height=8, units="in", res=200)
+  plot(c(1:length(data)), c(1:length(data)), col="white", ylim=c(0, max(all_data[, tests[i]])), main=titles[i], ylab=tests[i], xaxt="n", xlab="Machine type")
+  axis(1, at=c(1:length(data)), labels=x)
+
+  for (j in 1:length(compare)) {
+    service <- list()
+    for (k in 1:length(data)) {
+      # Iterate access the x variable and taking the mean of the replicas based on the result of the grep of compare
+      service <- c(service, mean(data[[k]][, tests[i]][grep(compare[j], rownames(data[[k]]))]))
+    }
+
+    points(c(1:length(data)), service, pch=shapes[j], col=color[j], cex=2)
+    lines(c(1:length(data)), service, col=color[j])
+  }
+  legend(legend=compare, pch=shapes, x="topleft", col=color, cex=2)
+  dev.off()
+}
