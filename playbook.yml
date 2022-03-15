@@ -1,4 +1,16 @@
 ---
+# Update packages on all servers.
+- hosts: all
+  become: True
+  tasks:
+  - name: Update packages
+    package:
+      name: "*"
+      state: latest
+      update_cache: yes
+  tags:
+    - install
+
 # Install docker on all servers.
 - hosts: all
   become: True
