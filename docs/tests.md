@@ -1,7 +1,7 @@
-## GraphQL Tests
+## Tests
 
 ### query_type
-Values: `REST` and `STITCH`
+Values: `REST`, `STITCH` or `FEDERATE`
 
 `REST`: Uses a REST request.
 

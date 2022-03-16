@@ -22,3 +22,9 @@
 
 ## Documentation
 Please check the `/docs` folder for more information about the repo.
+
+- [Tests](/docs/tests.md): Explains the different REST and GraphQL tests available.
+- [AWS](/docs/aws.md): Explains how to use the `aws.playbook.yml` to standup the resources necessary to run the tests in AWS.
+- [GCP](/docs/gcp.md): Explains how to use the `gcp.playbook.yml` to standup the resources necessary to run the tests in GCP.
+- [Variables](/docs/variables.md): Explains the different variables used in this repo.
+
