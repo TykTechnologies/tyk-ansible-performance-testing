@@ -1,5 +1,6 @@
 ## Variables
-- `vars/tests.yml`
+### Tests
+`vars/tests.yml`
 
 | Variable | Default | Comments |
 |----------------------| :---------: | --------- |
@@ -12,7 +13,8 @@
 | enable_rate_limiting | `False` | Enable rate limiting in the performance testing. Only available for Tyk. |
 | test_services | `[ kong ]` | List of services you would like to test Tyk against. |
 
-- `vars/services.yml`
+### Services
+`vars/services.yml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
@@ -28,7 +30,8 @@
 | services.kong.admin.ssl_port | `8444` | Kong gateway admin server SSL listening port |
 | services.apollo.service.port | `4000` | Apollo server listening port |
 
-- `vars/aws.yml`
+### AWS
+`vars/aws.yml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
@@ -43,7 +46,8 @@
 | provider.user | `ec2-user` | Username for SSH connection to generated instances. |
 | provider.key_file | `./secret.pem` | Key file for SSH connection to generated instances. Should be the key file referenced in `aws_key_name`. |
 
-- `vars/gcp.yml`
+### GCP
+`vars/gcp.yml`
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
