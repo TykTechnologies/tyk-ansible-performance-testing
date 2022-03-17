@@ -17,7 +17,7 @@
     state: started
     image: rcmorano/docker-hey
     detach: no
-    command: "-z 10s{% if label == 'tyk' and enable_auth %} -H \"Authorization: {{ response.json.key }}\"{% endif %}{% if query_type != 'REST' %} -m POST -H \"Content-Type: application/json\" -d \"{\\\"query\\\":\\\"{{ graphql_query[query_depth] }}\\\",\\\"variables\\\":null}\"{% endif %} http://{{ hostvars[label].ansible_facts.default_ipv4.address }}:{{ services[label].service.port }}/{% if (label == 'tyk' or label == 'kong') %}api/{% endif %}{% if query_type == 'REST' %}json/valid{% endif %}"
+    command: "-z 10s{% if label == 'tyk' and enable_auth %} -H \"Authorization: {{ response.json.key }}\"{% endif %}{% if query_type != 'REST' %} -m POST -H \"Content-Type: application/json\" -d \"{\\\"query\\\":\\\"{{ graphql_query[query_depth] }}\\\",\\\"variables\\\":null}\"{% endif %} {% if label == 'saas-tyk' %}{{ api_url }}{% else %}http://{{ hostvars[label].ansible_facts.default_ipv4.address }}:{{ services[label].service.port }}/{% if (label == 'tyk' or label == 'kong') %}api/{% endif %}{% endif %}{% if query_type == 'REST' %}json/valid{% endif %}"
   register: output
 
 - name: Copy result to local

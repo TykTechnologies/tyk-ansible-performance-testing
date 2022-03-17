@@ -2,6 +2,7 @@
   "name": "users-subgraph",
   "api_id": "2",
   "org_id": "default",
+  "active": true,
   "auth": {},
   "use_keyless": true,
   "version_data": {
@@ -19,9 +20,14 @@
       }
     }
   },
+{% if 'saas' in ansible_run_tags %}
+  "tags": [
+    "edge"
+  ],
+{% endif %}
   "internal": true,
   "proxy": {
-    "target_url": "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.services.users.port }}/query",
+    "target_url": "http://{% if 'saas' in ansible_run_tags %}{{ hostvars.upstream.ansible_host }}{% else %}{{ hostvars.upstream.ansible_facts.default_ipv4.address }}{% endif %}:{{ services.upstream.services.users.port }}/query",
     "strip_listen_path": true,
     "enable_load_balancing": false,
     "listen_path": "/users-subgraph/",

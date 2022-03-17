@@ -2,6 +2,7 @@
   "name": "Tyk Test API",
   "api_id": "1",
   "org_id": "default",
+  "active": true,
 {% if enable_auth %}
   "definition": {
     "location": "header",
@@ -29,9 +30,14 @@
       }
     }
   },
+{% if 'saas' in ansible_run_tags %}
+  "tags": [
+    "edge"
+  ],
+{% endif %}
   "proxy": {
     "listen_path": "/api/",
-    "target_url": "{% if query_type == 'REST' %}http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.service.port }}{% endif %}",
+    "target_url": "{% if query_type == 'REST' %}http://{% if 'saas' in ansible_run_tags %}{{ hostvars.upstream.ansible_host }}{% else %}{{ hostvars.upstream.ansible_facts.default_ipv4.address }}{% endif %}:{{ services.upstream.service.port }}{% endif %}",
     "strip_listen_path": true
   },
   "enable_batch_request_support": true,
@@ -82,7 +88,7 @@
             }
           ],
           "config": {
-            "url": "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.service.port }}/users/{% raw %}{{.arguments.id}}{% endraw %}",
+            "url": "http://{% if 'saas' in ansible_run_tags %}{{ hostvars.upstream.ansible_host }}{% else %}{{ hostvars.upstream.ansible_facts.default_ipv4.address }}{% endif %}:{{ services.upstream.service.port }}/users/{% raw %}{{.arguments.id}}{% endraw %}",
             "method": "GET",
             "body": "",
             "headers": {},
@@ -102,7 +108,7 @@
             }
           ],
           "config": {
-            "url": "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.service.port }}/users/{% raw %}{{.object.id}}{% endraw %}/posts",
+            "url": "http://{% if 'saas' in ansible_run_tags %}{{ hostvars.upstream.ansible_host }}{% else %}{{ hostvars.upstream.ansible_facts.default_ipv4.address }}{% endif %}:{{ services.upstream.service.port }}/users/{% raw %}{{.object.id}}{% endraw %}/posts",
             "method": "GET",
             "body": "",
             "headers": {},
@@ -122,7 +128,7 @@
             }
           ],
           "config": {
-            "url": "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.service.port }}/posts/{% raw %}{{.object.id}}{% endraw %}/comments",
+            "url": "http://{% if 'saas' in ansible_run_tags %}{{ hostvars.upstream.ansible_host }}{% else %}{{ hostvars.upstream.ansible_facts.default_ipv4.address }}{% endif %}:{{ services.upstream.service.port }}/posts/{% raw %}{{.object.id}}{% endraw %}/comments",
             "method": "GET",
             "body": "",
             "headers": {},

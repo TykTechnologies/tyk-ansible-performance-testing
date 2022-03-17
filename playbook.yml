@@ -13,6 +13,7 @@
 
 # Install docker on all servers.
 - hosts: all
+  gather_facts: false
   become: True
   vars:
     pip_install_packages:
@@ -25,6 +26,7 @@
 
 # Install htop on all servers (Optional)
 - hosts: all
+  gather_facts: false
   become: True
   roles:
     - htop
@@ -43,6 +45,7 @@
 
 # Stand up upstream services.
 - hosts: upstream
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
@@ -54,6 +57,7 @@
 
 # Benchmark upstream service
 - hosts: load-generator
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
@@ -69,31 +73,34 @@
     - test
 
 # Stand up Tyk gateway
-- hosts: tyk
+- hosts: "{% if 'saas' in ansible_run_tags %}localhost{% else %}tyk{% endif %}"
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
     - ./vars/services.yml
   roles:
-    - role: tyk
+    - tyk
   tags:
     - install
     - standup
 
 # Benchmark Tyk gateway
 - hosts: load-generator
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
     - ./vars/services.yml
   roles:
     - role: load-generator
-      label: tyk
+      label: "{% if 'saas' in ansible_run_tags %}saas-{% endif %}tyk"
   tags:
     - test
 
 # Stand up Kong gateway
 - hosts: kong
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
@@ -108,6 +115,7 @@
 
 # Benchmark Kong gateway
 - hosts: load-generator
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
@@ -124,6 +132,7 @@
 
 # Stand up Apollo server
 - hosts: apollo
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
@@ -139,6 +148,7 @@
 
 # Benchmark Apollo server
 - hosts: load-generator
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
@@ -155,6 +165,7 @@
 
 # Clean up upstream services
 - hosts: upstream
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
@@ -165,14 +176,19 @@
 
 # Clean up Tyk gateway services
 - hosts: tyk
+  gather_facts: false
   become: True
-  roles:
-    - tyk
+  tasks:
+    - name: Include tyk role
+      include_role:
+        name: tyk
+      when: not ('saas' in ansible_run_tags)
   tags:
     - cleanup
 
 # Clean up Kong gateway services
 - hosts: kong
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml
@@ -186,6 +202,7 @@
 
 # Clean up Apollo services
 - hosts: apollo
+  gather_facts: false
   become: True
   vars_files:
     - ./vars/tests.yml

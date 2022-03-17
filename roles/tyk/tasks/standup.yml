@@ -3,11 +3,12 @@
   template:
     src: tyk/tyk.j2
     dest: /opt/tyk-gateway/tyk.conf
+  when: not ('saas' in ansible_run_tags)
 
 - name: Create api.json
   template:
     src: tyk/api.j2
-    dest: /opt/tyk-gateway/apps/api.json
+    dest: "{% if 'saas' in ansible_run_tags %}./saas/apps/api.json{% else %}/opt/tyk-gateway/apps/api.json{% endif %}"
 
 - name: Include federation standup task
   include_tasks: standup-federation.yml
@@ -29,3 +30,4 @@
     env:
       GOGC: "1600"
       GOMAXPROCS: "{% if limit_cores %}{{ limit_cores }}{% endif %}"
+  when: not ('saas' in ansible_run_tags)
