@@ -26,6 +26,7 @@
     name: "{{ aws_instance_type }}-kong"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
   delegate_to: localhost
+  when: ('kong' in test_services)
 
 - name: Terminate Apollo EC2 instance
   ec2_instance:
@@ -33,3 +34,4 @@
     name: "{{ aws_instance_type }}-apollo"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
   delegate_to: localhost
+  when: ('apollo' in test_services)

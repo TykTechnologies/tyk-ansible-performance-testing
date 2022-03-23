@@ -1,93 +1,35 @@
 ---
-- name: Terminate Upstream GCP compute instance
-  gcp_compute_instance:
-    state: absent
-    name: "{{ gcp_machine_type }}-upstream"
-    project: "{{ gcp_project }}"
-    zone: "{{ gcp_zone }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
+- name: Include terminate_instance task to terminate Upstream vm
+  include_tasks: terminate_instance.yml
+  vars:
+    title: Upstream
+    type: upstream
 
-- name: Terminate Upstream GCP address instance
-  gcp_compute_address:
-    state: absent
-    name: "{{ gcp_machine_type }}-upstream-address"
-    project: "{{ gcp_project }}"
-    region: "{{ gcp_region }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
+- name: Include terminate_instance task to terminate Load Generator vm
+  include_tasks: terminate_instance.yml
+  vars:
+    title: Load Generator
+    type: load
 
-- name: Terminate Load Generator GCP compute instance
-  gcp_compute_instance:
-    state: absent
-    name: "{{ gcp_machine_type }}-load"
-    project: "{{ gcp_project }}"
-    zone: "{{ gcp_zone }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
+- name: Include terminate_instance task to terminate Tyk vm
+  include_tasks: terminate_instance.yml
+  vars:
+    title: Tyk
+    type: tyk
 
-- name: Terminate Load Generator GCP address instance
-  gcp_compute_address:
-    state: absent
-    name: "{{ gcp_machine_type }}-load-address"
-    project: "{{ gcp_project }}"
-    region: "{{ gcp_region }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
+- name: Include terminate_instance task to terminate Kong vm
+  include_tasks: terminate_instance.yml
+  vars:
+    title: Kong
+    type: kong
+  when: ('kong' in test_services)
 
-- name: Terminate Tyk GCP compute instance
-  gcp_compute_instance:
-    state: absent
-    name: "{{ gcp_machine_type }}-tyk"
-    project: "{{ gcp_project }}"
-    zone: "{{ gcp_zone }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
-
-- name: Terminate Tyk GCP address instance
-  gcp_compute_address:
-    state: absent
-    name: "{{ gcp_machine_type }}-tyk-address"
-    project: "{{ gcp_project }}"
-    region: "{{ gcp_region }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
-
-- name: Terminate Kong GCP compute instance
-  gcp_compute_instance:
-    state: absent
-    name: "{{ gcp_machine_type }}-kong"
-    project: "{{ gcp_project }}"
-    zone: "{{ gcp_zone }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
-
-- name: Terminate Kong GCP address instance
-  gcp_compute_address:
-    state: absent
-    name: "{{ gcp_machine_type }}-kong-address"
-    project: "{{ gcp_project }}"
-    region: "{{ gcp_region }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
-
-- name: Terminate Apollo GCP compute instance
-  gcp_compute_instance:
-    state: absent
-    name: "{{ gcp_machine_type }}-apollo"
-    project: "{{ gcp_project }}"
-    zone: "{{ gcp_zone }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
-
-- name: Terminate Apollo GCP address instance
-  gcp_compute_address:
-    state: absent
-    name: "{{ gcp_machine_type }}-apollo-address"
-    project: "{{ gcp_project }}"
-    region: "{{ gcp_region }}"
-    auth_kind: "{{ gcp_auth_kind }}"
-    service_account_file: "{{ gcp_service_account_file }}"
+- name: Include terminate_instance task to terminate Apollo vm
+  include_tasks: terminate_instance.yml
+  vars:
+    title: Apollo
+    type: apollo
+  when: ('apollo' in test_services)
 
 - name: Terminate GCP firewall instance
   gcp_compute_firewall:

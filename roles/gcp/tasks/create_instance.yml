@@ -1,0 +1,31 @@
+---
+- name: Provision {{ title }} GCP disk instance
+  gcp_compute_disk:
+    name: "{{ gcp_machine_type }}-{{ type }}-disk"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    source_image: "{{ gcp_image }}"
+    size_gb: 20
+  register: disk
+
+- name: Provision {{ title }} GCP compute instance
+  gcp_compute_instance:
+    name: "{{ gcp_machine_type }}-{{ type }}"
+    project: "{{ gcp_project }}"
+    zone: "{{ gcp_zone }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+    machine_type: "{{ gcp_machine_type }}"
+    disks:
+    - auto_delete: True
+      boot: True
+      source: "{{ disk }}"
+    network_interfaces:
+    - network: "{{ network }}"
+      access_configs:
+      - name: External NAT
+        nat_ip: "{{ address }}"
+        type: ONE_TO_ONE_NAT
+  delegate_to: localhost

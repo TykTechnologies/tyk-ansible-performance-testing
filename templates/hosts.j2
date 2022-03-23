@@ -12,11 +12,15 @@ all:
       ansible_host: "{{ hosts.tyk }}"
       ansible_user: "{{ provider.user }}"
       ansible_ssh_private_key_file: "{{ provider.key_file }}"
+{% if 'kong' in test_services %}
     kong:
       ansible_host: "{{ hosts.kong }}"
       ansible_user: "{{ provider.user }}"
       ansible_ssh_private_key_file: "{{ provider.key_file }}"
+{% endif %}
+{% if 'apollo' in test_services %}
     apollo:
       ansible_host: "{{ hosts.apollo }}"
       ansible_user: "{{ provider.user }}"
       ansible_ssh_private_key_file: "{{ provider.key_file }}"
+{% endif %}

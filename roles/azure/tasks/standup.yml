@@ -60,6 +60,7 @@
     allocation_method: Static
     name: "{{ azure_vm_size }}-kong-ip"
   register: kong
+  when: ('kong' in test_services)
 
 - name: Create Apollo public IP address
   azure_rm_publicipaddress:
@@ -67,6 +68,7 @@
     allocation_method: Static
     name: "{{ azure_vm_size }}-apollo-ip"
   register: apollo
+  when: ('apollo' in test_services)
 
 - name: Include create_vm task to create Upstream vm
   include_tasks: create_vm.yml
@@ -91,12 +93,14 @@
   vars:
     title: Kong
     type: kong
+  when: ('kong' in test_services)
 
 - name: Include create_vm task to create Apollo vm
   include_tasks: create_vm.yml
   vars:
     title: Apollo
     type: apollo
+  when: ('apollo' in test_services)
 
 - name: Create {{ azure_vm_size }}-azure-hosts.yml
   vars:
@@ -104,8 +108,8 @@
       upstream: "{{ upstream.state.ip_address }}"
       load: "{{ load.state.ip_address }}"
       tyk: "{{ tyk.state.ip_address }}"
-      kong: "{{ kong.state.ip_address }}"
-      apollo: "{{ apollo.state.ip_address }}"
+      kong: "{% if 'kong' in test_services %}{{ kong.state.ip_address }}{% endif %}"
+      apollo: "{% if 'apollo' in test_services %}{{ apollo.state.ip_address }}{% endif %}"
   template:
     src: hosts.j2
     dest: ./hosts/{{ azure_vm_size }}-azure-hosts.yml

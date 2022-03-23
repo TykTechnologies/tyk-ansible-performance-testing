@@ -20,10 +20,10 @@ provider:
 
 ### Example
 ```
-ansible-playbook aws.playbook.yml -t standup -e '{ "aws_instance_type": "t3.medium" }'
+ansible-playbook aws.playbook.yml -t standup -e '{ "aws_instance_type": "t3.medium", "test_services": [ "kong" ] }'
 ansible-playbook playbook.yml -i hosts/t3.medium-aws-hosts.yml -t install -t standup -e '{ "query_type": "REST" }'
 sudo ansible-playbook playbook.yml -i hosts/t3.medium-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "t3.medium-aws-1" }'
 sudo ansible-playbook playbook.yml -i hosts/t3.medium-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "t3.medium-aws-2" }'
 sudo ansible-playbook playbook.yml -i hosts/t3.medium-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "t3.medium-aws-3" }'
-ansible-playbook aws.playbook.yml -t cleanup -e '{ "aws_instance_type": "t3.medium" }'
+ansible-playbook aws.playbook.yml -t cleanup -e '{ "aws_instance_type": "t3.medium", "test_services": [ "kong" ] }'
 ```

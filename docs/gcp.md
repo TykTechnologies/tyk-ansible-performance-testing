@@ -19,11 +19,11 @@ provider:
 
 ### Example
 ```
-ansible-playbook gcp.playbook.yml -t standup -e '{ "gcp_machine_type": "n1-standard-1" }'
+ansible-playbook gcp.playbook.yml -t standup -e '{ "gcp_machine_type": "n1-standard-1", "test_services": [ "kong" ] }'
 ansible-playbook playbook.yml -i hosts/n1-standard-1-gcp-hosts.yml -t install -t standup -e '{ "query_type": "REST" }'
 sudo ansible-playbook playbook.yml -i hosts/n1-standard-1-gcp-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "n1-standard-1-gcp-1" }'
 sudo ansible-playbook playbook.yml -i hosts/n1-standard-1-gcp-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "n1-standard-1-gcp-2" }'
 sudo ansible-playbook playbook.yml -i hosts/n1-standard-1-gcp-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "n1-standard-1-gcp-3" }'
-ansible-playbook gcp.playbook.yml -t cleanup -e '{ "gcp_machine_type": "n1-standard-1" }'
+ansible-playbook gcp.playbook.yml -t cleanup -e '{ "gcp_machine_type": "n1-standard-1", "test_services": [ "kong" ] }'
 ```
 

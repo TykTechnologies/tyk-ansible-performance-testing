@@ -62,6 +62,7 @@
     aws_secret_key: "{{ aws_secret_key }}"
   register: kong
   delegate_to: localhost
+  when: ('kong' in test_services)
 
 - name: Provision Apollo EC2 instance
   ec2_instance:
@@ -78,6 +79,7 @@
     aws_secret_key: "{{ aws_secret_key }}"
   register: apollo
   delegate_to: localhost
+  when: ('apollo' in test_services)
 
 - name: Create {{ aws_instance_type }}-aws-hosts.yml
   vars:
@@ -85,8 +87,8 @@
       upstream: "{{ upstream.instances[0].public_dns_name }}"
       load: "{{ load.instances[0].public_dns_name }}"
       tyk: "{{ tyk.instances[0].public_dns_name }}"
-      kong: "{{ kong.instances[0].public_dns_name }}"
-      apollo: "{{ apollo.instances[0].public_dns_name }}"
+      kong: "{% if 'kong' in test_services %}{{ kong.instances[0].public_dns_name }}{% endif %}"
+      apollo: "{% if 'apollo' in test_services %}{{ apollo.instances[0].public_dns_name }}{% endif %}"
   template:
     src: hosts.j2
     dest: ./hosts/{{ aws_instance_type }}-aws-hosts.yml
