@@ -4,28 +4,24 @@
     state: absent
     name: "{{ aws_instance_type }}-upstream"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
 
 - name: Terminate Load Generator EC2 instance
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-load"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
 
 - name: Terminate Tyk EC2 instance
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-tyk"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
 
 - name: Terminate Kong EC2 instance
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-kong"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
   when: ('kong' in test_services)
 
 - name: Terminate Apollo EC2 instance
@@ -33,5 +29,4 @@
     state: absent
     name: "{{ aws_instance_type }}-apollo"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
   when: ('apollo' in test_services)

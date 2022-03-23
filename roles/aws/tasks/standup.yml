@@ -13,7 +13,6 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: upstream
-  delegate_to: localhost
 
 - name: Provision Load Generator EC2 instance
   ec2_instance:
@@ -29,7 +28,6 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: load
-  delegate_to: localhost
 
 - name: Provision Tyk EC2 instance
   ec2_instance:
@@ -45,7 +43,6 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: tyk
-  delegate_to: localhost
 
 - name: Provision Kong EC2 instance
   ec2_instance:
@@ -61,7 +58,6 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: kong
-  delegate_to: localhost
   when: ('kong' in test_services)
 
 - name: Provision Apollo EC2 instance
@@ -78,7 +74,6 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: apollo
-  delegate_to: localhost
   when: ('apollo' in test_services)
 
 - name: Create {{ aws_instance_type }}-aws-hosts.yml

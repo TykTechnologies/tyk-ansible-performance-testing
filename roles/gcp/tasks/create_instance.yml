@@ -28,4 +28,3 @@
       - name: External NAT
         nat_ip: "{{ address }}"
         type: ONE_TO_ONE_NAT
-  delegate_to: localhost
