@@ -8,4 +8,4 @@ hosts/*.yml
 benchmarks/*.txt
 analysis/*.png
 saas/hosts.yml
-saas/apps/*
+saas/apps/*.json
