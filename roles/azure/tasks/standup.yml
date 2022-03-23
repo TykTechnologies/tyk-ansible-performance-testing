@@ -1,0 +1,111 @@
+---
+- name: "Create a resource group {{ azure_vm_size }}-resource-group"
+  azure_rm_resourcegroup:
+    name: "{{ azure_vm_size }}-resource-group"
+    location: "{{ azure_location }}"
+
+- name: Create a virtual network
+  azure_rm_virtualnetwork:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    name: "{{ azure_vm_size }}-virtual-network"
+    address_prefixes_cidr:
+        - "10.1.0.0/16"
+
+- name: Create a subnet
+  azure_rm_subnet:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    virtual_network_name: "{{ azure_vm_size }}-virtual-network"
+    name: "{{ azure_vm_size }}-subnet"
+    address_prefix_cidr: "10.1.0.0/24"
+
+- name: Create a network security group
+  azure_rm_securitygroup:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    name: "{{ azure_vm_size }}-network-security-group"
+    rules:
+      - name: Access
+        destination_port_range:
+          - "22"
+          - "4000-4003"
+          - "8000-8001"
+          - "8080"
+          - "8443-8444"
+        priority: 1001
+        direction: Inbound
+
+- name: Create Upstream public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    allocation_method: Static
+    name: "{{ azure_vm_size }}-upstream-ip"
+  register: upstream
+
+- name: Create Load Generator public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    allocation_method: Static
+    name: "{{ azure_vm_size }}-load-ip"
+  register: load
+
+- name: Create Tyk public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    allocation_method: Static
+    name: "{{ azure_vm_size }}-tyk-ip"
+  register: tyk
+
+- name: Create Kong public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    allocation_method: Static
+    name: "{{ azure_vm_size }}-kong-ip"
+  register: kong
+
+- name: Create Apollo public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    allocation_method: Static
+    name: "{{ azure_vm_size }}-apollo-ip"
+  register: apollo
+
+- name: Include create_vm task to create Upstream vm
+  include_tasks: create_vm.yml
+  vars:
+    title: Upstream
+    type: upstream
+
+- name: Include create_vm task to create Load Generator vm
+  include_tasks: create_vm.yml
+  vars:
+    title: Load Generator
+    type: load
+
+- name: Include create_vm task to create Tyk vm
+  include_tasks: create_vm.yml
+  vars:
+    title: Tyk
+    type: tyk
+
+- name: Include create_vm task to create Kong vm
+  include_tasks: create_vm.yml
+  vars:
+    title: Kong
+    type: kong
+
+- name: Include create_vm task to create Apollo vm
+  include_tasks: create_vm.yml
+  vars:
+    title: Apollo
+    type: apollo
+
+- name: Create {{ azure_vm_size }}-azure-hosts.yml
+  vars:
+    hosts:
+      upstream: "{{ upstream.state.ip_address }}"
+      load: "{{ load.state.ip_address }}"
+      tyk: "{{ tyk.state.ip_address }}"
+      kong: "{{ kong.state.ip_address }}"
+      apollo: "{{ apollo.state.ip_address }}"
+  template:
+    src: hosts.j2
+    dest: ./hosts/{{ azure_vm_size }}-azure-hosts.yml

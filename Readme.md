@@ -8,11 +8,12 @@
 
 2. Run initalization script to initialize environment `sh scripts/init.sh`.
 
-3. Create 4 different servers to conduct the testing:
+3. Create 5 different servers to conduct the testing:
   - Upstream: expose port 8000 (ex. c5.2xlarge)
-  - Load Generator (ex. c5.9xlarge)
-  - Tyk: expose port 8080 (ex. c5.9xlarge)
-  - Apollo: expose port 4000 (ex. c5.9xlarge)
+  - Load Generator (ex. c5.2xlarge)
+  - Tyk: expose port 8080 (ex. c5.2xlarge)
+  - Kong: expose port 8000 (ex. c5.2xlarge)
+  - Apollo: expose port 4000 (ex. c5.2xlarge)
 
 4. Modify `hosts.yml` file to update ssh variables to your server(s). You can learn more about the hosts file [here](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html).
 
@@ -26,5 +27,5 @@ Please check the `/docs` folder for more information about the repo.
 - [Tests](/docs/tests.md): Explains the different REST and GraphQL tests available.
 - [AWS](/docs/aws.md): Explains how to use the `aws.playbook.yml` to standup the resources necessary to run the tests in AWS.
 - [GCP](/docs/gcp.md): Explains how to use the `gcp.playbook.yml` to standup the resources necessary to run the tests in GCP.
+- [Azure](/docs/azure.md): Explains how to use the `azure.playbook.yml` to standup the resources necessary to run the tests in Azure.
 - [Variables](/docs/variables.md): Explains the different variables used in this repo.
-

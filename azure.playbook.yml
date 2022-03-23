@@ -1,0 +1,11 @@
+---
+- name: Create Azure instances
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - ./vars/azure.yml
+  roles:
+    - azure
+  tags:
+    - standup
+    - cleanup

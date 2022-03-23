@@ -1,0 +1,6 @@
+---
+- name: "Delete {{ azure_vm_size }}-resource-group"
+  azure_rm_resourcegroup:
+    name: "{{ azure_vm_size }}-resource-group"
+    force_delete_nonempty: yes
+    state: absent

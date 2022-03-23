@@ -60,3 +60,25 @@
 | gcp_image | `projects/rhel-cloud/global/images/rhel-8-v20220303` | GCP image ID |
 | provider.user | `user` | Username for SSH connection to generated instances. |
 | provider.key_file | `./secret.pem` | Key file for SSH connection to generated instances. |
+
+azure_ssh_public_key: "public_key"
+provider:
+  user: azureuser
+  key_file: ./secret.pem
+
+### Azure
+`vars/azure.yml`
+
+| Variable | Default | Comments |
+| --------- | :---------: | --------- |
+| azure_vm_size| `Standard_B1s` | Azure VM size. |
+| azure_location | `westus` | Azure VM location. |
+| azure_image.offer | `UbuntuServer` | Azure image offer. |
+| azure_image.publisher | `Canonical` | Azure image publisher. |
+| azure_image.sku | `18.04-LTS` | Azure image sku. |
+| azure_image.version | `latest` | Azure image version. |
+| azure_ssh_public_key | `` | The public key that you will use to SSH into the VMs. |
+| provider.user | `user` | Username for SSH connection to generated instances. |
+| provider.key_file | `./secret.pem` | Key file for SSH connection to generated instances. |
+
+

@@ -1,0 +1,26 @@
+---
+- name: Create virtual network interface card for {{ title }}
+  azure_rm_networkinterface:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    name: "{{ azure_vm_size }}-{{ type }}-network-interface-card"
+    virtual_network: "{{ azure_vm_size }}-virtual-network"
+    subnet: "{{ azure_vm_size }}-subnet"
+    public_ip_name: "{{ azure_vm_size }}-{{ type }}-ip"
+    security_group: "{{ azure_vm_size }}-network-security-group"
+
+- name: Create {{ title }} VM
+  azure_rm_virtualmachine:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    name: "{{ azure_vm_size | replace('_','-') }}-{{ type }}-vm"
+    vm_size: "{{ azure_vm_size }}"
+    admin_username: "{{ provider.user }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ provider.user }}/.ssh/authorized_keys"
+        key_data: "{{ azure_ssh_public_key }}"
+    network_interfaces: "{{ azure_vm_size }}-{{ type }}-network-interface-card"
+    image:
+      offer: "{{ azure_image.offer }}"
+      publisher: "{{ azure_image.publisher }}"
+      sku: "{{ azure_image.sku }}"
+      version: "{{ azure_image.version }}"
