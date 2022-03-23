@@ -1,11 +1,11 @@
 aws_region: us-west-2
 aws_key_name: secret
 aws_instance_type: t2.micro
-aws_image: ami-0b28dfc7adc325ef4
-aws_group: secret-sg
-aws_vpc_subnet_id: subnet-vpc_subnet_id
+aws_image: ami-0892d3c7ee96c0bf7
+aws_vpc_cidr_block: 192.168.0.0/16
+aws_subnet_cidr: 192.168.64.0/18
 aws_access_key: aws_access_key
 aws_secret_key: aws_secret_key
 provider:
-  user: ec2-user
+  user: ubuntu
   key_file: ./secret.pem

@@ -1,19 +1,48 @@
 ---
+- name: Provision EC2 VPC
+  amazon.aws.ec2_vpc_net:
+    name: "{{ aws_instance_type }}-vpc"
+    cidr_block: "{{ aws_vpc_cidr_block }}"
+    region: "{{ aws_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: vpc_result
+
+- name: Provision EC2 subnet
+  amazon.aws.ec2_vpc_subnet:
+    vpc_id: "{{ vpc_result.vpc.id }}"
+    cidr: "{{ aws_subnet_cidr }}"
+    map_public: yes
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: subnet_result
+
+- name: Provision EC2 security group
+  amazon.aws.ec2_group:
+    name: "{{ aws_instance_type }}-security-group"
+    vpc_id: "{{ vpc_result.vpc.id }}"
+    region: "{{ aws_region }}"
+    description: "Gives access to all required ports."
+    rules:
+      - proto: tcp
+        ports:
+          - 22
+        cidr_ip: 0.0.0.0/0
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+
 - name: Provision Upstream EC2 instance
   ec2_instance:
     name: "{{ aws_instance_type }}-upstream"
     instance_type: "{{ aws_instance_type }}"
     region: "{{ aws_region }}"
     image_id: "{{ aws_image }}"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-    security_group: "{{ aws_group }}"
+    vpc_subnet_id: "{{ subnet_result.subnet.id }}"
+    security_group: "{{ aws_instance_type }}-security-group"
     key_name: "{{ aws_key_name }}"
-    network:
-      assign_public_ip: yes
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: upstream
-  delegate_to: localhost
 
 - name: Provision Load Generator EC2 instance
   ec2_instance:
@@ -21,15 +50,12 @@
     instance_type: "{{ aws_instance_type }}"
     region: "{{ aws_region }}"
     image_id: "{{ aws_image }}"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-    security_group: "{{ aws_group }}"
+    vpc_subnet_id: "{{ subnet_result.subnet.id }}"
+    security_group: "{{ aws_instance_type }}-security-group"
     key_name: "{{ aws_key_name }}"
-    network:
-      assign_public_ip: yes
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: load
-  delegate_to: localhost
 
 - name: Provision Tyk EC2 instance
   ec2_instance:
@@ -37,15 +63,12 @@
     instance_type: "{{ aws_instance_type }}"
     region: "{{ aws_region }}"
     image_id: "{{ aws_image }}"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-    security_group: "{{ aws_group }}"
+    vpc_subnet_id: "{{ subnet_result.subnet.id }}"
+    security_group: "{{ aws_instance_type }}-security-group"
     key_name: "{{ aws_key_name }}"
-    network:
-      assign_public_ip: yes
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: tyk
-  delegate_to: localhost
 
 - name: Provision Kong EC2 instance
   ec2_instance:
@@ -53,15 +76,12 @@
     instance_type: "{{ aws_instance_type }}"
     region: "{{ aws_region }}"
     image_id: "{{ aws_image }}"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-    security_group: "{{ aws_group }}"
+    vpc_subnet_id: "{{ subnet_result.subnet.id }}"
+    security_group: "{{ aws_instance_type }}-security-group"
     key_name: "{{ aws_key_name }}"
-    network:
-      assign_public_ip: yes
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: kong
-  delegate_to: localhost
   when: ('kong' in test_services)
 
 - name: Provision Apollo EC2 instance
@@ -70,15 +90,12 @@
     instance_type: "{{ aws_instance_type }}"
     region: "{{ aws_region }}"
     image_id: "{{ aws_image }}"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-    security_group: "{{ aws_group }}"
+    vpc_subnet_id: "{{ subnet_result.subnet.id }}"
+    security_group: "{{ aws_instance_type }}-security-group"
     key_name: "{{ aws_key_name }}"
-    network:
-      assign_public_ip: yes
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: apollo
-  delegate_to: localhost
   when: ('apollo' in test_services)
 
 - name: Create {{ aws_instance_type }}-aws-hosts.yml

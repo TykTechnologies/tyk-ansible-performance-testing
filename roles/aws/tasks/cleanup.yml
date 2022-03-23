@@ -1,37 +1,90 @@
 ---
+- name: Get VPC info
+  amazon.aws.ec2_vpc_net_info:
+    region: "{{ aws_region }}"
+    filters:
+      "tag:Name": "{{ aws_instance_type }}-vpc"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: vpc_results
+
+- name: Get subnet info
+  amazon.aws.ec2_vpc_subnet_info:
+    filters:
+      vpc-id: "{{ vpc_results.vpcs[0].id }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: subnet_results
+
 - name: Terminate Upstream EC2 instance
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-upstream"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
+    instance_type: "{{ aws_instance_type }}"
+    vpc_subnet_id: "{{ subnet_results.subnets[0].id }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
 
 - name: Terminate Load Generator EC2 instance
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-load"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
+    instance_type: "{{ aws_instance_type }}"
+    vpc_subnet_id: "{{ subnet_results.subnets[0].id }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
 
 - name: Terminate Tyk EC2 instance
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-tyk"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
+    instance_type: "{{ aws_instance_type }}"
+    vpc_subnet_id: "{{ subnet_results.subnets[0].id }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
 
 - name: Terminate Kong EC2 instance
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-kong"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
+    instance_type: "{{ aws_instance_type }}"
+    vpc_subnet_id: "{{ subnet_results.subnets[0].id }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
   when: ('kong' in test_services)
 
 - name: Terminate Apollo EC2 instance
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-apollo"
-    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
-  delegate_to: localhost
+    instance_type: "{{ aws_instance_type }}"
+    vpc_subnet_id: "{{ subnet_results.subnets[0].id }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
   when: ('apollo' in test_services)
+
+- name: Terminate EC2 security group
+  amazon.aws.ec2_group:
+    state: absent
+    name: "{{ aws_instance_type }}-security-group"
+    region: "{{ aws_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+
+- name: Terminate EC2 subnet
+  amazon.aws.ec2_vpc_subnet:
+    state: absent
+    state: absent
+    vpc_id: "{{ vpc_results.vpcs[0].id }}"
+    cidr: "{{ aws_subnet_cidr }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+
+- name: Terminate  EC2 VPC
+  amazon.aws.ec2_vpc_net:
+    state: absent
+    name: "{{ aws_instance_type }}-vpc"
+    region: "{{ aws_region }}"
+    cidr_block: "{{ aws_vpc_cidr_block }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"

@@ -9,8 +9,8 @@ aws_region: us-west-2
 aws_key_name: secret
 aws_instance_type: t2.micro
 aws_image: ami-0b28dfc7adc325ef4
-aws_group: secret-sg
-aws_vpc_subnet_id: subnet-vpc_subnet_id
+aws_vpc_cidr_block: 192.168.0.0/16
+aws_subnet_cidr: 192.168.0.0/16
 aws_access_key: aws_access_key
 aws_secret_key: aws_secret_key
 provider:
@@ -20,10 +20,10 @@ provider:
 
 ### Example
 ```
-ansible-playbook aws.playbook.yml -t standup -e '{ "aws_instance_type": "t3.medium", "test_services": [ "kong" ] }'
-ansible-playbook playbook.yml -i hosts/t3.medium-aws-hosts.yml -t install -t standup -e '{ "query_type": "REST" }'
-sudo ansible-playbook playbook.yml -i hosts/t3.medium-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "t3.medium-aws-1" }'
-sudo ansible-playbook playbook.yml -i hosts/t3.medium-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "t3.medium-aws-2" }'
-sudo ansible-playbook playbook.yml -i hosts/t3.medium-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "t3.medium-aws-3" }'
-ansible-playbook aws.playbook.yml -t cleanup -e '{ "aws_instance_type": "t3.medium", "test_services": [ "kong" ] }'
+ansible-playbook aws.playbook.yml -t standup -e '{ "aws_instance_type": "t3.2xlarge", "test_services": [ "kong" ] }'
+ansible-playbook playbook.yml -i hosts/t3.2xlarge-aws-hosts.yml -t install -t standup -e '{ "query_type": "REST" }'
+sudo ansible-playbook playbook.yml -i hosts/t3.2xlarge-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "t3.2xlarge-aws-1" }'
+sudo ansible-playbook playbook.yml -i hosts/t3.2xlarge-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "t3.2xlarge-aws-2" }'
+sudo ansible-playbook playbook.yml -i hosts/t3.2xlarge-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "t3.2xlarge-aws-3" }'
+ansible-playbook aws.playbook.yml -t cleanup -e '{ "aws_instance_type": "t3.2xlarge", "test_services": [ "kong" ] }'
 ```

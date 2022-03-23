@@ -39,8 +39,8 @@
 | aws_key_name | `secret` | AWS key name. |
 | aws_instance_type | `t2.micro` | AWS EC2 instant type that you want to test on. |
 | aws_image | `ami-0b28dfc7adc325ef4` | AWS AMI image ID |
-| aws_group | `secret-sg` | |
-| aws_vpc_subnet_id | `subnet-vpc_subnet_id` | AWS subnet ID |
+| aws_vpc_cidr_block | `10.10.0.0/16` | AWS VPC CIDR block |
+| aws_subnet_cidr | `10.10.0.0/28` | AWS subnet CIDR |
 | aws_access_key | `aws_access_key` | AWS access key |
 | aws_secret_key | `aws_secret_key` | AWS secret key |
 | provider.user | `ec2-user` | Username for SSH connection to generated instances. |
