@@ -11,7 +11,7 @@
 | enable_analytics | `False` | Enable analytics gathering in the performance testing. Only available for Tyk. |
 | enable_quota | `False` | Enable quota tracking in the performance testing. Only available for Tyk. |
 | enable_rate_limiting | `False` | Enable rate limiting in the performance testing. Only available for Tyk. |
-| test_services | `[ kong ]` | List of services you would like to test Tyk against. |
+| test_services | `[ kong ]` | List of services you would like to test Tyk against. This will influence that number of virtual machines created when using the `AWS`, `GCP`, and `Azure` playbooks. |
 
 ### Services
 `vars/services.yml`
@@ -60,11 +60,6 @@
 | gcp_image | `projects/rhel-cloud/global/images/rhel-8-v20220303` | GCP image ID |
 | provider.user | `user` | Username for SSH connection to generated instances. |
 | provider.key_file | `./secret.pem` | Key file for SSH connection to generated instances. |
-
-azure_ssh_public_key: "public_key"
-provider:
-  user: azureuser
-  key_file: ./secret.pem
 
 ### Azure
 `vars/azure.yml`
