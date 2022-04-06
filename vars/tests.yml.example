@@ -1,5 +1,5 @@
 # Test query type: enum(REST, STITCH, FEDERATE)
-query_type: STITCH
+query_type: REST
 # Test query depth: enum(0, 1, 2)
 # Applicable to the STITCH and FEDERATE query types.
 query_depth: 0
@@ -30,6 +30,6 @@ enable_rate_limiting: False
 #   apollo(STITCH, FEDERATE)
 # ]
 test_services:
-  - apollo
+  - kong
 # Prefix for the generated tests.
 prefix: False

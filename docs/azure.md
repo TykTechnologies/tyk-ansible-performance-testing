@@ -39,7 +39,7 @@ pip install -r requirements-azure.txt
 ### Example
 ```
 ansible-playbook azure.playbook.yml -t standup -e '{ "azure_vm_size": "Standard_B1s", "test_services": [ "kong" ] }'
-ansible-playbook playbook.yml -i hosts/Standard_B1s-azure-hosts.yml -t install -t standup -e '{ "query_type": "REST" }'
+ansible-playbook playbook.yml -i hosts/Standard_B1s-azure-hosts.yml -t install -t standup -e '{ "query_type": "REST", "test_services": [ "kong" ] }'
 sudo ansible-playbook playbook.yml -i hosts/Standard_B1s-azure-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "Standard_B1s-azure-1" }'
 sudo ansible-playbook playbook.yml -i hosts/Standard_B1s-azure-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "Standard_B1s-azure-2" }'
 sudo ansible-playbook playbook.yml -i hosts/Standard_B1s-azure-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "Standard_B1s-azure-3" }'
