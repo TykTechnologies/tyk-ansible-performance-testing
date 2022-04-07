@@ -41,6 +41,7 @@
     debug:
       msg: Discovering internal IP...
   tags:
+    - standup
     - test
 
 # Stand up upstream services.

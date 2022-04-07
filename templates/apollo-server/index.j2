@@ -86,9 +86,9 @@ const server = new ApolloServer({
 const gateway = new ApolloGateway({
   supergraphSdl: new IntrospectAndCompose({
     subgraphs: [
-      { name: "users",    url: "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.services.users.port }}/query" },
-      { name: "posts",    url: "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.services.posts.port }}/query" },
-      { name: "comments", url: "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.services.comments.port }}/query" },
+      { name: "users",    url: "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.subgraphs.users.port }}/query" },
+      { name: "posts",    url: "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.subgraphs.posts.port }}/query" },
+      { name: "comments", url: "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.subgraphs.comments.port }}/query" },
     ],
   }),
 })

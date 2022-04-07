@@ -27,7 +27,7 @@
 {% endif %}
   "internal": true,
   "proxy": {
-    "target_url": "http://{% if 'saas' in ansible_run_tags %}{{ hostvars.upstream.ansible_host }}{% else %}{{ hostvars.upstream.ansible_facts.default_ipv4.address }}{% endif %}:{{ services.upstream.services.posts.port }}/query",
+    "target_url": "http://{% if 'saas' in ansible_run_tags %}{{ hostvars.upstream.ansible_host }}{% else %}{{ hostvars.upstream.ansible_facts.default_ipv4.address }}{% endif %}:{{ services.upstream.subgraphs.posts.port }}/query",
     "strip_listen_path": true,
     "enable_load_balancing": false,
     "listen_path": "/posts-subgraph/",
