@@ -10,7 +10,7 @@ compare <- strsplit(args[1], ",")[[1]]
 filter <- strsplit(args[2], ",")[[1]]
 x <- strsplit(args[3], ",")[[1]]
 x_weights <- as.numeric(strsplit(args[4], ",")[[1]])
-x_label <- args[5]
+x_title <- args[5]
 x_labels <- strsplit(args[6], ",")[[1]]
 title <- args[7]
 
@@ -80,7 +80,7 @@ for (i in 1:length(tests)) {
 for (i in 1:length(tests)) {
   # Define image and plit properties
   png(paste("./analysis/", filter, "-", paste(compare, collapse="-"), "-", tests[i], "-",paste(filter, collapse="-"), ".png", sep=""), width=8, height=8, units="in", res=100)
-  plot(x_weights, c(1:length(data)), col="white", ylim=c(0, max(unlist(y[[i]]))), main=paste(title, y_labels[i]), ylab=y_labels[i], xaxt="n", xlab=x_label)
+  plot(x_weights, c(1:length(data)), col="white", ylim=c(0, max(unlist(y[[i]]))), main=paste(title, y_labels[i]), ylab=y_labels[i], xaxt="n", xlab=x_title)
   axis(1, at=x_weights, labels=x_labels)
 
   for (j in 1:length(compare)) {

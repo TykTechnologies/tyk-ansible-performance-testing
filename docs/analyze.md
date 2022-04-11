@@ -1,0 +1,30 @@
+## Analyze Tool
+
+Analyze tool will help you visualize the results of your performance tests through auto-generated graphs and csv files.
+
+### How to use
+
+`RScript ./analyze.r $compare $filter $x $x_weights $x_title $x_labels $title`
+
+| Variable | Example | Comments |
+|----------| :-----: | -------- |
+| compare | `"tyk,kong"` | What your looking to compare. Accepts regex. |
+| filter | `"rest,aws"` | Values to filter on. The result is an `AND` of the `,` separated fitler list. Accepts Regex. |
+| x | `"t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge"` | The x-axis values to split the data on. Accepts Regex. |
+| x_weights | `"2,4,8,16"` | The weights of the x-axis values. Length must match x list length. |
+| x_title | `"Cores"` | x-axis title |
+| x_labels | `"2,4,8,16"` | The labels of the x-axis values. Length must match x list length. |
+| title | `"AWS Tyk vs Kong"` | Title of the auto-generated Graphs. |
+
+### Examples
+`RScript ./analyze.r "tyk,kong" "rest,aws" "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" "2,4,8,16" "Cores" "2,4,8,16" "AWS Tyk vs Kong"`
+
+`RScript ./analyze.r "tyk-stitch-0,tyk-federate-0,tyk-stitch-1,tyk-federate-1,tyk-stitch-2,tyk-federate-2" "gcp" "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" "2,4,8,16" "Cores" "2,4,8,16" "GCP Stitch vs Federation"`
+
+`RScript ./analyze.r "tyk-stitch-0,apollo-stitch-0,tyk-stitch-1,apollo-stitch-1,tyk-stitch-2,apollo-stitch-2" "azure" "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" "2,4,8,16" "Cores" "2,4,8,16" "Azure Tyk vs Apollo Stitch"`
+
+`RScript ./analyze.r "tyk-federate-0,apollo-federate-0,tyk-federate-1,apollo-federate-1,tyk-federate-2,apollo-federate-2" "aws" "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" "2,4,8,16" "Cores" "2,4,8,16" "AWS Tyk vs Apollo Federation"`
+
+`RScript ./analyze.r "aws,gcp,azure" "rest,tyk" "t2.medium|e2-medium|Standard_B2s,c5.xlarge|c2-standard-4|Standard_F4s_v2,c5.2xlarge|c2-standard-8|Standard_F8s_v2,c5.4xlarge|c2-standard-16|Standard_F16s_v2" "2,4,8,16" "Cores" "2,4,8,16" "AWS vs GCP vs Azure REST"`
+
+`RScript ./analyze.r "aws-[1-5]-tyk,aws-[1-5]-kong,gcp-[1-5]-tyk,gcp-[1-5]-kong,azure-[1-5]-tyk,azure-[1-5]-kong" "rest" "t2.medium|e2-medium|Standard_B2s,c5.xlarge|c2-standard-4|Standard_F4s_v2,c5.2xlarge|c2-standard-8|Standard_F8s_v2,c5.4xlarge|c2-standard-16|Standard_F16s_v2" "2,4,8,16" "Cores" "2,4,8,16" "Tyk vs Kong on AWS vs GCP vs Azure REST"`
