@@ -4,8 +4,8 @@ BASE_DIR <- "./benchmarks/"
 
 args = commandArgs(trailingOnly=TRUE)
 
-# RScript ./analyze.r "tyk,kong" "rest,aws" "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" "2,4,8,16" "Machine type" "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" "Tyk vs Kong"
-# RScript ./analyze.r "tyk,kong" "rest,gcp" "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" "2,4,8,16" "Machine type" "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" "Tyk vs Kong"
+# RScript ./analyze.r "tyk,kong" "rest,aws" "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" "2,4,8,16" "Machine type" "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" "Tyk vs Kong" "Tyk,Kong"
+# RScript ./analyze.r "tyk,kong" "rest,gcp" "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" "2,4,8,16" "Machine type" "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" "Tyk vs Kong" "Tyk,Kong"
 compare <- strsplit(args[1], ",")[[1]]
 filter <- strsplit(args[2], ",")[[1]]
 x <- strsplit(args[3], ",")[[1]]
@@ -13,6 +13,7 @@ x_weights <- as.numeric(strsplit(args[4], ",")[[1]])
 x_title <- args[5]
 x_labels <- strsplit(args[6], ",")[[1]]
 title <- args[7]
+legend <- strsplit(args[8], ",")[[1]]
 
 # Create the tests array to help iterate
 tests <- c("rps", "p99")
@@ -95,7 +96,7 @@ for (i in 1:length(tests)) {
     lines(x_weights, service, col=color[j])
   }
   # Add legend
-  legend(legend=compare, pch=shapes, x=legends[i], col=color, cex=1.5)
+  legend(legend=legend, pch=shapes, x=legends[i], col=color, cex=1.5)
   abline(h=0, lwd=0.2,col=c(rgb(0,0,0,0.25)))
   dev.off()
 }
@@ -122,7 +123,7 @@ generate_csv <- function(l, type) {
   colnames(l) <- x
   rownames(l) <- compare
   # Generate CSVs
-  write.table(l, file=paste("./analysis/average-", type, "-", paste(filter, collapse="-"), ".csv", sep=""), sep=",", quote=FALSE)
+  write.table(l, file=paste("./analysis/average-", type, "-", paste(filter, collapse="-"), paste(compare, collapse="-"), ".csv", sep=""), sep=",", quote=FALSE)
 }
 
 # Invoke generate_csv to generate rps and p99 csv
