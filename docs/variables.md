@@ -7,10 +7,10 @@
 | query_type | `REST` | Sets the query type for the performance testing. Can be set to `REST`, `STITCH`, or `FEDERATE` |
 | query_depth | `0` | Sets the nested query depth |
 | limit_cores | `false` | Allows limiting the number of cores used by the service. Only available for Tyk and Apollo. |
-| enable_auth | `False` | Enable authentication in the performance testing. Only available for Tyk. |
+| enable_auth | `False` | Enable authentication in the performance testing. Only available for Tyk and Kong. |
 | enable_analytics | `False` | Enable analytics gathering in the performance testing. Only available for Tyk. |
-| enable_quota | `False` | Enable quota tracking in the performance testing. Only available for Tyk. |
-| enable_rate_limiting | `False` | Enable rate limiting in the performance testing. Only available for Tyk. |
+| enable_quota | `False` | Enable quota tracking in the performance testing. Only available for Tyk and Kong. |
+| enable_rate_limiting | `False` | Enable rate limiting in the performance testing. Only available for Tyk and Kong. |
 | test_services | `[ kong ]` | List of services you would like to test Tyk against. This will influence that number of virtual machines created when using the `AWS`, `GCP`, and `Azure` playbooks. |
 
 ### Services
