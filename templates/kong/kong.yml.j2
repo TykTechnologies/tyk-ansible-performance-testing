@@ -1,12 +1,45 @@
- _format_version: "2.1"
+_format_version: "2.1"
 
- services:
- - host: {{ hostvars.upstream.ansible_facts.default_ipv4.address }}
-   name: api
-   port: {{ services.upstream.service.port }}
-   protocol: http
-   routes:
-   - name: api
-     paths:
-     - /api
-     strip_path: true
+services:
+- host: {{ hostvars.upstream.ansible_facts.default_ipv4.address }}
+  name: api
+  port: {{ services.upstream.service.port }}
+  protocol: http
+  routes:
+  - name: api
+    paths:
+    - /api
+    strip_path: true
+
+{% if enable_quota or enable_rate_limiting or enable_auth %}
+plugins:
+{% if enable_quota or enable_rate_limiting %}
+- name: rate-limiting
+  service: api
+  config:
+    second: 5
+    hour: 10000
+    policy: local
+    fault_tolerant: true
+    hide_client_headers: false
+    redis_ssl: false
+    redis_ssl_verify: false
+{% endif %}
+{% if enable_auth %}
+- name: key-auth
+  service: api
+  config:
+    key_names:
+    - apikey
+    key_in_body: false
+    key_in_header: true
+    key_in_query: true
+    hide_credentials: false
+    run_on_preflight: true
+consumers:
+- username: default
+keyauth_credentials:
+- consumer: default
+  key: topsecretkey123
+{% endif %}
+{% endif %}
