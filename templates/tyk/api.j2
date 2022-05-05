@@ -3,6 +3,10 @@
   "api_id": "1",
   "org_id": "default",
   "active": true,
+  "global_rate_limit": {
+    "rate": 100000,
+    "per": 1
+  },
 {% if enable_auth %}
   "definition": {
     "location": "header",
