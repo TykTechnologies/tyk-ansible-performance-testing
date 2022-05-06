@@ -14,7 +14,7 @@ x_title <- args[5]
 x_labels <- strsplit(args[6], ",")[[1]]
 title <- args[7]
 legend <- strsplit(args[8], ",")[[1]]
-
+is_bar <-  if(length(args) >= 9 && args[9] == "bar") TRUE else FALSE
 # Create the tests array to help iterate
 tests <- c("rps", "p99")
 legends <- c("topleft", "topright")
@@ -81,9 +81,13 @@ for (i in 1:length(tests)) {
 for (i in 1:length(tests)) {
   # Define image and plit properties
   png(paste("./analysis/", filter, "-", paste(compare, collapse="-"), "-", tests[i], "-",paste(filter, collapse="-"), ".png", sep=""), width=8, height=8, units="in", res=100)
-  plot(x_weights, c(1:length(data)), col="white", ylim=c(0, max(unlist(y[[i]]))), main=paste(title, y_labels[i]), ylab=y_labels[i], xaxt="n", xlab=x_title)
-  axis(1, at=x_weights, labels=x_labels)
 
+  if (! is_bar) {
+    plot(x_weights, c(1:length(data)), col="white", ylim=c(0, max(unlist(y[[i]]))), main=paste(title, y_labels[i]), ylab=y_labels[i], xaxt="n", xlab=x_title)
+    axis(1, at=x_weights, labels=x_labels)
+  }
+
+  service_matrix <- list()
   for (j in 1:length(compare)) {
     service <- list()
     for (k in 1:length(data)) {
@@ -91,12 +95,22 @@ for (i in 1:length(tests)) {
       service <- c(service, mean(data[[k]][, tests[i]][grep(compare[j], rownames(data[[k]]))]))
     }
 
+    service_matrix[[j]] <- service
+
     # Plot points and lines
-    points(x_weights, service, pch=shapes[j], col=color[j], cex=2)
-    lines(x_weights, service, col=color[j])
+    if (! is_bar) {
+      points(x_weights, service, pch=shapes[j], col=color[j], cex=2)
+      lines(x_weights, service, col=color[j])
+    }
   }
-  # Add legend
-  legend(legend=legend, pch=shapes, x=legends[i], col=color, cex=1.5)
+  if (is_bar) {
+    par(mar = c(8, 3, 6, 3))
+    barplot(t(matrix(unlist(service_matrix), ncol=length(compare), nrow=length(x))), col=color, main=paste(title, y_labels[i]), space=0.2, beside=TRUE)
+    axis(1, at=1:length(legend) * 1.2 - 0.5, labels=legend, las=2)
+  } else {
+    # Add legend
+    legend(legend=legend, pch=shapes, x=legends[i], col=color, cex=1.5)
+  }
   abline(h=0, lwd=0.2,col=c(rgb(0,0,0,0.25)))
   dev.off()
 }
