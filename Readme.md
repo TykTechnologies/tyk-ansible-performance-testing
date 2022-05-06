@@ -17,9 +17,11 @@
 
 4. Modify `hosts.yml` file to update ssh variables to your server(s). You can learn more about the hosts file [here](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html).
 
-5. Run `sudo ansible-playbook playbook.yml` to run performance tests. `sudo` is used to allow ansible to create the performance testing results files on your local machine.
+5. Run `sudo ansible-playbook playbook.yml -t install -t standup -t test` to run performance tests. `sudo` is used to allow ansible to create the performance testing results files on your local machine.
 
 6. View output of performance tests under `./benchmarks/`.
+
+7. Run `ansible-playbook playbook.yml -t cleanup` to cleanup files and turn off services on the machines.
 
 ## Documentation
 Please check the `/docs` folder for more information about the repo.

@@ -1,7 +1,7 @@
 ---
 - name: Include install task
   include_tasks: install.yml
-  when: ('install' in ansible_run_tags) or (ansible_run_tags|length == 0)
+  when: ('install' in ansible_run_tags)
 
 - name: Remove Apollo server container
   docker_container:
@@ -15,4 +15,4 @@
 
 - name: Include standup task
   include_tasks: standup.yml
-  when: ('standup' in ansible_run_tags) or (ansible_run_tags|length == 0)
+  when: ('standup' in ansible_run_tags)
