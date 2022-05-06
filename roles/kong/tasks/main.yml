@@ -6,4 +6,4 @@
 
 - name: Include standup task
   include_tasks: standup.yml
-  when: ('standup' in ansible_run_tags) or (ansible_run_tags|length == 0)
+  when: ('standup' in ansible_run_tags)

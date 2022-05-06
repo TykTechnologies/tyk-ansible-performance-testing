@@ -10,10 +10,10 @@
       GOGC: "3200"
     ulimits: "nofile:80000:80000"
     command: "{% if query_type == 'REST' %}./go-bench-suite upstream{% endif %}"
-  when: ('standup' in ansible_run_tags) or (ansible_run_tags|length == 0)
+  when: ('standup' in ansible_run_tags)
 
 - name: Remove upstream container
   docker_container:
     name: upstream
     state: absent
-  when: ('cleanup' in ansible_run_tags) or (ansible_run_tags|length == 0)
+  when: ('cleanup' in ansible_run_tags)
