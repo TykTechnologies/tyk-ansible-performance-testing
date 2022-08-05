@@ -18,7 +18,7 @@ is_bar <-  if(length(args) >= 9 && args[9] == "bar") TRUE else FALSE
 # Create the tests array to help iterate
 tests <- c("rps", "p99")
 legends <- c("topleft", "topright")
-y_labels <- c("RPS", "P99")
+y_labels <- c("RPS", "P99(ms)")
 
 ###############################################################################
 # Preprocess data
@@ -48,7 +48,7 @@ for (filename in files) {
 
 # Parse all rps and p99 as numeric data.
 all_data$rps <- as.numeric(all_data$rps)
-all_data$p99 <- as.numeric(all_data$p99)
+all_data$p99 <- as.numeric(all_data$p99) * 1000
 
 # Create the shapes and colors of the lines and points we are going to plot.
 shapes <- rep(c(15, 16, 17, 18, 20), ceiling(length(compare) / 5))
@@ -136,6 +136,7 @@ generate_csv <- function(l, type) {
   l <- as.data.frame(do.call(rbind, l))
   colnames(l) <- x
   rownames(l) <- compare
+  l <- round(l, digits = 2)
   # Generate CSVs
   write.table(l, file=paste("./analysis/average-", type, "-", paste(filter, collapse="-"), paste(compare, collapse="-"), ".csv", sep=""), sep=",", quote=FALSE)
 }
