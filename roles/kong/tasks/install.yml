@@ -1,0 +1,60 @@
+---
+- name: Create Tyk network
+  docker_network:
+    name: kong
+
+- name: Launch Redis container
+  docker_container:
+    name: redis
+    state: started
+    image: redis:4.0-alpine
+    ports:
+      - "127.0.0.1:6379:6379"
+    networks:
+      - name: kong
+
+- name: Launch Postgres container
+  docker_container:
+    name: kong-database
+    state: started
+    image: postgres:9.6
+    ports:
+      - "127.0.0.1:5432:5432"
+    env:
+      POSTGRES_USER: "kong"
+      POSTGRES_DB: "kong"
+      POSTGRES_PASSWORD: "kong"
+    networks:
+      - name: kong
+
+- name: Wait for postgres to come up
+  ansible.builtin.wait_for:
+    port: 5432
+    delay: 5
+
+- name: Bootstrap kong
+  docker_container:
+    name: kong-bootstrap
+    cleanup: yes
+    state: started
+    image: kong:latest
+    entrypoint: kong
+    command: migrations bootstrap
+    env:
+      KONG_DATABASE: "postgres"
+      KONG_PG_HOST: "kong-database"
+      KONG_PG_USER: "kong"
+      KONG_PG_PASSWORD: "kong"
+      KONG_CASSANDRA_CONTACT_POINTS: "kong-database"
+    networks:
+      - name: kong
+
+- name: /etc/kong/ dir exists
+  file:
+    path: /etc/kong/
+    state: directory
+
+- name: Create kong.conf
+  template:
+    src: kong/kong.conf.j2
+    dest: /etc/kong/kong.conf
