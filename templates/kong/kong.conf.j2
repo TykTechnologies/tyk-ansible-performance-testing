@@ -1,7 +1,3 @@
 nginx_worker_processes=auto
 nginx_main_worker_rlimit_nofile=auto
 nginx_events_worker_connections=auto
-
-database=off
-declarative_config=/etc/kong/declarative/kong.yml
-admin_listen=0.0.0.0:{{ services.kong.admin.port }}, 0.0.0.0:{{ services.kong.admin.ssl_port }} ssl

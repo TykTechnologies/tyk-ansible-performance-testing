@@ -1,5 +1,5 @@
 RScript ./analyze.r \
-  "[1-3]-vanilla-tyk-rest,[1-3]-auth-tyk-rest,[1-3]-analytics-tyk-rest,[1-3]-rate-limiting-tyk-rest,[1-3]-auth-quota-tyk-rest,[1-3]-all-tyk-rest" \
+  "vanilla-tyk-rest,auth-tyk-rest,analytics-tyk-rest,rate-limiting-tyk-rest,auth-quota-tyk-rest,all-tyk-rest" \
   "aws" \
   "c5.4xlarge" \
   "16" \
@@ -10,7 +10,7 @@ RScript ./analyze.r \
   "bar"
 
 RScript ./analyze.r \
-  "[1-3]-vanilla-tyk-rest,[1-3]-auth-tyk-rest,[1-3]-analytics-tyk-rest,[1-3]-rate-limiting-tyk-rest,[1-3]-auth-quota-tyk-rest,[1-3]-all-tyk-rest" \
+  "vanilla-tyk-rest,auth-tyk-rest,analytics-tyk-rest,rate-limiting-tyk-rest,auth-quota-tyk-rest,all-tyk-rest" \
   "gcp" \
   "c2-standard-16" \
   "16" \
@@ -21,7 +21,7 @@ RScript ./analyze.r \
   "bar"
 
 RScript ./analyze.r \
-  "[1-3]-vanilla-tyk-rest,[1-3]-auth-tyk-rest,[1-3]-analytics-tyk-rest,[1-3]-rate-limiting-tyk-rest,[1-3]-auth-quota-tyk-rest,[1-3]-all-tyk-rest" \
+  "vanilla-tyk-rest,auth-tyk-rest,analytics-tyk-rest,rate-limiting-tyk-rest,auth-quota-tyk-rest,all-tyk-rest" \
   "azure" \
   "Standard_F16s_v2" \
   "16" \
@@ -62,7 +62,7 @@ RScript ./analyze.r \
   "Tyk"
 
 RScript ./analyze.r \
-  "tyk,kong" \
+  "vanilla-tyk,vanilla-kong" \
   "rest,aws" \
   "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" \
   "2,4,8,16" \
@@ -72,7 +72,7 @@ RScript ./analyze.r \
   "Tyk,Kong"
 
 RScript ./analyze.r \
-  "tyk,kong" \
+  "vanilla-tyk,vanilla-kong" \
   "rest,gcp" \
   "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" \
   "2,4,8,16" \
@@ -82,13 +82,103 @@ RScript ./analyze.r \
   "Tyk,Kong"
 
 RScript ./analyze.r \
-  "tyk,kong" \
+  "vanilla-tyk,vanilla-kong" \
   "rest,azure" \
   "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
   "2,4,8,16" \
   "Machine type" \
   "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
   "Tyk vs Kong on Azure - Vanilla REST -" \
+  "Tyk,Kong"
+
+RScript ./analyze.r \
+  "auth-tyk,auth-kong" \
+  "rest,aws" \
+  "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" \
+  "2,4,8,16" \
+  "Machine type" \
+  "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" \
+  "Tyk vs Kong on AWS - Auth REST -" \
+  "Tyk,Kong"
+
+RScript ./analyze.r \
+  "auth-tyk,auth-kong" \
+  "rest,gcp" \
+  "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" \
+  "2,4,8,16" \
+  "Machine type" \
+  "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" \
+  "Tyk vs Kong on GCP - Auth REST -" \
+  "Tyk,Kong"
+
+RScript ./analyze.r \
+  "auth-tyk,auth-kong" \
+  "rest,azure" \
+  "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
+  "2,4,8,16" \
+  "Machine type" \
+  "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
+  "Tyk vs Kong on Azure - Auth REST -" \
+  "Tyk,Kong"
+
+RScript ./analyze.r \
+  "rate-limiting-tyk,rate-limiting-kong" \
+  "rest,aws" \
+  "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" \
+  "2,4,8,16" \
+  "Machine type" \
+  "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" \
+  "Tyk vs Kong on AWS - Rate Limiting REST -" \
+  "Tyk,Kong"
+
+RScript ./analyze.r \
+  "rate-limiting-tyk,rate-limiting-kong" \
+  "rest,gcp" \
+  "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" \
+  "2,4,8,16" \
+  "Machine type" \
+  "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" \
+  "Tyk vs Kong on GCP - Rate Limiting REST -" \
+  "Tyk,Kong"
+
+RScript ./analyze.r \
+  "rate-limiting-tyk,rate-limiting-kong" \
+  "rest,azure" \
+  "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
+  "2,4,8,16" \
+  "Machine type" \
+  "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
+  "Tyk vs Kong on Azure - Rate Limiting REST -" \
+  "Tyk,Kong"
+
+RScript ./analyze.r \
+  "auth-quota-tyk,auth-quota-kong" \
+  "rest,aws" \
+  "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" \
+  "2,4,8,16" \
+  "Machine type" \
+  "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" \
+  "Tyk vs Kong on AWS - Auth & Quota REST -" \
+  "Tyk,Kong"
+
+RScript ./analyze.r \
+  "auth-quota-tyk,auth-quota-kong" \
+  "rest,gcp" \
+  "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" \
+  "2,4,8,16" \
+  "Machine type" \
+  "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" \
+  "Tyk vs Kong on GCP - Auth & Quota REST -" \
+  "Tyk,Kong"
+
+RScript ./analyze.r \
+  "auth-quota-tyk,auth-quota-kong" \
+  "rest,azure" \
+  "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
+  "2,4,8,16" \
+  "Machine type" \
+  "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
+  "Tyk vs Kong on Azure - Auth & Quota REST -" \
   "Tyk,Kong"
 
 RScript ./analyze.r \

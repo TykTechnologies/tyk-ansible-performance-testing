@@ -1,19 +1,4 @@
 ---
-- name: /etc/kong/declarative/ dir exists
-  file:
-    path: /etc/kong/declarative/
-    state: directory
-
-- name: Create kong.conf
-  template:
-    src: kong/kong.conf.j2
-    dest: /etc/kong/kong.conf
-
-- name: Create kong.yml
-  template:
-    src: kong/kong.yml.j2
-    dest: /etc/kong/declarative/kong.yml
-
 - name: Launch Kong container
   docker_container:
     name: kong
@@ -26,4 +11,69 @@
       - "{{ services.kong.admin.ssl_port }}:{{ services.kong.admin.ssl_port }}"
     volumes:
       - "/etc/kong/:/etc/kong/"
+    env:
+      KONG_DATABASE: "postgres"
+      KONG_PG_HOST: "kong-database"
+      KONG_PG_PASSWORD: "kong"
+      KONG_ADMIN_LISTEN: "0.0.0.0:{{ services.kong.admin.port }}, 0.0.0.0:{{ services.kong.admin.ssl_port }} ssl"
+      KONG_CASSANDRA_CONTACT_POINTS: "kong-database"
+      KONG_PROXY_ACCESS_LOG: "/dev/stdout"
+      KONG_ADMIN_ACCESS_LOG: "/dev/stdout"
+      KONG_PROXY_ERROR_LOG: "/dev/stderr"
+      KONG_ADMIN_ERROR_LOG: "/dev/stderr"
     ulimits: "nofile:80000:80000"
+    networks:
+      - name: kong
+
+- name: Create Service
+  uri:
+    url: http://localhost:{{ services.kong.admin.port }}/services/
+    method: POST
+    body_format: form-urlencoded
+    body:
+    - [ name, api ]
+    - [ url, "http://{{ hostvars.upstream.ansible_facts.default_ipv4.address }}:{{ services.upstream.service.port }}" ]
+    status_code: [ 201, 409 ]
+
+- name: Create Route
+  uri:
+    url: http://localhost:{{ services.kong.admin.port }}/services/api/routes
+    method: POST
+    body_format: form-urlencoded
+    body:
+    - [ "paths[]", /api ]
+    status_code: [ 201, 409 ]
+
+- name: Add Auth to API service
+  uri:
+    url: http://localhost:{{ services.kong.admin.port }}/services/api/plugins
+    method: POST
+    body_format: form-urlencoded
+    body:
+    - [ name, "key-auth" ]
+    - [ "config.key_names", apikey ]
+    status_code: [ 201, 409 ]
+  when: enable_auth
+
+- name: Create a consumer
+  uri:
+    url: http://localhost:{{ services.kong.admin.port }}/consumers/
+    method: POST
+    body_format: form-urlencoded
+    body:
+    - [ username, user123 ]
+    status_code: 201
+  when: enable_auth
+
+- name: Add Rate Limiting to API service
+  uri:
+    url: http://localhost:{{ services.kong.admin.port }}/services/api/plugins
+    method: POST
+    body_format: form-urlencoded
+    body:
+    - [ name, "rate-limiting" ]
+    - [ "config.second", 9999999 ]
+    - [ "config.policy", redis ]
+    - [ "config.redis_host", redis ]
+    status_code: [ 201, 409 ]
+  when: enable_auth or enable_quota

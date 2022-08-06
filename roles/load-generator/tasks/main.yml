@@ -1,5 +1,5 @@
 ---
-- name: Create API key
+- name: Create API key for Tyk
   uri:
     url: http://{{ hostvars[label].ansible_facts.default_ipv4.address }}:{{ services[label].service.port }}/tyk/keys/create
     method: POST
@@ -8,8 +8,16 @@
       Content-Type: application/json
       x-tyk-authorization: "{{ services.tyk.secret }}"
     body: "{ \"access_rights\": { \"1\": { \"allowed_urls\": [], \"api_id\": \"1\", \"api_name\": \"Tyk Test API\", \"limit\": null, \"versions\": [ \"Default\" ] } }, \"allowance\": 100000, \"expires\": 0, \"org_id\": \"default\", \"per\": 1, \"quota_max\": -1, \"quota_remaining\": -1, \"quota_renewal_rate\": -1, \"quota_renews\": 1568655187, \"rate\": 100000, \"throttle_interval\": -1, \"throttle_retry_limit\": -1 }"
-  register: response
+  register: tyk_key
   when: label == 'tyk' and enable_auth
+
+- name: Create API key for Kong
+  uri:
+    url: http://{{ hostvars[label].ansible_facts.default_ipv4.address }}:{{ services.kong.admin.port }}/consumers/user123/key-auth
+    method: POST
+    status_code: 201
+  register: kong_key
+  when: label == 'kong' and enable_auth
 
 - name: Launch Load Generator
   docker_container:
@@ -17,7 +25,7 @@
     state: started
     image: rcmorano/docker-hey
     detach: no
-    command: "-z 10s{% if label == 'tyk' and enable_auth %} -H \"Authorization: {{ response.json.key }}\"{% endif %}{% if query_type != 'REST' %} -m POST -H \"Content-Type: application/json\" -d \"{\\\"query\\\":\\\"{{ graphql_query[query_depth] }}\\\",\\\"variables\\\":null}\"{% endif %} {% if label == 'saas-tyk' %}{{ api_url }}{% else %}http://{{ hostvars[label].ansible_facts.default_ipv4.address }}:{{ services[label].service.port }}/{% if (label == 'tyk' or label == 'kong') %}api/{% endif %}{% endif %}{% if query_type == 'REST' %}json/valid{% endif %}{% if label == 'kong' and enable_auth %}?apikey=topsecretkey123{% endif %}"
+    command: "-z 10s{% if label == 'tyk' and enable_auth %} -H \"Authorization: {{ tyk_key.json.key }}\"{% endif %}{% if query_type != 'REST' %} -m POST -H \"Content-Type: application/json\" -d \"{\\\"query\\\":\\\"{{ graphql_query[query_depth] }}\\\",\\\"variables\\\":null}\"{% endif %} {% if label == 'saas-tyk' %}{{ api_url }}{% else %}http://{{ hostvars[label].ansible_facts.default_ipv4.address }}:{{ services[label].service.port }}/{% if (label == 'tyk' or label == 'kong') %}api/{% endif %}{% endif %}{% if query_type == 'REST' %}json/valid{% endif %}{% if label == 'kong' and enable_auth %}?apikey={{ kong_key.json.key }}{% endif %}"
   register: output
 
 - name: Copy result to local
