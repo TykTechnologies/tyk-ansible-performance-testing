@@ -8,7 +8,7 @@
 - name: Create api.json
   template:
     src: tyk/api.j2
-    dest: "{% if 'saas' in ansible_run_tags %}./saas/apps/api.json{% else %}/opt/tyk-gateway/apps/api.json{% endif %}"
+    dest: "{% if 'saas' in ansible_run_tags %}./saas/apps/api{% if prefix %}-{{ prefix }}{% endif %}.json{% else %}/opt/tyk-gateway/apps/api.json{% endif %}"
 
 - name: Include federation standup task
   include_tasks: standup-federation.yml

@@ -9,5 +9,5 @@ hosts/*.yml
 benchmarks/*.txt
 analysis/*.png
 analysis/*.csv
-saas/hosts.yml
+saas/*hosts.yml
 saas/apps/*.json
