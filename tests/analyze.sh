@@ -32,33 +32,33 @@ RScript ./analyze.r \
   "bar"
 
 RScript ./analyze.r \
-  "tyk" \
-  "rest,aws" \
+  "all-tyk-rest" \
+  "aws" \
   "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" \
   "2,4,8,16" \
   "Machine type" \
   "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" \
-  "Tyk on AWS - Vanilla REST -" \
+  "Tyk on AWS - Fully Loaded REST -" \
   "Tyk"
 
 RScript ./analyze.r \
-  "tyk" \
-  "rest,gcp" \
+  "all-tyk-rest" \
+  "gcp" \
   "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" \
   "2,4,8,16" \
   "Machine type" \
   "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" \
-  "Tyk on GCP - Vanilla REST -" \
+  "Tyk on GCP - Fully Loaded REST -" \
   "Tyk"
 
 RScript ./analyze.r \
-  "tyk" \
-  "rest,azure" \
+  "all-tyk-rest" \
+  "azure" \
   "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
   "2,4,8,16" \
   "Machine type" \
   "Standard_B2s,Standard_F4s_v2,Standard_F8s_v2,Standard_F16s_v2" \
-  "Tyk on Azure - Vanilla REST -" \
+  "Tyk on Azure - Fully Loaded REST -" \
   "Tyk"
 
 RScript ./analyze.r \
