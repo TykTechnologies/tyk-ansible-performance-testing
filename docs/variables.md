@@ -11,6 +11,7 @@
 | enable_analytics | `False` | Enable analytics gathering in the performance testing. Only available for Tyk. |
 | enable_quota | `False` | Enable quota tracking in the performance testing. Only available for Tyk and Kong. |
 | enable_rate_limiting | `False` | Enable rate limiting in the performance testing. Only available for Tyk and Kong. |
+| load_test_duration | `10s` | Load test duration. |
 | test_services | `[ kong ]` | List of services you would like to test Tyk against. This will influence that number of virtual machines created when using the `AWS`, `GCP`, and `Azure` playbooks. |
 
 ### Services
