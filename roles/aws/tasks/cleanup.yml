@@ -3,6 +3,8 @@
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-upstream"
+    region: "{{ aws_region }}"
+    instance_type: "{{ aws_instance_type }}"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
@@ -11,6 +13,8 @@
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-load"
+    region: "{{ aws_region }}"
+    instance_type: "{{ aws_instance_type }}"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
@@ -19,6 +23,8 @@
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-tyk"
+    region: "{{ aws_region }}"
+    instance_type: "{{ aws_instance_type }}"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
@@ -27,6 +33,8 @@
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-kong"
+    region: "{{ aws_region }}"
+    instance_type: "{{ aws_instance_type }}"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
@@ -36,6 +44,8 @@
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-apollo"
+    region: "{{ aws_region }}"
+    instance_type: "{{ aws_instance_type }}"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
