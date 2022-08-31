@@ -1,0 +1,47 @@
+
+Summary:
+  Total:	300.0077 secs
+  Slowest:	1.0523 secs
+  Fastest:	0.0013 secs
+  Average:	0.0149 secs
+  Requests/sec:	5966.5692
+  
+  Total data:	159311068 bytes
+  Size/request:	159 bytes
+
+Response time histogram:
+  0.001 [1]	|
+  0.106 [999985]	|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.212 [10]	|
+  0.317 [2]	|
+  0.422 [0]	|
+  0.527 [0]	|
+  0.632 [0]	|
+  0.737 [0]	|
+  0.842 [0]	|
+  0.947 [0]	|
+  1.052 [2]	|
+
+
+Latency distribution:
+  10% in 0.0060 secs
+  25% in 0.0068 secs
+  50% in 0.0078 secs
+  75% in 0.0093 secs
+  90% in 0.0109 secs
+  95% in 0.0123 secs
+  99% in 0.0165 secs
+
+Details (average, fastest, slowest):
+  DNS+dialup:	0.0000 secs, 0.0013 secs, 1.0523 secs
+  DNS-lookup:	0.0000 secs, 0.0000 secs, 0.0000 secs
+  req write:	0.0000 secs, 0.0000 secs, 0.0009 secs
+  resp wait:	0.0148 secs, 0.0013 secs, 1.0522 secs
+  resp read:	0.0000 secs, 0.0000 secs, 0.0013 secs
+
+Status code distribution:
+  [200]	1000000 responses
+
+Error distribution:
+  [5]	Post http://10.138.0.6:4000/: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
+
