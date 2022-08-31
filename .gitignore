@@ -11,3 +11,4 @@ analysis/*.png
 analysis/*.csv
 saas/*hosts.yml
 saas/apps/*.json
+**/node_modules
