@@ -59,7 +59,7 @@ export default ({ rps, p99, test, cloud, testSet }) => {
               {Object.values(rps).map(({ machine }) => (
                 <MainStyledTableCell
                   key={machine}
-                  align="right"
+                  align="center"
                 >
                   <strong>{machine}</strong>
                 </MainStyledTableCell>
@@ -77,7 +77,7 @@ export default ({ rps, p99, test, cloud, testSet }) => {
               {rps.map(({ machine, tyk }) => (
                 <TableCell
                   key={machine}
-                  align="right"
+                  align="center"
                 >
                   {tyk.toFixed(DECIMAL_PLACES)}
                 </TableCell>
@@ -88,7 +88,7 @@ export default ({ rps, p99, test, cloud, testSet }) => {
               {rps.map(props => (
                 <TableCell
                   key={props.machine}
-                  align="right"
+                  align="center"
                 >
                   {props[testSet].toFixed(DECIMAL_PLACES)}
                 </TableCell>
@@ -106,7 +106,7 @@ export default ({ rps, p99, test, cloud, testSet }) => {
               {p99.map(({ machine, tyk }) => (
                 <TableCell
                   key={machine}
-                  align="right"
+                  align="center"
                 >
                   {tyk.toFixed(DECIMAL_PLACES)}
                 </TableCell>
@@ -117,7 +117,7 @@ export default ({ rps, p99, test, cloud, testSet }) => {
               {p99.map(props => (
                 <TableCell
                   key={props.machine}
-                  align="right"
+                  align="center"
                 >
                   {props[testSet].toFixed(DECIMAL_PLACES)}
                 </TableCell>

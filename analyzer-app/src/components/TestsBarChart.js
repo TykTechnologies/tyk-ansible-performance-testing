@@ -13,7 +13,11 @@ import {
   rgba,
 } from '../helpers'
 
-export default ({ test, tests, data }) => (
+export default ({ test, tests, data, range }) =>
+{
+
+console.log(range)
+  return (
   <ResponsiveContainer width={500} height="100%">
     <BarChart
       data={data}
@@ -32,6 +36,8 @@ export default ({ test, tests, data }) => (
       <YAxis
         axisLine={false}
         tickLine={false}
+        domain={range}
+        tickCount={6}
         label={{
           value: `${test.toUpperCase()}${P99 === test ? '(ms)' : ''}`,
           angle: -90,
@@ -49,4 +55,4 @@ export default ({ test, tests, data }) => (
       ))}
     </BarChart>
   </ResponsiveContainer>
-)
+)}

@@ -28,7 +28,7 @@ const machines = {
   2: [ 't2.medium','e2-medium','Standard_B2s' ],
   4: [ 'c5.xlarge','c2-standard-4','Standard_F4s_v2' ],
   8: [ 'c5.2xlarge','c2-standard-8','Standard_F8s_v2' ],
-  16: [ 'c5.4xlarge','c2-standard-16','Standard_F16s_v2' ]
+  16: [ 'c5.4xlarge','c2-standard-16','Standard_F16s_v2' ],
 }
 
 const getMachineWeight = machine => {
@@ -58,8 +58,8 @@ const getRecord = (machine, test) => {
 
 const capitalize = word => word[0].toUpperCase() + word.slice(1)
 
-const clouds = ['aws', 'gcp', 'azure']
-const tests = ['rps', 'p99']
+const clouds = ['aws', 'gcp', 'azure'],
+      tests = ['rps', 'p99']
 
 const RPS = 'rps',
       P99 = 'p99'
@@ -70,8 +70,15 @@ const KONG = 'kong',
 const LINE = 'line',
       BAR = 'bar'
 
-const rgb = [ "rgb(4, 205, 176)", "rgb(163, 162, 205)", "rgb(255, 119, 135)", "rgb(80, 80, 112)", "rgb(219, 167, 45)", "rgb(54, 55, 76)" ]
-const rgba = [ "rgba(4, 205, 176, 0.8)", "rgba(163, 162, 205, 0.8)", "rgba(255, 119, 135, 0.8)", "rgba(80, 80, 112, 0.8)", "rgba(219, 167, 45, 0.8)", "rgba(54, 55, 76, 0.8)" ]
+const rgb = [ "rgb(4, 205, 176)", "rgb(163, 162, 205)", "rgb(255, 119, 135)", "rgb(80, 80, 112)", "rgb(219, 167, 45)", "rgb(54, 55, 76)" ],
+      rgba = [ "rgba(4, 205, 176, 0.8)", "rgba(163, 162, 205, 0.8)", "rgba(255, 119, 135, 0.8)", "rgba(80, 80, 112, 0.8)", "rgba(219, 167, 45, 0.8)", "rgba(54, 55, 76, 0.8)" ]
+
+const ranges = {
+  2: [ [0,15000], [0,150] ],
+  4: [ [0,25000], [0,15] ],
+  8: [ [0,50000], [0,10] ],
+  16: [ [0,100000], [0,3] ],
+}
 
 export {
   rps_reg,
@@ -95,4 +102,5 @@ export {
   rgb,
   rgba,
   capitalize,
+  ranges,
 }

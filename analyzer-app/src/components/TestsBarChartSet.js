@@ -15,6 +15,7 @@ import {
   getTests as getPerfTests,
   machines,
   getMachineWeight,
+  ranges,
 } from '../helpers'
 
 const TESTS = [ ...getPerfTests(KONG), ...getPerfTests() ]
@@ -46,6 +47,7 @@ const getData = (rps, p99, machine) => {
 export default ({ defaultTest, rps, p99 }) => {
   const [test, setTest] = useState(defaultTest),
         [cloud, setCloud] = useState(clouds[0]),
+        cloud_index=clouds.indexOf(cloud),
         data = getData(rps[cloud], p99[cloud], machines[test][clouds.indexOf(cloud)])
 
   return (
@@ -70,7 +72,7 @@ export default ({ defaultTest, rps, p99 }) => {
           />
           <div style={{ height: '10px' }}/>
           <Tests
-            test={machines[test][clouds.indexOf(cloud)]}
+            test={machines[test][cloud_index]}
             tests={getTests(cloud)}
             setTest={e => setTest(getMachineWeight(e.target.value))}
           />
@@ -86,6 +88,7 @@ export default ({ defaultTest, rps, p99 }) => {
                 test={RPS}
                 tests={TESTS}
                 data={[ data.rps ]}
+                range={ranges[test][0]}
               />
             </div>
             <div style={{
@@ -96,6 +99,7 @@ export default ({ defaultTest, rps, p99 }) => {
                 test={P99}
                 tests={TESTS}
                 data={[ data.p99 ]}
+                range={ranges[test][1]}
               />
             </div>
           </div>

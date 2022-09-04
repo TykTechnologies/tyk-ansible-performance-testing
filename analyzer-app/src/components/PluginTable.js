@@ -41,17 +41,17 @@ export default ({ rps, p99 }) => {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <MainStyledTableCell></MainStyledTableCell>
-              <MainStyledTableCell>RPS</MainStyledTableCell>
-              <MainStyledTableCell>P99 (ms)</MainStyledTableCell>
+              <MainStyledTableCell align="center"></MainStyledTableCell>
+              <MainStyledTableCell align="center">RPS</MainStyledTableCell>
+              <MainStyledTableCell align="center">P99 (ms)</MainStyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {Object.keys(rps).map(key => (
             <StyledTableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
               <TableCell component="th" scope="row"><strong>{key.split('-').map( v => capitalize(v)).join(' & ')}</strong></TableCell>
-              <TableCell component="th" scope="row">{rps[key]?.toFixed(DECIMAL_PLACES)}</TableCell>
-              <TableCell component="th" scope="row">{p99[key]?.toFixed(DECIMAL_PLACES)}</TableCell>
+              <TableCell component="th" scope="row" align="center">{rps[key]?.toFixed(DECIMAL_PLACES)}</TableCell>
+              <TableCell component="th" scope="row" align="center">{p99[key]?.toFixed(DECIMAL_PLACES)}</TableCell>
             </StyledTableRow>
             ))}
           </TableBody>
