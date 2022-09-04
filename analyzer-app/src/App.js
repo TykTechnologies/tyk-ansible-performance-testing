@@ -1,6 +1,7 @@
 import React from 'react'
 
 import TestsLineChartSet from './components/TestsLineChartSet'
+import TestsBarChartSet from './components/TestsBarChartSet'
 
 import {
   rps_reg,
@@ -76,16 +77,20 @@ export default class App extends React.Component {
 
     return (
       <div>
-        <TestsLineChartSet
-          testSet={KONG}
-          defaultTest={'auth'}
-          { ...benchmarks }
-        />
-        <TestsLineChartSet
-          testSet={APOLLO}
-          defaultTest={'stitch-2'}
-          { ...benchmarks }
-        />
+      {this.props.tyk ? <TestsBarChartSet
+        defaultTest={16}
+        { ...benchmarks }
+      /> : null}
+      {this.props.kong ? <TestsLineChartSet
+        testSet={KONG}
+        defaultTest={'auth'}
+        { ...benchmarks }
+      /> : null}
+      {this.props.apollo ? <TestsLineChartSet
+        testSet={APOLLO}
+        defaultTest={'stitch-0'}
+        { ...benchmarks }
+      /> : null}
       </div>
     )
   }

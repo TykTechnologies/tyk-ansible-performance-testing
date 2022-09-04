@@ -1,0 +1,6 @@
+.recharts-cartesian-axis-ticks g:nth-child(3) line,
+.recharts-cartesian-axis-ticks g:nth-child(5) line,
+.recharts-cartesian-axis-ticks g:nth-child(6) line,
+.recharts-cartesian-axis-ticks g:nth-child(7) line {
+  stroke-width: 1!important;
+}

@@ -8,11 +8,16 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { styled } from "@mui/material/styles";
 
+import {
+  rgb,
+  capitalize,
+} from '../helpers'
+
 const DECIMAL_PLACES = 2
 
 const MainStyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: '#04cdb0',
+    backgroundColor: rgb[0],
     color: theme.palette.common.white
   },
   [`&.${tableCellClasses.body}`]: {
@@ -22,8 +27,9 @@ const MainStyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: '#a3a2cd',
-    color: theme.palette.common.white
+    backgroundColor: rgb[1],
+    color: theme.palette.common.white,
+    padding: 4
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14
@@ -78,7 +84,7 @@ export default ({ rps, p99, test, cloud, testSet }) => {
               ))}
             </StyledTableRow>
             <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-              <TableCell component="th" scope="row"><strong>{testSet[0].toUpperCase() + testSet.slice(1)}</strong></TableCell>
+              <TableCell component="th" scope="row"><strong>{capitalize(testSet)}</strong></TableCell>
               {rps.map(props => (
                 <TableCell
                   key={props.machine}
@@ -107,7 +113,7 @@ export default ({ rps, p99, test, cloud, testSet }) => {
               ))}
             </StyledTableRow>
             <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-              <TableCell component="th" scope="row"><strong>{testSet[0].toUpperCase() + testSet.slice(1)}</strong></TableCell>
+              <TableCell component="th" scope="row"><strong>{capitalize(testSet)}</strong></TableCell>
               {p99.map(props => (
                 <TableCell
                   key={props.machine}

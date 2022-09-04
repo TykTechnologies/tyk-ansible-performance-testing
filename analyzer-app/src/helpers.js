@@ -56,6 +56,8 @@ const getRecord = (machine, test) => {
   return record
 }
 
+const capitalize = word => word[0].toUpperCase() + word.slice(1)
+
 const clouds = ['aws', 'gcp', 'azure']
 const tests = ['rps', 'p99']
 
@@ -64,6 +66,12 @@ const RPS = 'rps',
 
 const KONG = 'kong',
       APOLLO = 'apollo'
+
+const LINE = 'line',
+      BAR = 'bar'
+
+const rgb = [ "rgb(4, 205, 176)", "rgb(163, 162, 205)", "rgb(255, 119, 135)", "rgb(80, 80, 112)", "rgb(219, 167, 45)", "rgb(54, 55, 76)" ]
+const rgba = [ "rgba(4, 205, 176, 0.8)", "rgba(163, 162, 205, 0.8)", "rgba(255, 119, 135, 0.8)", "rgba(80, 80, 112, 0.8)", "rgba(219, 167, 45, 0.8)", "rgba(54, 55, 76, 0.8)" ]
 
 export {
   rps_reg,
@@ -82,4 +90,9 @@ export {
   P99,
   KONG,
   APOLLO,
+  LINE,
+  BAR,
+  rgb,
+  rgba,
+  capitalize,
 }

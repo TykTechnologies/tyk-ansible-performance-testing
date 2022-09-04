@@ -2,8 +2,15 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 
-ReactDOM.createRoot(document.getElementById('analyzer')).render(
+const analyzer = document.getElementById('analyzer'),
+      className = analyzer.classList.value
+
+ReactDOM.createRoot(analyzer).render(
   <React.StrictMode>
-    <App/>
+    <App
+      tyk={className.includes('tyk')}
+      kong={className.includes('kong')}
+      apollo={className.includes('apollo')}
+    />
   </React.StrictMode>
 )

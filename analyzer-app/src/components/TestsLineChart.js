@@ -3,7 +3,6 @@ import {
   LineChart,
   Line,
   CartesianGrid,
-  Tooltip,
   ResponsiveContainer,
   XAxis,
   YAxis,
@@ -13,10 +12,10 @@ import {
 import {
   KONG,
   P99,
-  machines,
+  rgba,
 } from '../helpers'
 
-const DECIMAL_PLACES = 4
+import './TestLineChart.css'
 
 const CustomizedTick = ({ payload, verticalAnchor, index, visibleTicksCount, tickFormatter, ...props }) => (
   <text
@@ -45,8 +44,6 @@ const CustomShape = props => (
   </g>
 )
 
-const TooltipFormatter =(value, name) => [value.toFixed(DECIMAL_PLACES), name[0].toUpperCase() + name.slice(1)]
-
 export default ({ test, data, cloud, testSet }) => (
   <ResponsiveContainer width={500} height="100%">
     <LineChart
@@ -59,6 +56,8 @@ export default ({ test, data, cloud, testSet }) => (
       />
       <XAxis
         dataKey="weight"
+        axisLine={{ strokeWidth: 2 }}
+        tickLine={{ strokeWidth: 2 }}
         type="number"
         domain={[0, 18]}
         interval="preserveStart"
@@ -68,6 +67,7 @@ export default ({ test, data, cloud, testSet }) => (
       />
       <YAxis
         axisLine={false}
+        tickLine={false}
         type="number"
         label={{
           value: `${test.toUpperCase()}${P99 === test ? '(ms)' : ''}`,
@@ -76,22 +76,18 @@ export default ({ test, data, cloud, testSet }) => (
           position: 'insideLeft'
         }}
       />
-      <Tooltip
-        formatter={TooltipFormatter}
-        labelFormatter={value => `Machine: ${machines[value][cloud]}`}
-      />
       {Object.entries([ 2, 6, 10, 14 ]).map(([key, value]) => (
-        <ReferenceArea
-          key={key}
-          x1={value}
-          x2={value+2}
-          shape={<CustomShape />}
-        />
+      <ReferenceArea
+        key={key}
+        x1={value}
+        x2={value+2}
+        shape={<CustomShape />}
+      />
       ))}
       <Line
         type="linear"
         dataKey="tyk"
-        stroke="#04cdb0"
+        stroke={rgba[0]}
         strokeWidth="4"
         dot={{ strokeWidth: 2 }}
         activeDot={{ r: 6 }}
@@ -99,7 +95,7 @@ export default ({ test, data, cloud, testSet }) => (
       <Line
         type="linear"
         dataKey={testSet}
-        stroke={KONG === testSet ? '#a3a2cd' : '#ff7787'}
+        stroke={KONG === testSet ? rgba[1] : rgba[2]}
         strokeWidth="4"
         dot={{ strokeWidth: 2 }}
         activeDot={{ r: 6 }}

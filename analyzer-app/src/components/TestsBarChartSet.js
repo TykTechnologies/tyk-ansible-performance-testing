@@ -3,22 +3,50 @@ import Container from '@mui/material/Container';
 
 import Clouds from './Clouds'
 import Tests from './Tests'
-import TestsLineChart from './TestsLineChart'
+import TestsBarChart from './TestsBarChart'
 import Legend from './Legend'
-import Table from './Table'
+import PluginTable from './PluginTable'
 
 import {
-  getTests,
   clouds,
-  APOLLO,
   RPS,
   P99,
-  rgb,
+  KONG,
+  getTests as getPerfTests,
+  machines,
+  getMachineWeight,
 } from '../helpers'
 
-export default ({ defaultTest, testSet, rps, p99 }) => {
+const TESTS = [ ...getPerfTests(KONG), ...getPerfTests() ]
+
+const getTests = cloud => {
+  const tests = []
+
+  Object.values(machines).map(value => tests.push(value[clouds.indexOf(cloud)]))
+
+  return tests
+}
+
+const getData = (rps, p99, machine) => {
+  const data = {}
+
+  data[RPS] = {}
+  data[P99] = {}
+
+  Object.keys(rps).map(key => {
+    if (TESTS.includes(key)) {
+      data[RPS][key] = rps[key][machine]?.tyk
+      data[P99][key] = p99[key][machine]?.tyk
+    }
+  })
+
+  return data
+}
+
+export default ({ defaultTest, rps, p99 }) => {
   const [test, setTest] = useState(defaultTest),
-        [cloud, setCloud] = useState(clouds[0])
+        [cloud, setCloud] = useState(clouds[0]),
+        data = getData(rps[cloud], p99[cloud], machines[test][clouds.indexOf(cloud)])
 
   return (
     <Container maxWidth="lg">
@@ -42,48 +70,39 @@ export default ({ defaultTest, testSet, rps, p99 }) => {
           />
           <div style={{ height: '10px' }}/>
           <Tests
-            test={test}
-            tests={getTests(testSet)}
-            setTest={e => setTest(e.target.value)}
+            test={machines[test][clouds.indexOf(cloud)]}
+            tests={getTests(cloud)}
+            setTest={e => setTest(getMachineWeight(e.target.value))}
           />
         </div>
         <div>
-          <Legend
-            values={[ 'Tyk', testSet ]}
-            colors={APOLLO === testSet ? [ rgb[0], rgb[2] ] : undefined}
-          />
+          <Legend values={TESTS} />
           <div style={{ display: "flex" }}>
             <div style={{
               width: '500px',
               height: '400px'
             }}>
-              <TestsLineChart
+              <TestsBarChart
                 test={RPS}
-                cloud={clouds.indexOf(cloud)}
-                data={Object.values(rps[cloud][test]).sort((a, b) => a.weight > b.weight ? 1 : -1)}
-                testSet={testSet}
+                tests={TESTS}
+                data={[ data.rps ]}
               />
             </div>
             <div style={{
               width: '500px',
               height: '400px'
             }}>
-              <TestsLineChart
+              <TestsBarChart
                 test={P99}
-                cloud={clouds.indexOf(cloud)}
-                data={Object.values(p99[cloud][test]).sort((a, b) => a.weight > b.weight ? 1 : -1)}
-                testSet={testSet}
+                tests={TESTS}
+                data={[ data.p99 ]}
               />
             </div>
           </div>
         </div>
       </div>
-      <Table
-        rps={rps}
-        p99={p99}
-        test={test}
-        cloud={cloud}
-        testSet={testSet}
+      <PluginTable
+        { ...data }
       />
     </Container>
   )
