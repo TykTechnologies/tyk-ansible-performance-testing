@@ -1,4 +1,6 @@
 import React from 'react'
+import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
 
 import TestsLineChartSet from './components/TestsLineChartSet'
 import TestsBarChartSet from './components/TestsBarChartSet'
@@ -72,8 +74,17 @@ export default class App extends React.Component {
   render() {
     const { cloud, benchmarks, test } = this.state
 
-    if (!(benchmarks?.rps?.[cloud]?.[test]))
-      return <div>Loading</div>
+    if (!(benchmarks?.rps?.[cloud]?.[test])) return (
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100vw',
+        height: '100vh',
+      }}>
+        <CircularProgress />
+      </Box>
+    )
 
     return (
       <div>
