@@ -9,11 +9,12 @@ import Table from './Table'
 
 import {
   getTests,
+  getTestsLabels,
   clouds,
   APOLLO,
   RPS,
   P99,
-  rgb,
+  colors,
 } from '../helpers'
 
 export default ({ defaultTest, testSet, rps, p99 }) => {
@@ -25,16 +26,16 @@ export default ({ defaultTest, testSet, rps, p99 }) => {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+          fontFamily: "'Open Sans', sans-serif",
           marginBottom: '20px',
         }}
       >
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          width: '200px',
+          minWidth: '160px',
         }}>
           <Clouds
             cloud={cloud}
@@ -44,37 +45,28 @@ export default ({ defaultTest, testSet, rps, p99 }) => {
           <Tests
             test={test}
             tests={getTests(testSet)}
+            labels={getTestsLabels(testSet)}
             setTest={e => setTest(e.target.value)}
           />
         </div>
         <div>
           <Legend
             values={[ 'Tyk', testSet ]}
-            colors={APOLLO === testSet ? [ rgb[0], rgb[2] ] : undefined}
+            colors={APOLLO === testSet ? [ colors[0], colors[2] ] : undefined}
           />
-          <div style={{ display: "flex" }}>
-            <div style={{
-              width: '500px',
-              height: '400px'
-            }}>
-              <TestsLineChart
-                test={RPS}
-                cloud={clouds.indexOf(cloud)}
-                data={Object.values(rps[cloud][test]).sort((a, b) => a.weight > b.weight ? 1 : -1)}
-                testSet={testSet}
-              />
-            </div>
-            <div style={{
-              width: '500px',
-              height: '400px'
-            }}>
-              <TestsLineChart
-                test={P99}
-                cloud={clouds.indexOf(cloud)}
-                data={Object.values(p99[cloud][test]).sort((a, b) => a.weight > b.weight ? 1 : -1)}
-                testSet={testSet}
-              />
-            </div>
+          <div className="line" style={{ display: "flex" }}>
+            <TestsLineChart
+              test={RPS}
+              cloud={clouds.indexOf(cloud)}
+              data={Object.values(rps[cloud][test]).sort((a, b) => a.weight > b.weight ? 1 : -1)}
+              testSet={testSet}
+            />
+            <TestsLineChart
+              test={P99}
+              cloud={clouds.indexOf(cloud)}
+              data={Object.values(p99[cloud][test]).sort((a, b) => a.weight > b.weight ? 1 : -1)}
+              testSet={testSet}
+            />
           </div>
         </div>
       </div>

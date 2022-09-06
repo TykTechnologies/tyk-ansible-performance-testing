@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell, { tableCellClasses } from '@mui/material/TableCell'
@@ -8,17 +8,17 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { styled } from "@mui/material/styles";
 
-import {
-  rgb,
-  capitalize,
-} from '../helpers'
+import { capitalize } from '../helpers'
 
 const DECIMAL_PLACES = 2
 
 const MainStyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: rgb[0],
-    color: theme.palette.common.white
+    fontFamily: 'Smoolthan',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    backgroundColor: '#2CA597',
+    color: '#FFFFFF'
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14
@@ -27,8 +27,10 @@ const MainStyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: rgb[1],
-    color: theme.palette.common.white,
+    fontFamily: "'Open Sans', sans-serif",
+    fontWeight: 'bold',
+    backgroundColor: '#D7F8F3',
+    color: '#258C80',
     padding: 4
   },
   [`&.${tableCellClasses.body}`]: {
@@ -38,12 +40,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover
+    backgroundColor: "rgba(168, 168, 207, 0.1)"
   },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0
-  }
 }));
 
 export default ({ rps, p99, test, cloud, testSet }) => {
@@ -51,80 +49,63 @@ export default ({ rps, p99, test, cloud, testSet }) => {
   p99 = Object.values(p99[cloud][test]).sort((a, b) => a.weight > b.weight ? 1 : -1)
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{ borderRadius: '10px' }}
+    >
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <MainStyledTableCell></MainStyledTableCell>
+            {Object.values(rps).map(({ machine }) => (
+              <MainStyledTableCell
+                key={machine}
+                align="center"
+              >
+                <strong>{machine}</strong>
+              </MainStyledTableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        {[ { name: 'RPS', value: rps }, { name: 'P99', value: p99 } ].map(({ name, value }, i) => (
+        <Fragment key={i}>
           <TableHead>
             <TableRow>
-              <MainStyledTableCell></MainStyledTableCell>
-              {Object.values(rps).map(({ machine }) => (
-                <MainStyledTableCell
-                  key={machine}
-                  align="center"
-                >
-                  <strong>{machine}</strong>
-                </MainStyledTableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="center" colSpan={5}>RPS</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-              <TableCell component="th" scope="row"><strong>Tyk</strong></TableCell>
-              {rps.map(({ machine, tyk }) => (
-                <TableCell
-                  key={machine}
-                  align="center"
-                >
-                  {tyk.toFixed(DECIMAL_PLACES)}
-                </TableCell>
-              ))}
-            </StyledTableRow>
-            <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-              <TableCell component="th" scope="row"><strong>{capitalize(testSet)}</strong></TableCell>
-              {rps.map(props => (
-                <TableCell
-                  key={props.machine}
-                  align="center"
-                >
-                  {props[testSet].toFixed(DECIMAL_PLACES)}
-                </TableCell>
-              ))}
-            </StyledTableRow>
-          </TableBody>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="center" colSpan={5}>P99</StyledTableCell>
+              <StyledTableCell align="center" colSpan={5}>{name}</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-              <TableCell component="th" scope="row"><strong>Tyk</strong></TableCell>
-              {p99.map(({ machine, tyk }) => (
-                <TableCell
-                  key={machine}
-                  align="center"
-                >
-                  {tyk.toFixed(DECIMAL_PLACES)}
-                </TableCell>
-              ))}
-            </StyledTableRow>
-            <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-              <TableCell component="th" scope="row"><strong>{capitalize(testSet)}</strong></TableCell>
-              {p99.map(props => (
+            {[ 'tyk', testSet ].map((test, i) => (
+            <StyledTableRow key={i}>
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{
+                  fontFamily: "'Open Sans', sans-serif",
+                  fontWeight: 'bold',
+                  color: '#505071',
+                }}
+              >
+                {capitalize(test)}
+              </TableCell>
+              {value.map(props => (
                 <TableCell
                   key={props.machine}
                   align="center"
+                  sx={{
+                    fontFamily: "'Open Sans', sans-serif",
+                    color: '#505071',
+                  }}
                 >
-                  {props[testSet].toFixed(DECIMAL_PLACES)}
+                  {props[test].toFixed(DECIMAL_PLACES)}
                 </TableCell>
               ))}
             </StyledTableRow>
+            ))}
           </TableBody>
-        </Table>
-      </TableContainer>
-    )
+        </Fragment>
+        ))}
+      </Table>
+    </TableContainer>
+  )
 }

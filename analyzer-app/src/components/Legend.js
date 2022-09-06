@@ -1,11 +1,11 @@
 import React from 'react'
 
 import {
-  rgb,
+  colors as c,
   capitalize,
 } from '../helpers'
 
-export default ({ values, colors = rgb }) => (
+export default ({ values, colors = c }) => (
   <ul style={{
     display: 'flex',
     flexWrap: 'wrap',
@@ -27,7 +27,12 @@ export default ({ values, colors = rgb }) => (
         backgroundColor: colors?.[i],
         margin: '5px',
       }}/>
-      <div>{value.split('-').map(v => capitalize(v)).join(' & ')}</div>
+      <div style={{
+        fontFamily: "'Open Sans', sans-serif",
+        color: '#505071',
+      }}>
+        {capitalize(value)}
+      </div>
     </li>
   ))}
   </ul>

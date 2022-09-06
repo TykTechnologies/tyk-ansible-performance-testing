@@ -1,6 +1,25 @@
-.recharts-cartesian-axis-ticks g:nth-child(3) line,
-.recharts-cartesian-axis-ticks g:nth-child(5) line,
-.recharts-cartesian-axis-ticks g:nth-child(6) line,
-.recharts-cartesian-axis-ticks g:nth-child(7) line {
+.line .recharts-cartesian-axis-ticks g:nth-child(3) line,
+.line .recharts-cartesian-axis-ticks g:nth-child(5) line,
+.line .recharts-cartesian-axis-ticks g:nth-child(6) line,
+.line .recharts-cartesian-axis-ticks g:nth-child(7) line {
   stroke-width: 1!important;
+}
+
+.line .yAxis .recharts-cartesian-axis-tick-value {
+  fill: #7A79A1;
+}
+
+.line .yAxis .recharts-cartesian-axis-tick-value tspan,
+.line .yAxis .recharts-label,
+.line .xAxis .recharts-label {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.line .yAxis .recharts-label {
+  font-weight: bold;
+  color: #505071;
+}
+
+.line .xAxis .recharts-label {
+  fill: #505071;
 }

@@ -8,54 +8,80 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
 
-import {
-  rgb,
-  capitalize,
-} from '../helpers'
+import { capitalize } from '../helpers'
 
 const DECIMAL_PLACES = 2
 
 const MainStyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: rgb[0],
-    color: theme.palette.common.white
+    fontFamily: 'Smoolthan',
+    fontWeight: 'bold',
+    backgroundColor: '#2CA597',
+    color: '#FFFFFF'
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14
+    fontSize: 14,
   }
-}));
+}))
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover
+  '&:nth-of-type(odd)': {
+    backgroundColor: "rgba(168, 168, 207, 0.1)"
   },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0
-  }
 }));
 
-export default ({ rps, p99 }) => {
-  return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <MainStyledTableCell align="center"></MainStyledTableCell>
-              <MainStyledTableCell align="center">RPS</MainStyledTableCell>
-              <MainStyledTableCell align="center">P99 (ms)</MainStyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Object.keys(rps).map(key => (
-            <StyledTableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
-              <TableCell component="th" scope="row"><strong>{key.split('-').map( v => capitalize(v)).join(' & ')}</strong></TableCell>
-              <TableCell component="th" scope="row" align="center">{rps[key]?.toFixed(DECIMAL_PLACES)}</TableCell>
-              <TableCell component="th" scope="row" align="center">{p99[key]?.toFixed(DECIMAL_PLACES)}</TableCell>
-            </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    )
-}
+export default ({ rps, p99, labels }) => (
+  <TableContainer
+    component={Paper}
+    sx={{ borderRadius: '10px' }}
+  >
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          <MainStyledTableCell align="center"></MainStyledTableCell>
+          <MainStyledTableCell align="center">RPS</MainStyledTableCell>
+          <MainStyledTableCell align="center">P99 (ms)</MainStyledTableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {Object.keys(rps).map((key, i) => (
+        <StyledTableRow key={key} >
+          <TableCell
+            component="th"
+            scope="row"
+            sx={{
+              fontFamily: "'Open Sans', sans-serif",
+              fontWeight: 'bold',
+              color: '#505071',
+            }}
+          >
+            {capitalize(labels[i])}
+          </TableCell>
+          <TableCell
+            component="th"
+            scope="row"
+            align="center"
+            sx={{
+              fontFamily: "'Open Sans', sans-serif",
+              color: '#505071',
+            }}
+          >
+            {rps[key]?.toFixed(DECIMAL_PLACES)}
+          </TableCell>
+          <TableCell
+            component="th"
+            scope="row"
+            align="center"
+            sx={{
+              fontFamily: "'Open Sans', sans-serif",
+              color: '#505071',
+            }}
+          >
+            {p99[key]?.toFixed(DECIMAL_PLACES)}
+          </TableCell>
+        </StyledTableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+)

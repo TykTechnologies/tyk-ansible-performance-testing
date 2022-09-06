@@ -13,12 +13,14 @@ import {
   P99,
   KONG,
   getTests as getPerfTests,
+  getTestsLabels,
   machines,
   getMachineWeight,
   ranges,
 } from '../helpers'
 
-const TESTS = [ ...getPerfTests(KONG), ...getPerfTests() ]
+const TESTS = [ ...getPerfTests(KONG), ...getPerfTests() ],
+      LABELS = [ ...getTestsLabels(KONG), ...getPerfTests() ]
 
 const getTests = cloud => {
   const tests = []
@@ -34,7 +36,8 @@ const getData = (rps, p99, machine) => {
   data[RPS] = {}
   data[P99] = {}
 
-  Object.keys(rps).map(key => {
+
+  Object.keys(rps).forEach(key => {
     if (TESTS.includes(key)) {
       data[RPS][key] = rps[key][machine]?.tyk
       data[P99][key] = p99[key][machine]?.tyk
@@ -48,23 +51,24 @@ export default ({ defaultTest, rps, p99 }) => {
   const [test, setTest] = useState(defaultTest),
         [cloud, setCloud] = useState(clouds[0]),
         cloud_index=clouds.indexOf(cloud),
-        data = getData(rps[cloud], p99[cloud], machines[test][clouds.indexOf(cloud)])
+        machine = machines[test][clouds.indexOf(cloud)],
+        data = getData(rps[cloud], p99[cloud], machine)
 
   return (
     <Container maxWidth="lg">
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+          fontFamily: "'Open Sans', sans-serif",
           marginBottom: '20px',
         }}
       >
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          width: '200px',
+          minWidth: '160px',
         }}>
           <Clouds
             cloud={cloud}
@@ -74,38 +78,32 @@ export default ({ defaultTest, rps, p99 }) => {
           <Tests
             test={machines[test][cloud_index]}
             tests={getTests(cloud)}
+            labels={getTestsLabels()}
             setTest={e => setTest(getMachineWeight(e.target.value))}
           />
         </div>
         <div>
-          <Legend values={TESTS} />
-          <div style={{ display: "flex" }}>
-            <div style={{
-              width: '500px',
-              height: '400px'
-            }}>
-              <TestsBarChart
-                test={RPS}
-                tests={TESTS}
-                data={[ data.rps ]}
-                range={ranges[test][0]}
-              />
-            </div>
-            <div style={{
-              width: '500px',
-              height: '400px'
-            }}>
-              <TestsBarChart
-                test={P99}
-                tests={TESTS}
-                data={[ data.p99 ]}
-                range={ranges[test][1]}
-              />
-            </div>
+          <Legend values={LABELS} />
+          <div className="bar" style={{ display: "flex" }}>
+            <TestsBarChart
+              test={RPS}
+              tests={TESTS}
+              data={[ data.rps ]}
+              range={ranges[test][0]}
+              machine={machine}
+            />
+            <TestsBarChart
+              test={P99}
+              tests={TESTS}
+              data={[ data.p99 ]}
+              range={ranges[test][1]}
+              machine={machine}
+            />
           </div>
         </div>
       </div>
       <PluginTable
+        labels={LABELS}
         { ...data }
       />
     </Container>

@@ -1,0 +1,18 @@
+.bar .yAxis .recharts-cartesian-axis-tick-value {
+  fill: #7A79A1;
+}
+
+.bar .yAxis .recharts-cartesian-axis-tick-value tspan,
+.bar .yAxis .recharts-label,
+.bar .xAxis .recharts-label {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.bar .yAxis .recharts-label {
+  font-weight: bold;
+  color: #505071;
+}
+
+.bar .xAxis .recharts-label {
+  fill: #505071;
+}

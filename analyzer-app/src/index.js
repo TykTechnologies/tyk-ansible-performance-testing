@@ -2,6 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 
+import './fonts/Smoolthan/Smoolthan Bold.otf'
+import './index.css'
+
 const analyzer = document.getElementById('analyzer'),
       className = analyzer.classList.value
 

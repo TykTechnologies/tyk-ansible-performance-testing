@@ -7,7 +7,6 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/material": "^5.10.3",
-    "babel-plugin-wildcard": "^7.0.0",
     "customize-cra": "^1.0.0",
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
@@ -16,8 +15,8 @@
     "recharts": "^2.1.13"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "node src/import.mjs & react-app-rewired start",
+    "build": "node src/import.mjs & react-app-rewired build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
