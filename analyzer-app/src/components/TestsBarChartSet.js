@@ -20,7 +20,7 @@ import {
 } from '../helpers'
 
 const TESTS = [ ...getPerfTests(KONG), ...getPerfTests() ],
-      LABELS = [ ...getTestsLabels(KONG), ...getPerfTests() ]
+      LABELS = [ ...getTestsLabels(KONG), ...getPerfTests() ].map(l => l.toLowerCase()).sort()
 
 const getTests = cloud => {
   const tests = []
