@@ -45,7 +45,7 @@ export default ({ rps, p99, labels }) => (
         </TableRow>
       </TableHead>
       <TableBody>
-        {Object.keys(rps).map((key, i) => (
+        {Object.keys(rps).sort().map((key, i) => (
         <StyledTableRow key={key} >
           <TableCell
             component="th"

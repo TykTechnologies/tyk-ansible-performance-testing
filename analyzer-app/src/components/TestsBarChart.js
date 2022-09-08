@@ -42,7 +42,7 @@ export default ({ test, tests, data, range, machine }) => (
         data={data}
         margin={{ top: 10, right: 10, left: 10, bottom: 30 }}
       >
-        {Object.values(tests).map((value, key) => (
+        {Object.values(tests).sort().map((value, key) => (
         <Bar
           key={key}
           dataKey={value}
