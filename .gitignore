@@ -12,3 +12,5 @@ analysis/*.csv
 saas/*hosts.yml
 saas/apps/*.json
 **/node_modules
+analyzer-app/build
+analyzer-app/src/benchmarks.json
