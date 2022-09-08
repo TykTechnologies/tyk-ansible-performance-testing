@@ -76,4 +76,4 @@
     - [ "config.policy", redis ]
     - [ "config.redis_host", redis ]
     status_code: [ 201, 409 ]
-  when: enable_auth or enable_quota
+  when: enable_auth or enable_quota or enable_rate_limiting
