@@ -16,3 +16,9 @@
 .bar .xAxis .recharts-label {
   fill: #505071;
 }
+
+.bar .notice {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  color: #7A79A1;
+}

@@ -6,6 +6,7 @@ import {
   ResponsiveContainer,
   XAxis,
   YAxis,
+  Tooltip,
 } from 'recharts';
 
 import {
@@ -66,6 +67,14 @@ export default ({ test, tests, data, range, machine }) => (
           tickLine={false}
           domain={range}
           tickCount={6}
+        />
+        <Tooltip
+          position={{ x: P99 === test ? 350 : 70, y: 15 }}
+          cursor={false}
+          content={() => <div className="notice">{P99 === test ? "(lower is better)" : "(higher is better)"}</div>}
+          wrapperStyle={{
+            visibility: 'visible',
+          }}
         />
       </BarChart>
     </ResponsiveContainer>

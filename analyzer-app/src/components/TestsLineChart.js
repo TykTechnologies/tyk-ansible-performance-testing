@@ -8,6 +8,7 @@ import {
   YAxis,
   ReferenceArea,
   Tooltip,
+  Label,
 } from 'recharts';
 
 import {
@@ -116,6 +117,7 @@ export default ({ test, data, cloud, testSet }) => (
           vertical={false}
         />
         <XAxis
+          xAxisId={0}
           dataKey="weight"
           axisLine={{ strokeWidth: 2 }}
           tickLine={{ strokeWidth: 2 }}
@@ -125,6 +127,17 @@ export default ({ test, data, cloud, testSet }) => (
           ticks={[ 2, 4, 6, 8, 10, 12, 14, 16 ]}
           tick={<CustomizedTick />}
           label={{ value: 'CPUs', offset: -20, position: 'insideBottom' }}
+        />
+        <XAxis
+          xAxisId={1}
+          axisLine={false}
+          tickLine={false}
+          tick={false}
+          label={{
+            value: P99 === test ? "(lower is better)" : "(higher is better)",
+            offset: 0,
+            position: P99 === test ? "insideRight" : "insideLeft",
+          }}
         />
         <YAxis
           axisLine={false}

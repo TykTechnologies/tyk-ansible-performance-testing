@@ -24,17 +24,17 @@
   fill: #505071;
 }
 
-.recharts-tooltip-wrapper:focus-visible {
+.line .recharts-tooltip-wrapper:focus-visible {
   outline: none!important;
 }
 
 
-.recharts-tooltip-wrapper .recharts-default-tooltip {
+.line .recharts-tooltip-wrapper .recharts-default-tooltip {
   border: 1px solid #A8A8CF!important;
   border-radius: 10px;
 }
 
-.recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-label {
+.line .recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-label {
   font-family: Smoolthan;
   font-weight: bold;
   color: #505071;
@@ -42,20 +42,26 @@
   text-align: center;
 }
 
-.recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item-list {
+.line .recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item-list {
   font-family: 'Open Sans', sans-serif;
   font-size: 0.875rem;
 }
 
-.recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item-list .recharts-tooltip-item-name {
+.line .recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item-list .recharts-tooltip-item-name {
   font-weight: 700;
 }
 
-.recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item-list .recharts-tooltip-item-separator {
+.line .recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item-list .recharts-tooltip-item-separator {
   font-weight: 700;
   margin-right: 10px;
 }
 
-.recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item-list .recharts-tooltip-item-value {
+.line .recharts-tooltip-wrapper .recharts-default-tooltip .recharts-tooltip-item-list .recharts-tooltip-item-value {
   float: right;
+}
+
+.line .xAxis + .xAxis .recharts-text.recharts-label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  fill: #7A79A1;
 }
