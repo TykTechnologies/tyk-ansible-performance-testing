@@ -47,6 +47,8 @@ const KONG = 'kong',
 const LINE = 'line',
       BAR = 'bar'
 
+const DECIMAL_PLACES = 2
+
 const colors = [ "#00CDB0", "#505071", "#FF7787", "#DBA72C", "#A8A8CF", "#C5425C" ]
 
 const ranges = {
@@ -73,4 +75,5 @@ export {
   colors,
   capitalize,
   ranges,
+  DECIMAL_PLACES,
 }

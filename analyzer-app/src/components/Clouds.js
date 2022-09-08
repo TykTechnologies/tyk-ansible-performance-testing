@@ -29,6 +29,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
       '&.Mui-selected': {
         color: '#258C80',
         backgroundColor: '#D7F8F3',
+        borderTop: '1px solid rgba(0, 0, 0, 0.12)',
       },
     },
   },

@@ -7,12 +7,16 @@ import {
   XAxis,
   YAxis,
   ReferenceArea,
+  Tooltip,
 } from 'recharts';
 
 import {
   KONG,
   P99,
   colors,
+  capitalize,
+  DECIMAL_PLACES,
+  machines,
 } from '../helpers'
 
 import './TestLineChart.css'
@@ -81,6 +85,15 @@ export default ({ test, data, cloud, testSet }) => (
           shape={<CustomShape />}
         />
         ))}
+        <Tooltip
+          labelFormatter={machine => machines[machine][cloud]}
+          formatter={(value, name) => [value.toFixed(DECIMAL_PLACES), capitalize(name)]}
+          separator=":"
+          cursor={{
+            stroke: '#A8A8CF',
+            strokeWidth: 1
+          }}
+        />
         <Line
           type="linear"
           dataKey="tyk"

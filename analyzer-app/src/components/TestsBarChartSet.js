@@ -63,6 +63,7 @@ export default ({ defaultTest, rps, p99 }) => {
           alignItems: 'center',
           fontFamily: "'Open Sans', sans-serif",
           marginBottom: '20px',
+          flexWrap: 'wrap',
         }}
       >
         <div style={{
@@ -84,7 +85,13 @@ export default ({ defaultTest, rps, p99 }) => {
         </div>
         <div>
           <Legend values={LABELS} />
-          <div className="bar" style={{ display: "flex" }}>
+          <div
+            className="bar"
+            style={{
+              display: "flex",
+              flexWrap: 'wrap',
+            }}
+          >
             <TestsBarChart
               test={RPS}
               tests={TESTS}

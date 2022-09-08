@@ -30,6 +30,7 @@ export default ({ defaultTest, testSet, rps, p99 }) => {
           alignItems: 'center',
           fontFamily: "'Open Sans', sans-serif",
           marginBottom: '20px',
+          flexWrap: 'wrap',
         }}
       >
         <div style={{
@@ -54,7 +55,13 @@ export default ({ defaultTest, testSet, rps, p99 }) => {
             values={[ 'Tyk', testSet ]}
             colors={APOLLO === testSet ? [ colors[0], colors[2] ] : undefined}
           />
-          <div className="line" style={{ display: "flex" }}>
+          <div
+            className="line"
+            style={{
+              display: "flex",
+              flexWrap: 'wrap',
+            }}
+          >
             <TestsLineChart
               test={RPS}
               cloud={clouds.indexOf(cloud)}

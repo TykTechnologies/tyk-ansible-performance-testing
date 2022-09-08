@@ -8,9 +8,10 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
 
-import { capitalize } from '../helpers'
-
-const DECIMAL_PLACES = 2
+import {
+  capitalize,
+  DECIMAL_PLACES,
+} from '../helpers'
 
 const MainStyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
