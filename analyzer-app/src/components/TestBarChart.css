@@ -22,3 +22,9 @@
   font-size: 12px;
   color: #7A79A1;
 }
+
+.bar .xAxis + .xAxis .recharts-text.recharts-label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  fill: #7A79A1;
+}

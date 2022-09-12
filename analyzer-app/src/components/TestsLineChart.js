@@ -8,7 +8,6 @@ import {
   YAxis,
   ReferenceArea,
   Tooltip,
-  Label,
 } from 'recharts';
 
 import {
@@ -126,7 +125,11 @@ export default ({ test, data, cloud, testSet }) => (
           interval="preserveStart"
           ticks={[ 2, 4, 6, 8, 10, 12, 14, 16 ]}
           tick={<CustomizedTick />}
-          label={{ value: 'CPUs', offset: -20, position: 'insideBottom' }}
+          label={{
+            value: 'CPUs',
+            offset: -20,
+            position: 'insideBottom',
+          }}
         />
         <XAxis
           xAxisId={1}
