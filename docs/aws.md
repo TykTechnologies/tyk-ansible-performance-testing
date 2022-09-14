@@ -8,7 +8,7 @@ Make sure to add the required AWS information in `vars/aws.yml`. You can find ou
 aws_region: us-west-2
 aws_key_name: secret
 aws_instance_type: t2.micro
-aws_image: ami-0b28dfc7adc325ef4
+aws_image: ami-06640050dc3f556bb
 aws_group: secret-sg
 aws_vpc_subnet_id: subnet-vpc_subnet_id
 aws_access_key: aws_access_key

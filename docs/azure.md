@@ -10,10 +10,10 @@ Make sure to add the required Azure information in `vars/azure.yml`. You can fin
 azure_vm_size: Standard_B1s
 azure_location: westus
 azure_image:
-  offer: UbuntuServer
-  publisher: Canonical
-  sku: '18.04-LTS'
-  version: latest
+  offer: RHEL
+  publisher: RedHat
+  sku: '8_6'
+  version: '8.6.2022070801'
 azure_ssh_public_key: "public_key"
 provider:
   user: azureuser
