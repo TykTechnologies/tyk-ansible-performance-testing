@@ -13,6 +13,7 @@
 
 # Update packages on all servers.
 - hosts: all
+  gather_facts: false
   become: True
   tasks:
   - name: Update packages
