@@ -1,0 +1,14 @@
+---
+- name: Remove postgres container
+  docker_container:
+    name: kong-database
+    state: absent
+
+- name: Remove redis container
+  docker_container:
+    name: redis
+    state: absent
+
+- name: Include install task
+  include_tasks: install.yml
+  when: ('install' in ansible_run_tags)

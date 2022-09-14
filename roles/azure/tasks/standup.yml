@@ -47,6 +47,14 @@
     name: "{{ azure_vm_size }}-load-ip"
   register: load
 
+- name: Create Tyk Dependencies public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    allocation_method: Static
+    name: "{{ azure_vm_size }}-tyk-dependencies-ip"
+  register: tyk_dependencies
+  when: ('tyk' in test_services)
+
 - name: Create Tyk public IP address
   azure_rm_publicipaddress:
     resource_group: "{{ azure_vm_size }}-resource-group"
@@ -54,6 +62,14 @@
     name: "{{ azure_vm_size }}-tyk-ip"
   register: tyk
   when: ('tyk' in test_services)
+
+- name: Create Kong Dependencies public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ azure_vm_size }}-resource-group"
+    allocation_method: Static
+    name: "{{ azure_vm_size }}-kong-dependencies-ip"
+  register: kong_dependencies
+  when: ('kong' in test_services)
 
 - name: Create Kong public IP address
   azure_rm_publicipaddress:
@@ -83,12 +99,26 @@
     title: Load Generator
     type: load
 
+- name: Include create_vm task to create Tyk Dependencies vm
+  include_tasks: create_vm.yml
+  vars:
+    title: Tyk Dependencies
+    type: tyk-dependencies
+  when: ('tyk' in test_services)
+
 - name: Include create_vm task to create Tyk vm
   include_tasks: create_vm.yml
   vars:
     title: Tyk
     type: tyk
   when: ('tyk' in test_services)
+
+- name: Include create_vm task to create Kong Dependencies vm
+  include_tasks: create_vm.yml
+  vars:
+    title: Kong Dependencies
+    type: kong-dependencies
+  when: ('kong' in test_services)
 
 - name: Include create_vm task to create Kong vm
   include_tasks: create_vm.yml
@@ -110,7 +140,9 @@
       upstream: "{{ upstream.state.ip_address }}"
       load: "{{ load.state.ip_address }}"
       tyk: "{% if 'tyk' in test_services %}{{ tyk.state.ip_address }}{% endif %}"
+      tyk_dependencies: "{% if 'tyk' in test_services %}{{ tyk_dependencies.state.ip_address }}{% endif %}"
       kong: "{% if 'kong' in test_services %}{{ kong.state.ip_address }}{% endif %}"
+      kong_dependencies: "{% if 'kong' in test_services %}{{ kong_dependencies.state.ip_address }}{% endif %}"
       apollo: "{% if 'apollo' in test_services %}{{ apollo.state.ip_address }}{% endif %}"
   template:
     src: hosts.j2

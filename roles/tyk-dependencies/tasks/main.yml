@@ -1,0 +1,9 @@
+---
+- name: Launch Redis container
+  docker_container:
+    name: redis
+    state: started
+    image: redis:4.0-alpine
+    ports:
+      - "6379:6379"
+

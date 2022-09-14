@@ -73,6 +73,18 @@
   tags:
     - test
 
+# Stand up Tyk gateway dependencies
+- hosts: tyk_dependencies
+  gather_facts: false
+  become: True
+  tasks:
+    - name: Include tyk-dependencies role
+      include_role:
+        name: tyk-dependencies
+      when: ('kong' in test_services) and (not ('saas' in ansible_run_tags))
+  tags:
+    - install
+
 # Stand up Tyk gateway
 - hosts: "{% if 'saas' in ansible_run_tags %}localhost{% else %}tyk{% endif %}"
   gather_facts: false
@@ -105,6 +117,18 @@
       when: 'tyk' in test_services
   tags:
     - test
+
+# Stand up Kong dependencies gateway
+- hosts: kong_dependencies
+  gather_facts: false
+  become: True
+  tasks:
+    - name: Include kong role
+      include_role:
+        name: kong
+      when: (query_type == 'REST') and ('kong' in test_services)
+  tags:
+    - standup
 
 # Stand up Kong gateway
 - hosts: kong

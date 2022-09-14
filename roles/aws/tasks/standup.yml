@@ -29,6 +29,22 @@
     aws_secret_key: "{{ aws_secret_key }}"
   register: load
 
+- name: Provision Tyk Dependencies EC2 instance
+  ec2_instance:
+    name: "{{ aws_instance_type }}-tyk-dependencies"
+    instance_type: "{{ aws_instance_type }}"
+    region: "{{ aws_region }}"
+    image_id: "{{ aws_image }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    security_group: "{{ aws_group }}"
+    key_name: "{{ aws_key_name }}"
+    network:
+      assign_public_ip: yes
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: tyk_dependencies
+  when: ('tyk' in test_services)
+
 - name: Provision Tyk EC2 instance
   ec2_instance:
     name: "{{ aws_instance_type }}-tyk"
@@ -44,6 +60,22 @@
     aws_secret_key: "{{ aws_secret_key }}"
   register: tyk
   when: ('tyk' in test_services)
+
+- name: Provision Kong Dependencies EC2 instance
+  ec2_instance:
+    name: "{{ aws_instance_type }}-kong-dependencies"
+    instance_type: "{{ aws_instance_type }}"
+    region: "{{ aws_region }}"
+    image_id: "{{ aws_image }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    security_group: "{{ aws_group }}"
+    key_name: "{{ aws_key_name }}"
+    network:
+      assign_public_ip: yes
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  register: kong_dependencies
+  when: ('kong' in test_services)
 
 - name: Provision Kong EC2 instance
   ec2_instance:
@@ -83,7 +115,9 @@
       upstream: "{{ upstream.instances[0].public_dns_name }}"
       load: "{{ load.instances[0].public_dns_name }}"
       tyk: "{% if 'tyk' in test_services %}{{ tyk.instances[0].public_dns_name }}{% endif %}"
+      tyk_dependencies: "{% if 'tyk' in test_services %}{{ tyk_dependencies.instances[0].public_dns_name }}{% endif %}"
       kong: "{% if 'kong' in test_services %}{{ kong.instances[0].public_dns_name }}{% endif %}"
+      kong_dependencies: "{% if 'kong' in test_services %}{{ kong_dependencies.instances[0].public_dns_name }}{% endif %}"
       apollo: "{% if 'apollo' in test_services %}{{ apollo.instances[0].public_dns_name }}{% endif %}"
   template:
     src: hosts.j2

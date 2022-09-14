@@ -13,7 +13,7 @@
       - "/etc/kong/:/etc/kong/"
     env:
       KONG_DATABASE: "postgres"
-      KONG_PG_HOST: "kong-database"
+      KONG_PG_HOST: "{{ hostvars.kong_dependencies.ansible_facts.default_ipv4.address }}"
       KONG_PG_PASSWORD: "kong"
       KONG_ADMIN_LISTEN: "0.0.0.0:{{ services.kong.admin.port }}, 0.0.0.0:{{ services.kong.admin.ssl_port }} ssl"
       KONG_CASSANDRA_CONTACT_POINTS: "kong-database"
@@ -74,6 +74,6 @@
     - [ name, "rate-limiting" ]
     - [ "config.second", 9999999 ]
     - [ "config.policy", redis ]
-    - [ "config.redis_host", redis ]
+    - [ "config.redis_host", "{{ hostvars.kong_dependencies.ansible_facts.default_ipv4.address }}" ]
     status_code: [ 201, 409 ]
   when: enable_auth or enable_quota or enable_rate_limiting

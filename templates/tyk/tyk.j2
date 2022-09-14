@@ -8,7 +8,7 @@
   "app_path": "/opt/tyk-gateway/apps/",
   "storage": {
     "type": "redis",
-    "host": "redis",
+    "host": "{{ hostvars.tyk_dependencies.ansible_facts.default_ipv4.address }}",
     "port": 6379,
     "username": "",
     "password": "",

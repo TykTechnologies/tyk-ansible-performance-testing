@@ -11,12 +11,26 @@
     title: Load Generator
     type: load
 
+- name: Include terminate_instance task to terminate Tyk Dependencies vm
+  include_tasks: terminate_instance.yml
+  vars:
+    title: Tyk Dependencies
+    type: tyk-dependencies
+  when: ('tyk' in test_services)
+
 - name: Include terminate_instance task to terminate Tyk vm
   include_tasks: terminate_instance.yml
   vars:
     title: Tyk
     type: tyk
   when: ('tyk' in test_services)
+
+- name: Include terminate_instance task to terminate Kong Dependencies vm
+  include_tasks: terminate_instance.yml
+  vars:
+    title: Kong Dependencies
+    type: kong-dependencies
+  when: ('kong' in test_services)
 
 - name: Include terminate_instance task to terminate Kong vm
   include_tasks: terminate_instance.yml

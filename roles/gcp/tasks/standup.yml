@@ -42,6 +42,16 @@
     service_account_file: "{{ gcp_service_account_file }}"
   register: load_address
 
+- name: Provision Tyk GCP Dependencies address instance
+  gcp_compute_address:
+    name: "{{ gcp_machine_type }}-tyk-dependencies-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+  register: tyk_dependencies_address
+  when: ('tyk' in test_services)
+
 - name: Provision Tyk GCP address instance
   gcp_compute_address:
     name: "{{ gcp_machine_type }}-tyk-address"
@@ -51,6 +61,16 @@
     service_account_file: "{{ gcp_service_account_file }}"
   register: tyk_address
   when: ('tyk' in test_services)
+
+- name: Provision Kong Dependencies GCP address instance
+  gcp_compute_address:
+    name: "{{ gcp_machine_type }}-kong-dependencies-address"
+    project: "{{ gcp_project }}"
+    region: "{{ gcp_region }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_service_account_file }}"
+  register: kong_dependencies_address
+  when: ('kong' in test_services)
 
 - name: Provision Kong GCP address instance
   gcp_compute_address:
@@ -86,6 +106,14 @@
     type: load
     address: "{{ load_address }}"
 
+- name: Include create_instance task to create Tyk Dependencies vm
+  include_tasks: create_instance.yml
+  vars:
+    title: Tyk Dependencies
+    type: tyk-dependencies
+    address: "{{ tyk_dependencies_address }}"
+  when: ('tyk' in test_services)
+
 - name: Include create_instance task to create Tyk vm
   include_tasks: create_instance.yml
   vars:
@@ -93,6 +121,14 @@
     type: tyk
     address: "{{ tyk_address }}"
   when: ('tyk' in test_services)
+
+- name: Include create_instance task to create Kong Dependencies vm
+  include_tasks: create_instance.yml
+  vars:
+    title: Kong
+    type: kong-dependencies
+    address: "{{ kong_dependencies_address }}"
+  when: ('kong' in test_services)
 
 - name: Include create_instance task to create Kong vm
   include_tasks: create_instance.yml
@@ -116,7 +152,9 @@
       upstream: "{{ upstream_address.address }}"
       load: "{{ load_address.address }}"
       tyk: "{% if 'tyk' in test_services %}{{ tyk_address.address }}{% endif %}"
+      tyk_dependencies: "{% if 'tyk' in test_services %}{{ tyk_dependencies_address.address }}{% endif %}"
       kong: "{% if 'kong' in test_services %}{{ kong_address.address }}{% endif %}"
+      kong_dependencies: "{% if 'kong' in test_services %}{{ kong_dependencies_address.address }}{% endif %}"
       apollo: "{% if 'apollo' in test_services %}{{ apollo_address.address }}{% endif %}"
   template:
     src: hosts.j2

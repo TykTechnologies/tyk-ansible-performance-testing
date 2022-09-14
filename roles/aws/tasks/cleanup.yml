@@ -30,10 +30,32 @@
     aws_secret_key: "{{ aws_secret_key }}"
   when: ('tyk' in test_services)
 
+- name: Terminate Tyk Dependencies EC2 instance
+  ec2_instance:
+    state: absent
+    name: "{{ aws_instance_type }}-tyk-dependencies"
+    region: "{{ aws_region }}"
+    instance_type: "{{ aws_instance_type }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  when: ('tyk' in test_services)
+
 - name: Terminate Kong EC2 instance
   ec2_instance:
     state: absent
     name: "{{ aws_instance_type }}-kong"
+    region: "{{ aws_region }}"
+    instance_type: "{{ aws_instance_type }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+  when: ('kong' in test_services)
+
+- name: Terminate Kong Dependencies EC2 instance
+  ec2_instance:
+    state: absent
+    name: "{{ aws_instance_type }}-kong-dependencies"
     region: "{{ aws_region }}"
     instance_type: "{{ aws_instance_type }}"
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
