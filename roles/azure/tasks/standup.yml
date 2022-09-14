@@ -53,6 +53,7 @@
     allocation_method: Static
     name: "{{ azure_vm_size }}-tyk-ip"
   register: tyk
+  when: ('tyk' in test_services)
 
 - name: Create Kong public IP address
   azure_rm_publicipaddress:
@@ -87,6 +88,7 @@
   vars:
     title: Tyk
     type: tyk
+  when: ('tyk' in test_services)
 
 - name: Include create_vm task to create Kong vm
   include_tasks: create_vm.yml
@@ -107,7 +109,7 @@
     hosts:
       upstream: "{{ upstream.state.ip_address }}"
       load: "{{ load.state.ip_address }}"
-      tyk: "{{ tyk.state.ip_address }}"
+      tyk: "{% if 'tyk' in test_services %}{{ tyk.state.ip_address }}{% endif %}"
       kong: "{% if 'kong' in test_services %}{{ kong.state.ip_address }}{% endif %}"
       apollo: "{% if 'apollo' in test_services %}{{ apollo.state.ip_address }}{% endif %}"
   template:

@@ -16,8 +16,6 @@ Tests:
 
 - Split dependencies out of the vendors containers
 
-- Be able to turn off Tyk and upstream tests
-
 - Allow analyzer app to be more flexible
 - Add analyzer app documentation
 - Remove only analyzation scripts

@@ -43,6 +43,7 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: tyk
+  when: ('tyk' in test_services)
 
 - name: Provision Kong EC2 instance
   ec2_instance:
@@ -81,7 +82,7 @@
     hosts:
       upstream: "{{ upstream.instances[0].public_dns_name }}"
       load: "{{ load.instances[0].public_dns_name }}"
-      tyk: "{{ tyk.instances[0].public_dns_name }}"
+      tyk: "{% if 'tyk' in test_services %}{{ tyk.instances[0].public_dns_name }}{% endif %}"
       kong: "{% if 'kong' in test_services %}{{ kong.instances[0].public_dns_name }}{% endif %}"
       apollo: "{% if 'apollo' in test_services %}{{ apollo.instances[0].public_dns_name }}{% endif %}"
   template:

@@ -28,6 +28,7 @@
     vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
+  when: ('tyk' in test_services)
 
 - name: Terminate Kong EC2 instance
   ec2_instance:

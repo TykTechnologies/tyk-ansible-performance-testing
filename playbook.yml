@@ -69,7 +69,7 @@
         label: upstream
       include_role:
         name: load-generator
-      when: query_type == 'REST'
+      when: (query_type == 'REST') and ('upstream' in test_services)
   tags:
     - test
 
@@ -80,8 +80,11 @@
   vars_files:
     - ./vars/tests.yml
     - ./vars/services.yml
-  roles:
-    - tyk
+  tasks:
+    - name: Include tyk role
+      include_role:
+        name: tyk
+      when: 'tyk' in test_services
   tags:
     - install
     - standup
@@ -93,9 +96,13 @@
   vars_files:
     - ./vars/tests.yml
     - ./vars/services.yml
-  roles:
-    - role: load-generator
-      label: "{% if 'saas' in ansible_run_tags %}saas-{% endif %}tyk"
+  tasks:
+    - name: Include load-generator role
+      vars:
+        label: "{% if 'saas' in ansible_run_tags %}saas-{% endif %}tyk"
+      include_role:
+        name: load-generator
+      when: 'tyk' in test_services
   tags:
     - test
 
@@ -183,7 +190,7 @@
     - name: Include tyk role
       include_role:
         name: tyk
-      when: not ('saas' in ansible_run_tags)
+      when: ('tyk' in test_services) and (not ('saas' in ansible_run_tags))
   tags:
     - cleanup
 

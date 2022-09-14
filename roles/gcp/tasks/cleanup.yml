@@ -16,6 +16,7 @@
   vars:
     title: Tyk
     type: tyk
+  when: ('tyk' in test_services)
 
 - name: Include terminate_instance task to terminate Kong vm
   include_tasks: terminate_instance.yml

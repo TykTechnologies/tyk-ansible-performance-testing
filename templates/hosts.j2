@@ -8,10 +8,12 @@ all:
       ansible_host: "{{ hosts.load }}"
       ansible_user: "{{ provider.user }}"
       ansible_ssh_private_key_file: "{{ provider.key_file }}"
+{% if 'tyk' in test_services %}
     tyk:
       ansible_host: "{{ hosts.tyk }}"
       ansible_user: "{{ provider.user }}"
       ansible_ssh_private_key_file: "{{ provider.key_file }}"
+{% endif %}
 {% if 'kong' in test_services %}
     kong:
       ansible_host: "{{ hosts.kong }}"
