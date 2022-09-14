@@ -97,7 +97,7 @@
     - name: Include tyk role
       include_role:
         name: tyk
-      when: 'tyk' in test_services
+      when: ('tyk' in test_services)
   tags:
     - install
     - standup
@@ -115,7 +115,7 @@
         label: "{% if 'saas' in ansible_run_tags %}saas-{% endif %}tyk"
       include_role:
         name: load-generator
-      when: 'tyk' in test_services
+      when: ('tyk' in test_services)
   tags:
     - test
 
