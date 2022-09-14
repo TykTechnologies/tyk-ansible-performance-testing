@@ -127,7 +127,7 @@
   tasks:
     - name: Include kong role
       include_role:
-        name: kong_dependencies
+        name: kong-dependencies
       when: (query_type == 'REST') and ('kong' in test_services)
   tags:
     - standup
