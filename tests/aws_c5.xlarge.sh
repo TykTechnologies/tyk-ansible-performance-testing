@@ -1,4 +1,4 @@
-ansible-playbook aws.playbook.yml -t standup -e '{ "aws_instance_type": "c5.xlarge", "aws_image": "ami-06640050dc3f556bb", "test_services": [ "tyk", "kong", "apollo" ] }'
+ansible-playbook aws.playbook.yml -t standup -e '{ "aws_instance_type": "c5.xlarge", "aws_image": "ami-08970fb2e5767e3b8", "test_services": [ "tyk", "kong", "apollo" ] }'
 
 ansible-playbook playbook.yml -i hosts/c5.xlarge-aws-hosts.yml -t install -t standup -e '{ "query_type": "REST", "test_services": [ "tyk", "kong" ], "enable_auth": false, "enable_analytics": false, "enable_quota": false, "enable_rate_limiting": false }'
 ansible-playbook playbook.yml -i hosts/c5.xlarge-aws-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "tyk", "kong" ], "enable_auth": false, "enable_analytics": false, "enable_quota": false, "enable_rate_limiting": false, "prefix": "c5.xlarge-aws-1-vanilla"vanilla", "load_test_duration": "5m" }'
