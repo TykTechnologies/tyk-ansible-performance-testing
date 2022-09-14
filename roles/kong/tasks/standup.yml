@@ -22,8 +22,6 @@
       KONG_PROXY_ERROR_LOG: "/dev/stderr"
       KONG_ADMIN_ERROR_LOG: "/dev/stderr"
     ulimits: "nofile:80000:80000"
-    networks:
-      - name: kong
 
 - name: Create Service
   uri:
