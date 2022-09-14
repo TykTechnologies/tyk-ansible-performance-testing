@@ -1,4 +1,16 @@
 ---
+# Allows gathering of ansible_facts to discover the internal IPs of the
+# servers as well as await until machines are up.
+- hosts: all
+  tasks:
+  - name: Collect ansible_facts to discover internal IPs
+    debug:
+      msg: Discovering internal IP...
+    register: discoverable
+    until: discoverable is not failed
+    retries: 10
+    delay: 30
+
 # Update packages on all servers.
 - hosts: all
   become: True
@@ -32,17 +44,6 @@
     - htop
   tags:
     - htop
-
-# Allows gathering of ansible_facts to discover the internal IPs of the
-# servers when running the test tag.
-- hosts: all
-  tasks:
-  - name: Collect ansible_facts to discover internal IPs
-    debug:
-      msg: Discovering internal IP...
-  tags:
-    - standup
-    - test
 
 # Stand up upstream services.
 - hosts: upstream

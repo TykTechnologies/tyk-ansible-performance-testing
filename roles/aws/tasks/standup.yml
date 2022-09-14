@@ -13,6 +13,9 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: upstream
+  until: upstream.instances[0].public_dns_name != ""
+  retries: 10
+  delay: 5
 
 - name: Provision Load Generator EC2 instance
   ec2_instance:
@@ -28,6 +31,9 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: load
+  until: load.instances[0].public_dns_name != ""
+  retries: 10
+  delay: 5
 
 - name: Provision Tyk Dependencies EC2 instance
   ec2_instance:
@@ -43,6 +49,9 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: tyk_dependencies
+  until: tyk_dependencies.instances[0].public_dns_name != ""
+  retries: 10
+  delay: 5
   when: ('tyk' in test_services)
 
 - name: Provision Tyk EC2 instance
@@ -59,6 +68,9 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: tyk
+  until: tyk.instances[0].public_dns_name != ""
+  retries: 10
+  delay: 5
   when: ('tyk' in test_services)
 
 - name: Provision Kong Dependencies EC2 instance
@@ -75,6 +87,9 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: kong_dependencies
+  until: kong_dependencies.instances[0].public_dns_name != ""
+  retries: 10
+  delay: 5
   when: ('kong' in test_services)
 
 - name: Provision Kong EC2 instance
@@ -91,6 +106,9 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: kong
+  until: kong.instances[0].public_dns_name != ""
+  retries: 10
+  delay: 5
   when: ('kong' in test_services)
 
 - name: Provision Apollo EC2 instance
@@ -107,6 +125,9 @@
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
   register: apollo
+  until: apollo.instances[0].public_dns_name != ""
+  retries: 10
+  delay: 5
   when: ('apollo' in test_services)
 
 - name: Create {{ aws_instance_type }}-aws-hosts.yml
