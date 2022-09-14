@@ -7,7 +7,7 @@ pip install -r requirements-azure.tx
 Make sure to add the required Azure information in `vars/azure.yml`. You can find out more information about the following variables in the [variables documentation](/docs/variables.md#azure) page.
 
 ```
-azure_vm_size: Standard_B1s
+azure_vm_size: Standard_F2s_v2
 azure_location: westus
 azure_image:
   offer: RHEL
@@ -38,11 +38,11 @@ pip install -r requirements-azure.txt
 
 ### Example
 ```
-ansible-playbook azure.playbook.yml -t standup -e '{ "azure_vm_size": "Standard_B1s", "test_services": [ "kong" ] }'
-ansible-playbook playbook.yml -i hosts/Standard_B1s-azure-hosts.yml -t install -t standup -e '{ "query_type": "REST", "test_services": [ "kong" ] }'
-sudo ansible-playbook playbook.yml -i hosts/Standard_B1s-azure-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "Standard_B1s-azure-1" }'
-sudo ansible-playbook playbook.yml -i hosts/Standard_B1s-azure-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "Standard_B1s-azure-2" }'
-sudo ansible-playbook playbook.yml -i hosts/Standard_B1s-azure-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "Standard_B1s-azure-3" }'
-ansible-playbook azure.playbook.yml -t cleanup -e '{ "azure_vm_size": "Standard_B1s", "test_services": [ "kong" ] }'
+ansible-playbook azure.playbook.yml -t standup -e '{ "azure_vm_size": "Standard_F2s_v2", "test_services": [ "kong" ] }'
+ansible-playbook playbook.yml -i hosts/Standard_F2s_v2-azure-hosts.yml -t install -t standup -e '{ "query_type": "REST", "test_services": [ "kong" ] }'
+sudo ansible-playbook playbook.yml -i hosts/Standard_F2s_v2-azure-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "Standard_F2s_v2-azure-1" }'
+sudo ansible-playbook playbook.yml -i hosts/Standard_F2s_v2-azure-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "Standard_F2s_v2-azure-2" }'
+sudo ansible-playbook playbook.yml -i hosts/Standard_F2s_v2-azure-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "kong" ], "prefix": "Standard_F2s_v2-azure-3" }'
+ansible-playbook azure.playbook.yml -t cleanup -e '{ "azure_vm_size": "Standard_F2s_v2", "test_services": [ "kong" ] }'
 ```
 

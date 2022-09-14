@@ -10,7 +10,7 @@ gcp_region: us-west1
 gcp_zone: us-west1-a
 gcp_auth_kind: serviceaccount
 gcp_service_account_file: ./secret.json
-gcp_machine_type: e2-medium
+gcp_machine_type: e2-standard-2
 gcp_image: projects/rhel-cloud/global/images/rhel-8-v20220822
 provider:
   user: user

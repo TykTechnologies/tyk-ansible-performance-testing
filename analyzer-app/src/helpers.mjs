@@ -15,10 +15,10 @@ const getTest = name => {
 }
 
 const machines = {
-  2: [ 't2.medium','e2-medium','Standard_B2s' ],
-  4: [ 'c5.xlarge','c2-standard-4','Standard_F4s_v2' ],
-  8: [ 'c5.2xlarge','c2-standard-8','Standard_F8s_v2' ],
-  16: [ 'c5.4xlarge','c2-standard-16','Standard_F16s_v2' ],
+  2: [ 'c5.large','c2d-standard-2 ','Standard_F2s_v2' ],
+  4: [ 'c5.xlarge','c2d-standard-4','Standard_F4s_v2' ],
+  8: [ 'c5.2xlarge','c2d-standard-8','Standard_F8s_v2' ],
+  16: [ 'c5.4xlarge','c2d-standard-16','Standard_F16s_v2' ],
 }
 
 const getMachineWeight = machine => {

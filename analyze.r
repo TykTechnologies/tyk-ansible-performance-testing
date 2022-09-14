@@ -4,8 +4,8 @@ BASE_DIR <- "./benchmarks/"
 
 args = commandArgs(trailingOnly=TRUE)
 
-# RScript ./analyze.r "tyk,kong" "rest,aws" "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" "2,4,8,16" "Machine type" "t2.medium,c5.xlarge,c5.2xlarge,c5.4xlarge" "Tyk vs Kong" "Tyk,Kong"
-# RScript ./analyze.r "tyk,kong" "rest,gcp" "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" "2,4,8,16" "Machine type" "e2-medium,c2-standard-4,c2-standard-8,c2-standard-16" "Tyk vs Kong" "Tyk,Kong"
+# RScript ./analyze.r "tyk,kong" "rest,aws" "c5.large,c5.xlarge,c5.2xlarge,c5.4xlarge" "2,4,8,16" "Machine type" "c5.large,c5.xlarge,c5.2xlarge,c5.4xlarge" "Tyk vs Kong" "Tyk,Kong"
+# RScript ./analyze.r "tyk,kong" "rest,gcp" "e2-standard-2,c2d-standard-4,c2d-standard-8,c2d-standard-16" "2,4,8,16" "Machine type" "e2-standard-2,c2d-standard-4,c2d-standard-8,c2d-standard-16" "Tyk vs Kong" "Tyk,Kong"
 compare <- strsplit(args[1], ",")[[1]]
 filter <- strsplit(args[2], ",")[[1]]
 x <- strsplit(args[3], ",")[[1]]

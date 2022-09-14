@@ -38,7 +38,7 @@
 | --------- | :---------: | --------- |
 | aws_region| `us-west-2` | AWS region. |
 | aws_key_name | `secret` | AWS key name. |
-| aws_instance_type | `t2.micro` | AWS EC2 instant type that you want to test on. |
+| aws_instance_type | `c5.large` | AWS EC2 instant type that you want to test on. |
 | aws_image | `ami-0b28dfc7adc325ef4` | AWS AMI image ID |
 | aws_group | `secret-sg` | |
 | aws_vpc_subnet_id | `subnet-vpc_subnet_id` | AWS subnet ID |
@@ -57,7 +57,7 @@
 | gcp_zone | `us-west1-a` | GCP zone. |
 | gcp_auth_kind | `serviceaccount` | GCP authentication method |
 | gcp_service_account_file | `./secret.json | GCP authentication file |
-| gcp_machine_type | `e2-medium` | GCP compute instant type that you want to test on. |
+| gcp_machine_type | `e2-standard-2` | GCP compute instant type that you want to test on. |
 | gcp_image | `projects/rhel-cloud/global/images/rhel-8-v20220303` | GCP image ID |
 | provider.user | `user` | Username for SSH connection to generated instances. |
 | provider.key_file | `./secret.pem` | Key file for SSH connection to generated instances. |
@@ -67,7 +67,7 @@
 
 | Variable | Default | Comments |
 | --------- | :---------: | --------- |
-| azure_vm_size| `Standard_B1s` | Azure VM size. |
+| azure_vm_size| `Standard_F2s_v2` | Azure VM size. |
 | azure_location | `westus` | Azure VM location. |
 | azure_image.offer | `UbuntuServer` | Azure image offer. |
 | azure_image.publisher | `Canonical` | Azure image publisher. |

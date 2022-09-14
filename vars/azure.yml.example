@@ -1,4 +1,4 @@
-azure_vm_size: Standard_B1s
+azure_vm_size: Standard_F2s_v2
 azure_location: westus
 azure_image:
   offer: RHEL
