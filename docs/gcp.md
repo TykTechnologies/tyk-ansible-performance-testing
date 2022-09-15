@@ -11,7 +11,7 @@ gcp_zone: us-central1-a
 gcp_auth_kind: serviceaccount
 gcp_service_account_file: ./secret.json
 gcp_machine_type: c2d-standard-2
-gcp_image: projects/rhel-cloud/global/images/rhel-8-v20220719
+gcp_image: projects/rhel-cloud/global/images/rhel-8-v20220303
 provider:
   user: user
   key_file: ./secret.pem
