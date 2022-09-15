@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 # Freemium
 ansible-playbook playbook.yml -t install -t standup -t saas -i saas/freemium-hosts.yml -e '{ "query_type": "REST", "prefix": "freemium", "test_services": [ "tyk" ] }'
 # Freemium Edge Gateway

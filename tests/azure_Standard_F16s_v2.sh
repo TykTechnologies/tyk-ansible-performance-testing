@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 ansible-playbook azure.playbook.yml -t standup -e '{ "azure_vm_size": "Standard_F16s_v2", "azure_image": { "offer": "RHEL", "publisher": "RedHat", "sku": "8_6", "version": "8.6.2022070801" }, "test_services": [ "tyk", "kong", "apollo" ] }'
 
 ansible-playbook playbook.yml -i hosts/Standard_F16s_v2-azure-hosts.yml -t install -t standup -e '{ "query_type": "REST", "test_services": [ "tyk", "kong" ], "enable_auth": false, "enable_analytics": false, "enable_quota": false, "enable_rate_limiting": false }'

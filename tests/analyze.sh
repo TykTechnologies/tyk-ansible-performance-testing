@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 RScript ./analyze.r \
   "vanilla-tyk-rest,auth-tyk-rest,analytics-tyk-rest,rate-limiting-tyk-rest,auth-quota-tyk-rest,all-tyk-rest" \
   "aws" \
