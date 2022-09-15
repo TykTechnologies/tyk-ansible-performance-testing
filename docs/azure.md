@@ -1,7 +1,7 @@
 ## Azure playbook
 Azure playbook allows you to standup and teardown the infrastructure required to run the tests on Azure.
 
-pip install -r requirements-azure.tx
+pip install -r requirements-azure.txt
 
 ### Getting Started
 Make sure to add the required Azure information in `vars/azure.yml`. You can find out more information about the following variables in the [variables documentation](/docs/variables.md#azure) page.
