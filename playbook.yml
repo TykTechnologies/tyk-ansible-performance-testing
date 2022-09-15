@@ -1,15 +1,26 @@
 ---
+# Checks if the machines are up and rechable.
+- hosts: all
+  gather_facts: no
+  any_errors_fatal: true
+  tasks:
+  - name: Wait for machines to come up
+    delegate_to: localhost
+    wait_for:
+      port: 22
+      host: "{{ hostvars[inventory_hostname].ansible_host }}"
+      search_regex: OpenSSH
+  tags:
+    - install
+    - standup
+
 # Allows gathering of ansible_facts to discover the internal IPs of the
-# servers as well as await until machines are up.
+# servers.
 - hosts: all
   tasks:
   - name: Collect ansible_facts to discover internal IPs
     debug:
       msg: Discovering internal IP...
-    register: discoverable
-    until: discoverable is not failed
-    retries: 10
-    delay: 30
 
 # Update packages on all servers.
 - hosts: all
