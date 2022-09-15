@@ -1,4 +1,4 @@
-ansible-playbook gcp.playbook.yml -t standup -e '{ "gcp_machine_type": "c2d-standard-16", "gcp_image": "projects/rhel-cloud/global/images/rhel-8-v20220822", "test_services": [ "tyk", "kong", "apollo" ] }'
+ansible-playbook gcp.playbook.yml -t standup -e '{ "gcp_machine_type": "c2d-standard-16", "gcp_image": "projects/rhel-cloud/global/images/rhel-8-v20220519", "test_services": [ "tyk", "kong", "apollo" ] }'
 
 ansible-playbook playbook.yml -i hosts/c2d-standard-16-gcp-hosts.yml -t install -t standup -e '{ "query_type": "REST", "test_services": [ "tyk", "kong" ], "enable_auth": false, "enable_analytics": false, "enable_quota": false,  "enable_rate_limiting": false }'
 ansible-playbook playbook.yml -i hosts/c2d-standard-16-gcp-hosts.yml -t test -e '{ "query_type": "REST", "test_services": [ "tyk", "kong" ], "enable_auth": false, "enable_analytics": false, "enable_quota": false,  "enable_rate_limiting": false, "prefix": "c2d-standard-16-gcp-1-vanilla", "load_test_duration": "5m" }'
