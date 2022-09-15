@@ -4,7 +4,7 @@ gcp_zone: us-central1-a
 gcp_auth_kind: serviceaccount
 gcp_service_account_file: ./secret.json
 gcp_machine_type: e2-standard-2
-gcp_image: projects/rhel-cloud/global/images/rhel-8-v20220519
+gcp_image: projects/rhel-cloud/global/images/rhel-8-v20220317
 provider:
   user: user
   key_file: ./secret.pem
