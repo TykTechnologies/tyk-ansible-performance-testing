@@ -1,4 +1,6 @@
 [defaults]
+timeout = 25
+retries = 5
 inventory = ./hosts.yml
 host_key_checking = False
 

@@ -11,8 +11,10 @@
       host: "{{ hostvars[inventory_hostname].ansible_host }}"
       search_regex: OpenSSH
   tags:
-    - install
     - standup
+    - install
+    - test
+    - cleanup
 
 # Allows gathering of ansible_facts to discover the internal IPs of the
 # servers.
@@ -21,6 +23,11 @@
   - name: Collect ansible_facts to discover internal IPs
     debug:
       msg: Discovering internal IP...
+  tags:
+    - standup
+    - install
+    - test
+    - cleanup
 
 # Update packages on all servers.
 - hosts: all
